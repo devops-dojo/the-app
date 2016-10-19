@@ -1,0 +1,32 @@
+include 'microservice:frontend:catalog'
+include 'microservice:frontend:checkout'
+include 'microservice:frontend:registration'
+
+include 'microservice:service:cart'
+include 'microservice:service:dataloader'
+include 'microservice:service:user'
+include 'microservice:service:product'
+//include 'microservice:service:product-go'
+include 'microservice:service:order'
+include 'microservice:service:navigation'
+include 'microservice:service:recommendation'
+
+include 'monolithic:common:util'
+include 'monolithic:common:dataloader'
+
+include 'monolithic:repository:common'
+include 'monolithic:repository:cart'
+include 'monolithic:repository:order'
+include 'monolithic:repository:product'
+include 'monolithic:repository:user'
+
+include 'monolithic:service:common'
+include 'monolithic:service:authentication'
+include 'monolithic:service:cart'
+include 'monolithic:service:checkout'
+include 'monolithic:service:order'
+include 'monolithic:service:product'
+include 'monolithic:service:recommendation'
+include 'monolithic:service:user'
+
+include 'monolithic:ui'

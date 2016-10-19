@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+    <mapping map-null="false" map-empty-string="false">
+        <class-a>io.github.zutherb.appstash.shop.repository.user.model.User</class-a>
+        <class-b>io.github.zutherb.appstash.shop.service.user.model.UserInfo</class-b>
+        <field>
+            <a is-accessible="true">id</a>
+            <b is-accessible="true">id</b>
+        </field>
+        <field>
+            <a>username</a>
+            <b is-accessible="true">username</b>
+        </field>
+        <field>
+            <a>password</a>
+            <b is-accessible="true">password</b>
+        </field>
+        <field>
+            <a>firstname</a>
+            <b is-accessible="true">firstname</b>
+        </field>
+        <field>
+            <a>lastname</a>
+            <b is-accessible="true">lastname</b>
+        </field>
+        <field>
+            <a>email</a>
+            <b is-accessible="true">email</b>
+        </field>
+        <field relationship-type="cumulative">
+            <a>roles</a>
+            <b is-accessible="true">roles</b>
+            <a-hint>io.github.zutherb.appstash.shop.repository.user.model.Role</a-hint>
+            <b-hint>io.github.zutherb.appstash.shop.service.user.model.RoleInfo</b-hint>
+        </field>
+        <field>
+            <a>address</a>
+            <b is-accessible="true">address</b>
+            <a-hint>io.github.zutherb.appstash.shop.repository.user.model.Address</a-hint>
+            <b-hint>io.github.zutherb.appstash.shop.service.user.model.AddressInfo</b-hint>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>io.github.zutherb.appstash.shop.repository.user.model.Role</class-a>
+        <class-b>io.github.zutherb.appstash.shop.service.user.model.RoleInfo</class-b>
+        <field>
+            <a is-accessible="true">name</a>
+            <b is-accessible="true">name</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>io.github.zutherb.appstash.shop.repository.user.model.Address</class-a>
+        <class-b>io.github.zutherb.appstash.shop.service.user.model.AddressInfo</class-b>
+        <field>
+            <a>street</a>
+            <b is-accessible="true">street</b>
+        </field>
+        <field>
+            <a>zip</a>
+            <b is-accessible="true">zip</b>
+        </field>
+        <field>
+            <a>city</a>
+            <b is-accessible="true">city</b>
+        </field>
+        <field>
+            <a>county</a>
+            <b is-accessible="true">county</b>
+        </field>
+        <field>
+            <a>houseNumber</a>
+            <b is-accessible="true">houseNumber</b>
+        </field>
+        <field>
+            <a>state</a>
+            <b is-accessible="true">state</b>
+        </field>
+        <field>
+            <a>countryCode</a>
+            <b is-accessible="true">countryCode</b>
+        </field>
+        <field>
+            <a>country</a>
+            <b is-accessible="true">country</b>
+        </field>
+        <field>
+            <a>longitude</a>
+            <b is-accessible="true">longitude</b>
+        </field>
+        <field>
+            <a>latitude</a>
+            <b is-accessible="true">latitude</b>
+        </field>
+    </mapping>
+
+</mappings>

@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="navbar-header">
+        <button data-target=".bs-navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+            <span class="sr-only">Microservices architecture</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="./"><img class="logo" src="/images/logo25.png" /> Microservices architecture</a>
+    </div>
+    <nav role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+        <ul class="nav navbar-nav" ng-controller="NavigationController">
+
+            <li class="active">
+                <a href="./">
+                    Home
+                </a>
+            </li>
+
+            <li ng-repeat="item in vm.items">
+                <a href="./#/productcatalog/{{item.urlname}}">
+                    {{item.name}}
+                </a>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right" ng-controller="DropdownController">
+
+            <li class="dropdown">
+                <a href="#menu0" class="dropdown-toggle" on-toggle="toggled(open)">
+                    Sign In
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+
+                    <li>
+                        <a href="http://registration.microservice.io/shop/login">
+                            Sign In
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="http://registration.microservice.io">
+                            New customer? Start here.
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

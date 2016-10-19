@@ -1,0 +1,31 @@
+---
+- name: install xfce
+  apt: pkg={{item}} state=present force=yes
+  with_items:
+    - xfce4
+    - firefox
+    - vnc4server
+    - imagemagick
+    - imagemagick-doc
+
+- name: install vnc configuration
+  sudo: yes
+  sudo_user: jenkins
+  copy: src=.Xauthority dest=/var/lib/jenkins/.Xauthority force=yes mode=700 owner=jenkins
+
+- sudo: yes
+  sudo_user: jenkins
+  command: mkdir /var/lib/jenkins/.vnc/
+  ignore_errors: yes
+
+- name: install vnc configuration
+  copy: src={{item}} dest=/var/lib/jenkins/.vnc/{{item}} force=yes mode=700 owner=jenkins
+  with_items:
+      - passwd
+      - xstartup
+
+- name: install vnc init script
+  copy: src=vncserver dest=/etc/init.d/vncserver mode=0755 owner=root
+
+- name: register vncserver as service
+  raw: sudo update-rc.d vncserver defaults

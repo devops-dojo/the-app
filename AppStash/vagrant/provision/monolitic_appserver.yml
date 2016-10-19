@@ -1,0 +1,15 @@
+---
+- hosts: monolitic_appservers
+  user: vagrant
+  sudo: yes
+
+  vars_files:
+     - vars/default.yml
+
+  roles:
+    - hosts
+    - common
+    - oracle-java
+    - tomcat
+    - logstash
+    - oldschool-appserver

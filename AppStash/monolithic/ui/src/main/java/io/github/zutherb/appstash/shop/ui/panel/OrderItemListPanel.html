@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd ">
+<wicket:head />
+<body>
+    <wicket:panel>
+        <table class="table">
+            <colgroup>
+                <col width="10%" />
+                <col width="30%" />
+                <col width="50%" />
+                <col width="10%" />
+            </colgroup>
+            <thead>
+                <tr class="well">
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <wicket:container wicket:id="orderItems">
+                    <tr>
+                        <td wicket:id="orderItemCounter">1</td>
+                        <td wicket:id="product">Product</td>
+                        <td><wicket:container wicket:id="description" /></td>
+                        <td wicket:id="totalSum">1.00&nbsp;€</td>
+                    </tr>
+                </wicket:container>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Subtotal</td>
+                    <td wicket:id="totalSum">1.00&nbsp;€</td>
+                </tr>
+            </tfoot>
+        </table>
+    </wicket:panel>
+</body>
+</html>

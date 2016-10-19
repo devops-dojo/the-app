@@ -1,0 +1,15 @@
+---
+- name: install elasticsearch key file
+  apt_key: url=http://packages.elasticsearch.org/GPG-KEY-elasticsearch state=present
+
+- name: add elasticsearch repository into sources list.
+  apt_repository: repo='deb http://packages.elasticsearch.org/elasticsearch/{{elasticsearch_version}}/debian stable main' state=present
+
+- name: update cache
+  apt: update_cache=yes force=yes
+
+- name: install elasticsearch
+  apt: pkg=elasticsearch state=present force=yes
+
+- raw: sudo update-rc.d elasticsearch defaults
+- raw: sudo service elasticsearch start

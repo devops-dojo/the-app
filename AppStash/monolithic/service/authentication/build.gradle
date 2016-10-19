@@ -1,0 +1,33 @@
+
+
+idea {
+    module {
+        name='authentication-service'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+            srcDir 'src/main/resources'
+        }
+    }
+    test {
+        resources {
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+
+dependencies {
+    compile springSecurityDeps
+    compile project(':monolithic:service:common')
+    compile project(':monolithic:service:user')
+    // required for fake authentication
+    compile project(':monolithic:common:dataloader')
+    //
+
+    testCompile testDeps
+}

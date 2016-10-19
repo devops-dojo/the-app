@@ -1,0 +1,56 @@
+jar.baseName = "order-microservice"
+
+//mainClassName = "io.github.zutherb.appstash.shop.service.order.Boot"
+
+idea {
+    module {
+        name='order-microservice'
+    }
+}
+
+configurations {
+    all*.exclude group: 'org.springframework.security'
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+            srcDir 'src/main/resources'
+        }
+    }
+    test {
+        resources {
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+
+dependencies {
+    compile commonDeps
+    compile mongoDeps
+    compile "com.sparkjava:spark-core:2.0.0"
+    compile "com.google.code.gson:gson:2.2.4"
+    testCompile testDeps
+}
+
+jar {
+    def manifestClasspath = configurations.compile.collect { it.getName() }.join(',')
+    def cmd = "git rev-parse HEAD"
+    def proc = cmd.execute()
+    manifest {
+        attributes("Manifest-Version"       : "1.0",
+                "Created-By"             : vendor,
+                "Specification-Title"    : appName,
+                "Specification-Version"  : version,
+                "Specification-Vendor"   : vendor,
+                "Implementation-Title"   : appName,
+                "Implementation-Version" : version,
+                "Implementation-Vendor"  : vendor,
+                "Git-Revision"           : proc.text.trim(),
+                "Build"                  : "${System.getenv("JOB_NAME")}",
+                "Build-Number"           : "${System.getenv("BUILD_NUMBER")}",
+                "Class-Path"             : manifestClasspath)
+    }
+}

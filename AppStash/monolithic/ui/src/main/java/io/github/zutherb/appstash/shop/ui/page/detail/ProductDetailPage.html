@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<head>
+    <title>Produkt-Detailseite</title>
+</head>
+<body>
+<wicket:extend>
+
+    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-left: 0px;">
+                <img wicket:id="productImage" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" />
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <h2>
+                    <div wicket:id="productName">Pizza Fantastica</div>
+                </h2>
+                <div wicket:id="productDescription">Pizza with random ingredients, you never know what you will
+                    get!
+                </div>
+                <p></p>
+
+                <div class="caption">
+                    <a wicket:id="addToCart" class="btn btn-primary addToCart">
+                        <span class="glyphicon glyphicon-shopping-cart"></span>
+                    </a>
+                    <strong><span class="price" wicket:id="productPrice">9.10</span></strong>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <br/>
+        </div>
+        <div class="row">
+            <div wicket:id="otherUsersAlsoViewedProducts"></div>
+        </div>
+    </div>
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div wicket:id="cartPanel"></div>
+    </div>
+
+</wicket:extend>
+</body>
+</html>

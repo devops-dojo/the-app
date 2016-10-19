@@ -1,0 +1,180 @@
+{
+  "name": "shop",
+  "components": {
+    "cart-service": {
+      "expose": [
+        {
+          "port": "8008",
+          "component": "cart-service/cart",
+          "target_port": 18100
+        }
+      ]
+    },
+    "cart-service/cart": {
+      "image": "zutherb/cart-service",
+      "ports": [
+        18100
+      ],
+      "links": [
+        {
+          "component": "database-service",
+          "target_port": "8003/tcp",
+          "alias": "redis"
+        }
+      ]
+    },
+    "catalog-service": {
+      "expose": [
+        {
+          "port": "8005",
+          "component": "catalog-service/catalog",
+          "target_port": 80
+        }
+      ]
+    },
+    "catalog-service/catalog": {
+      "image": "zutherb/catalog-frontend",
+      "ports": [
+        80
+      ],
+      "env": [
+        "CHECKOUT_DESIGN=standard"
+      ],
+      "domains": {
+        "80/tcp": [
+          "shop-$GIANTSWARM_LOGIN_NAME.gigantic.io"
+        ]
+      },
+      "links": [
+        {
+          "component": "product-service",
+          "target_port": "8006/tcp",
+          "alias": "product"
+        },
+        {
+          "component": "navigation-service",
+          "target_port": "8007/tcp",
+          "alias": "navigation"
+        },
+        {
+          "component": "cart-service",
+          "target_port": "8008/tcp",
+          "alias": "cart"
+        },
+        {
+          "component": "checkout-service",
+          "target_port": "8004/tcp",
+          "alias": "shop"
+        }
+      ]
+    },
+    "checkout-service": {
+      "expose": [
+        {
+          "port": "8004",
+          "component": "checkout-service/shop",
+          "target_port": 8080
+        }
+      ]
+    },
+    "checkout-service/shop": {
+      "image": "zutherb/monolithic-shop",
+      "ports": [
+        8080
+      ],
+      "domains": {
+        "8080/tcp": [
+          "monolithic-shop-zutherb.gigantic.io"
+        ]
+      },
+      "links": [
+        {
+          "component": "cart-service",
+          "target_port": "8008/tcp",
+          "alias": "cart"
+        },
+        {
+          "component": "database-service",
+          "target_port": "8001/tcp",
+          "alias": "mongodb"
+        }
+      ]
+    },
+    "database-service": {
+      "expose": [
+        {
+          "port": "8001",
+          "component": "database-service/mongodb",
+          "target_port": 27017
+        },
+        {
+          "port": "8002",
+          "component": "database-service/mongodb",
+          "target_port": 28017
+        },
+        {
+          "port": "8003",
+          "component": "database-service/redis",
+          "target_port": 6379
+        }
+      ]
+    },
+    "database-service/mongodb": {
+      "image": "mongo",
+      "ports": [
+        27017,
+        28017
+      ]
+    },
+    "database-service/redis": {
+      "image": "redis",
+      "ports": [
+        6379
+      ]
+    },
+    "navigation-service": {
+      "expose": [
+        {
+          "port": "8007",
+          "component": "navigation-service/navigation",
+          "target_port": 18090
+        }
+      ]
+    },
+    "navigation-service/navigation": {
+      "image": "zutherb/navigation-service",
+      "ports": [
+        18090
+      ],
+      "links": [
+        {
+          "component": "database-service",
+          "target_port": "8001/tcp",
+          "alias": "mongodb"
+        }
+      ]
+    },
+    "product-service": {
+      "expose": [
+        {
+          "port": "8006",
+          "component": "product-service/product",
+          "target_port": 18080
+        }
+      ]
+    },
+    "product-service/product": {
+      "image": "zutherb/product-service",
+      "ports": [
+        18080
+      ],
+      "links": [
+        {
+          "component": "database-service",
+          "target_port": "8002/tcp",
+          "alias": "mongodb"
+        }
+      ]
+    }
+  }
+}

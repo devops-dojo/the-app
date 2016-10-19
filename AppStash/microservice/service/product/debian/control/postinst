@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+chmod +x /usr/share/shop/product/bin/product
+chmod +x /etc/init.d/product
+
+update-rc.d product defaults
+
+service product force-reload

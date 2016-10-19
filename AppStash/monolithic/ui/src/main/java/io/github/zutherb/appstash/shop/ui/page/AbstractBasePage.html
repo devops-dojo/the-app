@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress HtmlUnknownTarget -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd ">
+<head>
+    <title>Shop</title>
+    <wicket:head/>
+</head>
+<body>
+<!--[if lte IE 9]>
+<script type="text/javascript">
+    (function ($) {
+        $(function () {
+            var message = "This site does not support Internet Explorer. Please consider downloading a <a href='http://firefox.com'>newer browser</a>.",
+                    div = $('<div id="ie-warning"></div>').html(message).css({
+                        'height': '50px',
+                        'line-height': '50px',
+                        'background-color': '#f9db17',
+                        'text-align': 'center',
+                        'font-family': 'Arial, Helvetica, sans-serif',
+                        'font-size': '12pt',
+                        'font-weight': 'bold',
+                        'color': 'black'
+                    }).hide().find('a').css({color: '#333'}).end();
+            $.each($(document.body).children(), function (index, element) {
+                $(element).hide();
+            })
+            div.prependTo(document.body).slideDown(500);
+        });
+    })(jQuery);
+</script>
+<![endif]-->
+
+<header role="banner" id="top" class="navbar navbar-static-top bs-docs-nav" wicket:id="header">
+    <div class="container" wicket:id="navigation" />
+</header>
+<wicket:container wicket:id="loginModal"/>
+<main class="container" >
+    <div wicket:id="feedback"></div>
+    <wicket:child>
+        <h2>Subheading</h2>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut ac leo in lorem ultricies sollicitudin.
+            Vivamus molestie elit nec nulla. Suspendisse potenti. Suspendisse at lorem. Donec pulvinar, magna
+            eget molestie pretium, justo sem iaculis urna, eget condimentum nibh augue pellentesque arcu.
+            Integer tristique tempor mauris. Sed justo orci, commodo volutpat, sagittis vitae, varius vitae,
+            massa. Maecenas pede ligula, iaculis sit amet, pharetra eu, adipiscing consectetuer, eros. Duis
+            ullamcorper nisl ac magna. Nunc neque dolor, posuere dapibus, convallis non, tristique sed, nibh.
+            Suspendisse quis leo. Phasellus pretium erat ut purus. Duis facilisis consectetuer sapien. Nulla
+            eget pede ut nisl faucibus consequat. Quisque erat lectus, luctus in, pellentesque ac, adipiscing
+            eu, enim. Donec ultrices laoreet urna.
+        </p>
+
+
+    </wicket:child>
+</main>
+<footer class="footer">
+    <div class="container">
+        Code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache Open Source</a>
+    </div>
+</footer>
+</body>
+</html>

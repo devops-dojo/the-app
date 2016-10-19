@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      name: navigation
+      role: backend
+  name: navigation
+spec:
+  ports:
+    - name: navigation
+      port: 18090
+  selector:
+      name: navigation

@@ -1,0 +1,25 @@
+{
+  "name": "eshop-catalog",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "https://github.com/angular/bower-angular.git#1.2.28",
+    "json3": "https://github.com/bestiejs/json3.git#3.3.1",
+    "es5-shim": "https://github.com/es-shims/es5-shim.git#4.0.3",
+    "jquery": "https://github.com/jquery/jquery.git#2.1.1",
+    "bootstrap-sass-official": "https://github.com/twbs/bootstrap-sass.git#3.3.0",
+    "underscore": "https://github.com/jashkenas/underscore.git#1.7.0",
+    "angular-resource": "https://github.com/angular/bower-angular-resource.git#1.2.28",
+    "angular-cookies": "https://github.com/angular/bower-angular-cookies.git#1.2.28",
+    "angular-sanitize": "https://github.com/angular/bower-angular-sanitize.git#1.2.28",
+    "angular-animate": "https://github.com/angular/bower-angular-animate.git#1.2.28",
+    "angular-touch": "https://github.com/angular/bower-angular-touch.git#1.2.28",
+    "angular-route": "https://github.com/angular/bower-angular-route.git#1.2.28",
+    "angular-bootstrap": "https://github.com/angular-ui/bootstrap-bower.git#0.12.0",
+    "angular-local-storage": "https://github.com/grevory/angular-local-storage.git#0.1.5"
+  },
+  "devDependencies": {
+    "angular-mocks": "http://github.com/angular/bower-angular-mocks.git#1.2.28",
+    "angular-scenario": "http://github.com/angular/bower-angular-scenario.git#1.2.28"
+  },
+  "appPath": "app"
+}

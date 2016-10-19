@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: cart
+spec:
+  replicas: 1
+  selector:
+    name: cart
+  template:
+    metadata:
+      labels:
+        name: cart
+        role: backend
+      name: cart
+    spec:
+      containers:
+        - name: cart
+          image: zutherb/cart-service
+          ports:
+            - containerPort: 18100

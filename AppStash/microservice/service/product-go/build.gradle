@@ -1,0 +1,61 @@
+apply plugin: 'docker'
+
+idea {
+    module {
+        name='product-go'
+    }
+}
+
+
+task buildGo {
+    exec {
+        environment "GOPATH":"${projectDir}", "GOOS":"linux", "GOARCH":"amd64", "CGO_ENABLED":"0"
+        commandLine "go", "get", "gopkg.in/mgo.v2"
+    }
+    exec {
+        environment "GOPATH":"${projectDir}", "GOOS":"linux", "GOARCH":"amd64", "CGO_ENABLED":"0"
+        commandLine "go", "get", "github.com/emicklei/go-restful"
+    }
+    exec {
+        environment "GOPATH":"${projectDir}", "GOOS":"linux", "GOARCH":"amd64", "CGO_ENABLED":"0"
+        workingDir "${projectDir}/src/github.com/zutherb/productservice/cmd"
+        commandLine "go", "build", "-o", "${buildDir}/productservice", "productservice.go"
+    }
+}
+
+docker {
+    maintainer = 'Bernd Zuther <bernd.zuther@codecentric.de>'
+    baseImage = 'golang'
+}
+
+task packageToContainer(type: Docker) {
+    dependsOn buildGo
+
+    applicationName = 'product-service'
+    tagVersion = "latest-go"
+    tag = "zutherb/${applicationName}"
+
+    addFile "${buildDir}/productservice", "/usr/local/bin/productservice"
+
+    defaultCommand (["/usr/local/bin/productservice"])
+
+    exposePort(18080)
+}
+
+task packageToContainerWithDebug(type: Docker) {
+    dependsOn build
+
+    applicationName = 'product-service'
+    tagVersion = "latest-go-with-debug"
+    tag = "zutherb/${applicationName}"
+
+    addFile "${buildDir}/productservice", "/usr/local/bin/productservice"
+
+    runCommand "apt-get update -y"
+    runCommand "apt-get install -y cgdb gdb gdbserver"
+
+    defaultCommand (["gdbserver", ":2345", "/usr/local/bin/productservice"])
+
+    exposePort(2345)
+    exposePort(18080)
+}

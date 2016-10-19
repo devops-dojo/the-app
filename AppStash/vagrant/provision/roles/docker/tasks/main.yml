@@ -1,0 +1,11 @@
+---
+- name: update cache
+  apt: update_cache=yes force=yes
+
+- name: install docker
+  apt: pkg={{item}} state=present force=yes
+  with_items:
+      - docker.io
+      - python-pip
+
+- pip: name=fig

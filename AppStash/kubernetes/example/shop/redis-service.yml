@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      name: redis
+      role: database
+  name: redis
+spec:
+  ports:
+    - name: redis
+      port: 6379
+  selector:
+      name: redis

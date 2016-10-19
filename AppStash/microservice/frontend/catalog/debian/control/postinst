@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+chown -R www-data:www-data /usr/share/shop/frontend/catalog/html
+chmod 755 /usr/share/shop/frontend/catalog/
+ln -sf /etc/nginx/sites-available/shop.microservice.io /etc/nginx/sites-enabled/shop.microservice.io
+ln -sf /etc/nginx/sites-available/test-shop.microservice.io /etc/nginx/sites-enabled/test-shop.microservice.io
+
+nginx -t
+
+service nginx restart

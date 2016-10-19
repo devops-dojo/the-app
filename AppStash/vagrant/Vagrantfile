@@ -1,0 +1,59 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+nodes_config = (JSON.parse(File.read("nodes.json")))['nodes']
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    nodes_config.each do |node|
+        node_name = node["node"] # name of node
+        config.vm.box_url = node["box_url"]
+        config.ssh.insert_key = false
+
+        # configures all forwarding ports in JSON array
+        config.vm.define node_name do |config|
+            ports = node['ports']
+            ports.each do |port|
+                config.vm.network :forwarded_port,
+                host: port['host'],
+                guest: port['guest'],
+                auto_correct: port['auto_correct']
+            end
+
+            config.vm.hostname = node['hostname']
+            config.vm.box = node['box']
+            config.vm.network :private_network, ip: node['ip']
+
+            config.vm.synced_folder "provision", "/provision"
+
+            config.vm.provider :virtualbox do |vb|
+                vb.customize ["modifyvm", :id, "--memory", node['memory']]
+                vb.customize ["modifyvm", :id, "--name", node['node']]
+            end
+
+            if Vagrant.has_plugin?("vagrant-hostsupdater")
+                config.hostsupdater.aliases = node['aliases']
+            end
+
+            if Vagrant.has_plugin?("vagrant-cachier") && node['apt_cache']
+                config.cache.scope = :machine
+                config.cache.enable :apt
+                config.cache.enable :gem
+                config.cache.enable :bower
+                config.cache.enable :npm
+            end
+
+            config.vm.provision "ansible" do |ansible|
+                  ansible.playbook = node['playbook']
+                  ansible.inventory_path = "provision/hosts"
+                  ansible.limit = node['hostname']
+                  #for better debugging set 'v' to 'vvvv'
+                  ansible.verbose = 'v'
+                  ansible.ask_vault_pass = false
+                  ansible.raw_arguments  = "--user=vagrant"
+                  ansible.raw_arguments  = "--private-key=~/.vagrant.d/insecure_private_key"
+            end
+        end
+    end
+end

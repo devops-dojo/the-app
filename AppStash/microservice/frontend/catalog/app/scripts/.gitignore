@@ -1,0 +1,3 @@
+#pure javascript should not be commited here
+*.js.map
+*.js

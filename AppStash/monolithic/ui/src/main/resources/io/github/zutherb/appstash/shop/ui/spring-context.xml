@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <context:component-scan base-package="io.github.zutherb.appstash.shop.ui"/>
+
+    <security:http auto-config="true">
+        <security:anonymous enabled="false" />
+        <security:http-basic />
+        <security:csrf disabled="true" />
+    </security:http>
+
+    <import resource="classpath:io/github/zutherb/appstash/shop/service/authentication/spring-context.xml"/>
+    <import resource="classpath:io/github/zutherb/appstash/shop/service/cart/spring-context.xml"/>
+    <import resource="classpath:io/github/zutherb/appstash/shop/service/checkout/spring-context.xml"/>
+    <import resource="classpath:io/github/zutherb/appstash/shop/service/order/spring-context.xml"/>
+    <import resource="classpath:io/github/zutherb/appstash/shop/service/product/spring-context.xml"/>
+    <import resource="classpath:io/github/zutherb/appstash/shop/service/recommendation/spring-context.xml"/>
+
+    <import resource="classpath:io/github/zutherb/appstash/dataloader/spring-context.xml"/>
+
+    <import resource="spring-profile-context.xml"/>
+    <import resource="spring-jetm-context.xml"/>
+
+    <bean id="dozerMapper" class="org.dozer.DozerBeanMapper">
+        <property name="mappingFiles">
+            <list>
+                <value>io/github/zutherb/appstash/shop/service/user/dozer-mapping.xml</value>
+                <value>io/github/zutherb/appstash/shop/service/checkout/dozer-mapping.xml</value>
+                <value>io/github/zutherb/appstash/shop/service/order/dozer-mapping.xml</value>
+                <value>io/github/zutherb/appstash/shop/service/product/dozer-mapping.xml</value>
+                <value>io/github/zutherb/appstash/shop/service/cart/dozer-mapping.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="resttemplate" class="org.springframework.web.client.RestTemplate"/>
+
+    <context:mbean-export />
+
+    <task:annotation-driven executor="executor" scheduler="scheduler"/>
+    <task:executor id="executor" pool-size="5"/>
+    <task:scheduler id="scheduler" pool-size="10"/>
+
+</beans>

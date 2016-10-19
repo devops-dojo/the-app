@@ -1,0 +1,6 @@
+---
+- name: install apache webserver
+  apt: pkg={{item}} state=present force=yes
+  with_items:
+    - apache2
+    - apache2-doc

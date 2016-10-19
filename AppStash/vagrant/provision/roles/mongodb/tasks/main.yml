@@ -1,0 +1,16 @@
+---
+- raw: sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+
+- apt_repository: repo='deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main' state=present
+
+- apt: update_cache=yes force=yes
+
+- name: install mongodb
+  apt: pkg=mongodb-org state=present force=yes
+
+- copy: src=mongod.conf dest=/etc/mongod.conf force=true owner=root
+
+- raw: sudo ufw disable
+
+- raw: sudo service mongod restart
+

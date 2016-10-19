@@ -1,0 +1,10 @@
+{
+    "NAVIGATION_SERVICE_URL": "/api/navigation/all",
+    "PRODUCT_SERVICE_URL": "/api/product/all",
+    "CART_SERVICE_IMPL": "redis-microservice",
+    "CART_SERVICE_GET_URL": "/api/cart/get/",
+    "CART_SERVICE_PUT_URL": "/api/cart/create",
+    "CART_SERVICE_POST_URL": "/api/cart/add",
+    "CART_SERVICE_DELETE_URL": "/api/cart/removeItemFromCart",
+    "CHECKOUT_BASE_URL": "/shop/checkout"
+}

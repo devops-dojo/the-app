@@ -1,0 +1,7 @@
+---
+- name: restart nagios3
+  service: name=nagios3 state=restarted
+- name: restart nagira
+  service: name=nagira state=restarted
+- name: restart apache2
+  service: name=apache2 state=restarted

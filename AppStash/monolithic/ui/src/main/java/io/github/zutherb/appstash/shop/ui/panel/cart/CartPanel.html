@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+    <h2>Shopping Cart</h2>
+
+    <div class="well">
+        <table class="table table-striped">
+            <thead>
+            <tr class="well">
+                <th>Name</th>
+                <th style="text-align: right;">Price</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody wicket:id="cart">
+            <tr wicket:id="item">
+                <td>
+                    <wicket:container wicket:id="name">Product</wicket:container>
+                </td>
+                <td style="text-align: right;">
+                    <wicket:container wicket:id="price">1.00</wicket:container>
+                </td>
+                <td>
+                    <a class="btn btn-danger" wicket:id="delete">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>Subtotal</td>
+                <td style="text-align: right;">
+                    <wicket:container wicket:id="price">1.00</wicket:container>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <a wicket:id="checkout" class="btn btn-primary">Proceed to Checkout</a>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</wicket:panel>
+</body>
+</html>

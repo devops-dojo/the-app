@@ -1,0 +1,27 @@
+jar.baseName = "common-util"
+
+idea {
+    module {
+        name='common-util'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+        }
+    }
+    test {
+        resources {
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+
+dependencies {
+    compile commonDeps
+
+    testCompile testDeps
+}

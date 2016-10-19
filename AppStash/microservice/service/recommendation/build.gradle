@@ -1,0 +1,52 @@
+apply plugin: 'pkg-debian'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "http://dl.bintray.com/gesellix/gradle-plugins"
+        }
+    }
+    dependencies {
+        classpath "de.gesellix:gradle-debian-plugin:14"
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/R'
+        }
+    }
+    test {
+        resources {
+            srcDir 'src/test/resources'
+        }
+    }
+}
+
+def debName = "recommendation"
+debian {
+    packagename = debName
+    publications = ['mavenStuff']
+    controlDirectory = "${projectDir}/debian/control"
+    changelogFile = "${projectDir}/debian/changelog"
+    outputFile = "${buildDir}/debian/${debName}_${version}.deb"
+
+    data {
+        dir {
+            name = "${buildDir}/debian-data/"
+            exclusions = ["**/.DS_Store"]
+        }
+
+    }
+}
+
+task prepareDeb {
+    copy {
+        from "${projectDir}/src/main/R"
+        into "${buildDir}/debian-data/usr/share/shop/${debName}"
+    }
+}
+
+//buildDep.dependsOn prepareDeb

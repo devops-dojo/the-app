@@ -1,0 +1,12 @@
+Source: shop-product-service
+Section: web
+Priority: optional
+Version: [[version]]
+Maintainer: Bernd Zuther <bernd.zuther@me.com>
+Homepage: http://www.bernd-zuther.de/
+Vcs-Git: https://github.com/zutherb/AppStash.git
+Vcs-Browser: https://github.com/zutherb/AppStash
+Package: shop-product-service
+Architecture: amd64
+Depends:
+Description: Product Service

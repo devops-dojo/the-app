@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+chmod +x /usr/share/shop/recommendation/createRecommendations.sh
+chmod +x /usr/share/shop/recommendation/recommendation.R
+
+if [ ! -z "$(cat /etc/crontab | grep /usr/share/shop/recommendation/createRecommendations.sh)" ]
+then
+sudo touch /var/log/recommendation.log
+chown www-data /var/log/recommendation.log
+chgrp www-data /var/log/recommendation.log
+sudo -u www-data Rscript /usr/share/shop/recommendation/installDependencies.R >> /var/log/recommendation.log
+echo "*/5 * * * * www-data /usr/share/shop/recommendation/createRecommendations.sh >> /var/log/recommendation.log" >> /etc/crontab
+fi
+
+service cron restart

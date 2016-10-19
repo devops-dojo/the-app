@@ -1,0 +1,14 @@
+[
+    {
+        "sum": 33,
+        "name": "Handy",
+        "urlname": "handy",
+        "_id": "handy"
+    },
+    {
+        "sum": 1,
+        "name": "Tablet",
+        "urlname": "tablet",
+        "_id": "tablet"
+    }
+]

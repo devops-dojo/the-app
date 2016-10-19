@@ -1,0 +1,15 @@
+<div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+    <div class="thumbnail">
+        <a ng-href="/#/productdetail/{{product.urlname}}">
+            <img ng-src="/images/{{product.productType | lowercase}}/{{product.urlname}}.0.jpg"
+                 title="{{product.name}}"
+                 alt="{{product.name}}">
+        </a>
+
+        <div class="caption">
+            <div class="text">{{product.name}}</div>
+            <shop-add-to-cart product="product" />
+            <span class="price">{{product.price | currency}}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+---
+- name: install hosts
+  copy: src=hosts dest=/etc/hosts
+

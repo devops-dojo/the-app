@@ -1,0 +1,131 @@
+---
+name: shop:1.0
+
+gateways:
+  9050/http: catalog/port
+
+clusters:
+
+  catalog:
+    services:
+      breed:
+        name: catalog
+        deployable: zutherb/catalog-frontend:latest
+        ports:
+          port: 80/http
+        environment_variables:
+          CHECKOUT_DESIGN: standard
+          SHOP_PORT_8080_TCP_ADDR: $checkout.host
+          SHOP_PORT_8080_TCP_PORT: $checkout.ports.port
+          PRODUCT_PORT_18080_TCP_ADDR: $product.host
+          PRODUCT_PORT_18080_TCP_PORT: $product.ports.port
+          NAVIGATION_PORT_18090_TCP_ADDR: $navigation.host
+          NAVIGATION_PORT_18090_TCP_PORT: $navigation.ports.port
+          CART_PORT_18100_TCP_ADDR: $cart.host
+          CART_PORT_18100_TCP_PORT: $cart.ports.port
+        dependencies:
+          product: product
+          navigation: navigation
+          cart: cart
+          checkout: checkout
+      scale:
+        instances: 1
+        cpu: 0.3
+        memory: 128MB
+
+  checkout:
+    services:
+      breed:
+        name: checkout
+        deployable: zutherb/monolithic-shop:latest
+        ports:
+          port: 8080/http
+        environment_variables:
+          CART_PORT_18100_TCP_ADDR: $cart.host
+          CART_PORT_18100_TCP_PORT: $cart.ports.port
+          MONGODB_PORT_27017_TCP_ADDR: $mongodb.host
+          MONGODB_PORT_27017_TCP_PORT: $mongodb.ports.port
+        dependencies:
+          mongodb: mongodb
+          cart: cart
+      scale:
+        instances: 1
+        cpu: 0.5
+        memory: 512MB
+
+  product:
+    services:
+      breed:
+        name: product
+        deployable: zutherb/product-service
+        ports:
+          port: 18080/http
+        environment_variables:
+          MONGODB_PORT_27017_TCP_ADDR: $mongodb.host
+          MONGODB_PORT_27017_TCP_PORT: $mongodb.ports.port
+        dependencies:
+          mongodb: mongodb
+      scale:
+        instances: 1
+        cpu: 0.3
+        memory: 128MB
+
+  navigation:
+    services:
+      breed:
+        name: navigation
+        deployable: zutherb/navigation-service:latest
+        ports:
+          port: 18090/http
+        environment_variables:
+          MONGODB_PORT_27017_TCP_ADDR: $mongodb.host
+          MONGODB_PORT_27017_TCP_PORT: $mongodb.ports.port          
+        dependencies:
+          mongodb: mongodb
+      scale:
+        instances: 1
+        cpu: 0.3
+        memory: 128MB
+
+  cart:
+    services:
+      breed:
+        name: cart
+        deployable: zutherb/cart-service:latest
+        ports:
+          port: 18100/http
+        environment_variables:
+          REDIS_PORT_6379_TCP_ADDR: $redis.host
+          REDIS_PORT_6379_TCP_PORT: $redis.ports.port
+        dependencies:
+          redis: redis
+      scale:
+        instances: 1
+        cpu: 0.3
+        memory: 128MB
+
+  redis:
+    services:
+      breed:
+        name: redis
+        deployable: redis:latest
+        ports:
+          port: 6379/tcp
+      scale:
+        instances: 1
+        cpu: 0.3
+        memory: 256MB
+
+  mongodb:
+    services:
+      breed:
+        name: mongodb
+        deployable: mongo:latest
+        ports:
+          port: 27017/tcp
+      marathon:
+        cmd: "mongod --smallfiles"
+      scale:
+        instances: 1
+        cpu: 0.3
+        memory: 256MB

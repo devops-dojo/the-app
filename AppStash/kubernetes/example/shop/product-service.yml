@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      name: product
+      role: backend
+  name: product
+spec:
+  ports:
+    - name: product
+      port: 18080
+  selector:
+      name: product

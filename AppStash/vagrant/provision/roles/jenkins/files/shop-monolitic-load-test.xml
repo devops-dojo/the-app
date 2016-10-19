@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description/>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>5</daysToKeep>
+    <numToKeep>5</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.copyartifact.CopyArtifactPermissionProperty plugin="copyartifact@1.32.1">
+      <projectNameList>
+        <string>shop-monolitic-ui-test</string>
+      </projectNameList>
+    </hudson.plugins.copyartifact.CopyArtifactPermissionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>/var/lib/jenkins/repo-cache/appstash</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>(Default)</jdk>
+  <triggers>
+    <jenkins.triggers.ReverseBuildTrigger>
+      <spec/>
+      <upstreamProjects>shop-monolitic-ui-test</upstreamProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </jenkins.triggers.ReverseBuildTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.32.1">
+      <project>shop-monolitic-ui-test</project>
+      <filter>**/*.war</filter>
+      <target>artifacts/</target>
+      <excludes/>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector">
+        <stable>true</stable>
+      </selector>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
+      <command>./gradlew -p monolithic/ui jmeterRun</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.chucknorris.CordellWalkerRecorder plugin="chucknorris@0.5">
+      <factGenerator/>
+    </hudson.plugins.chucknorris.CordellWalkerRecorder>
+    <hudson.plugins.performance.PerformancePublisher plugin="performance@1.11">
+      <errorFailedThreshold>0</errorFailedThreshold>
+      <errorUnstableThreshold>0</errorUnstableThreshold>
+      <errorUnstableResponseTimeThreshold/>
+      <relativeFailedThresholdPositive>0.0</relativeFailedThresholdPositive>
+      <relativeFailedThresholdNegative>0.0</relativeFailedThresholdNegative>
+      <relativeUnstableThresholdPositive>0.0</relativeUnstableThresholdPositive>
+      <relativeUnstableThresholdNegative>0.0</relativeUnstableThresholdNegative>
+      <nthBuildNumber>0</nthBuildNumber>
+      <modeRelativeThresholds>false</modeRelativeThresholds>
+      <configType>ART</configType>
+      <modeOfThreshold>true</modeOfThreshold>
+      <compareBuildPrevious>true</compareBuildPrevious>
+      <xml/>
+      <modePerformancePerTestCase>true</modePerformancePerTestCase>
+      <parsers>
+        <hudson.plugins.performance.JMeterParser>
+          <glob>**/loadtest.*.xml</glob>
+        </hudson.plugins.performance.JMeterParser>
+      </parsers>
+      <modeThroughput>true</modeThroughput>
+    </hudson.plugins.performance.PerformancePublisher>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>artifacts/*.war</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
+  <buildWrappers/>
+</project>

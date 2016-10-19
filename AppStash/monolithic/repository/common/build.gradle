@@ -1,0 +1,23 @@
+jar.baseName = "common-repository"
+
+idea {
+    module {
+        name='common-repository'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+
+dependencies {
+    compile commonDeps
+    compile mongoDeps
+    compile springDeps
+}

@@ -1,0 +1,47 @@
+#! /bin/sh
+PIDFILE=/var/run/product.pid
+BASE_DIRECTORY=/usr/share/shop/product/bin
+
+if [ `id -u` -ne 0 ]; then
+    echo "You need root privileges to run this script"
+    exit 1
+fi
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/etc/init.d
+. /lib/lsb/init-functions
+
+start_service() {
+        log_daemon_msg "Starting product service"
+        nohup $BASE_DIRECTORY/product -Dconfig.file=/etc/product/application.conf > /var/log/product.log 2>&1 &
+        echo $! > $PIDFILE
+        sleep 1
+        log_end_msg 0 || true
+}
+
+stop_service() {
+    if [ -e $PIDFILE ]; then
+        SERVICE_PID=`cat $PIDFILE|sed 's/\(.*\)pts.*/\1/g'|head -n 1`
+        log_daemon_msg "Stopping product service [$SERVICE_PID]"
+        kill $SERVICE_PID
+        rm $PIDFILE
+        log_end_msg 0 || true
+    fi
+}
+
+case "$1" in
+    start)
+        start_service
+        ;;
+    restart|reload|force-reload)
+        stop_service
+        sleep 1
+        start_service
+        ;;
+    stop)
+        stop_service
+        ;;
+    *)
+        echo "Usage: $0 start|restart|stop" >&2
+        exit 3
+        ;;
+esac

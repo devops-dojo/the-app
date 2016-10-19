@@ -1,0 +1,22 @@
+jar.baseName = "common-service"
+
+idea {
+    module {
+        name='common-service'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+        }
+    }
+}
+
+
+dependencies {
+    compile commonDeps
+    compile springDeps
+    compile project(':monolithic:repository:common')
+}

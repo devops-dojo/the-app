@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description/>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>5</daysToKeep>
+    <numToKeep>5</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3.4">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>/var/lib/jenkins/repo-cache/appstash</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>(Default)</jdk>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>H/60 * * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>rm -rf /var/lib/jenkins/.npm/5fd4d489-ins-npm-lodash-2-4-1-package-tgz.lock
+./gradlew -p microservice/frontend/catalog bower grunt_build --stacktrace
+./gradlew -p microservice/frontend/catalog prepareDeb buildDeb --stacktrace</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.chucknorris.CordellWalkerRecorder plugin="chucknorris@0.5">
+      <factGenerator/>
+    </hudson.plugins.chucknorris.CordellWalkerRecorder>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>**/*.deb</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.25">
+      <patterns>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>**/bower_components/</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>**/node_modules/</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>**/.bowerrc</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>.git/</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+      </patterns>
+      <deleteDirs>true</deleteDirs>
+      <cleanupParameter/>
+      <externalDelete/>
+    </hudson.plugins.ws__cleanup.PreBuildCleanup>
+  </buildWrappers>
+</project>

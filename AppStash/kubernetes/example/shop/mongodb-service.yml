@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      name: mongodb
+      role: database
+  name: mongodb
+spec:
+  ports:
+    - name: mongodb
+      port: 27017
+  selector:
+      name: mongodb

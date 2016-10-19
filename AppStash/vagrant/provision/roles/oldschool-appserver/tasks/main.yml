@@ -1,0 +1,7 @@
+- raw: sudo chgrp -R tomcat7 /var/log/tomcat7/
+- raw: sudo chmod -R 755 /var/log/tomcat7
+
+- copy: src=default dest=/etc/default/logstash force=yes mode=0644
+- copy: src=logstash.conf dest=/etc/logstash/conf.d force=yes mode=0644
+  notify: restart logstash
+

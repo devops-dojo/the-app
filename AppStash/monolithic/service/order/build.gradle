@@ -1,0 +1,35 @@
+jar.baseName = "order-service"
+
+idea {
+    module {
+        name='order-service'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+            srcDir 'src/main/resources'
+        }
+    }
+    test {
+        resources {
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+
+dependencies {
+    compile project(':monolithic:service:common')
+    compile project(':monolithic:repository:order')
+    compile project(':monolithic:service:cart')
+    compile project(':monolithic:service:product')
+    compile project(':monolithic:service:user')
+    // required for automatic supplier generation
+    compile project(':monolithic:common:dataloader')
+    //
+
+    testCompile testDeps
+}

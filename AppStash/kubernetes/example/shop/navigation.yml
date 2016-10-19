@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: navigation
+spec:
+  replicas: 1
+  selector:
+    name: navigation
+  template:
+    metadata:
+      labels:
+        name: navigation
+        role: backend
+      name: navigation
+    spec:
+      containers:
+        - name: navigation
+          image: zutherb/navigation-service
+          ports:
+            - containerPort: 18090

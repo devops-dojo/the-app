@@ -1,0 +1,9 @@
+Origin: ci-repo
+Label: ci-repo
+Codename: shop
+Architectures: i386 amd64
+Components: main
+Description: Shop APT Repository
+SignWith: 18858766
+DebOverride: override.shop
+DscOverride: override.shop

@@ -1,0 +1,31 @@
+jar.baseName = "common-dataloader"
+
+idea {
+    module {
+        name='dataloader'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/resources'
+            srcDir 'src/main/java'
+        }
+    }
+    test {
+        resources {
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+
+dependencies {
+    compile project(':monolithic:common:util')
+    compile project(':monolithic:repository:product')
+    compile project(':monolithic:repository:order')
+    compile project(':monolithic:repository:user')
+
+    testCompile testDeps
+}

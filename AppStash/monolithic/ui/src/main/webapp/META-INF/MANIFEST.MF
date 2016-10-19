@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Created-By: codecentric AG
+Specification-Title: Appstash Microservice Showcase
+Specification-Version: localhost
+Specification-Vendor: codecentric AG
+Implementation-Title: Appstash Microservice Showcase
+Implementation-Version: localhost
+Implementation-Vendor: codecentric AG

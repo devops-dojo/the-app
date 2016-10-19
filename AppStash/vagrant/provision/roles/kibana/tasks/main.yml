@@ -1,0 +1,21 @@
+---
+- name: install curl and unzip
+  apt: pkg={{item}} state=present force=yes
+  with_items:
+      - unzip
+      - curl
+
+- name: download kibana
+  get_url: url=http://download.elasticsearch.org/kibana/kibana/kibana-{{kibana_version}}.tar.gz dest=/tmp/kibana.tar.gz mode=0755 owner=vagrant
+
+- group: name=www state=present
+- user: name=vagrant shell=/bin/bash groups=www append=yes
+- file: path=/var/www/ owner=vagrant group=www mode=4755 recurse=yes
+
+- name: unarchive kibana
+  sudo : yes
+  sudo_user: vagrant
+  raw: tar -xf /tmp/kibana.tar.gz --directory=/tmp/
+
+- raw: cp -r /tmp/kibana-{{kibana_version}}/* /var/www/html/
+  notify: httpd restart

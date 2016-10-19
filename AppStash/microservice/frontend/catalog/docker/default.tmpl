@@ -1,0 +1,53 @@
+server {
+
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /var/www/html;
+
+	index index.html index.htm index.nginx-debian.html;
+
+	server_name _;
+
+	location /shop/ {
+        rewrite /shop/(.*) /shop/$1  break;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Docker-Mode-Enabled true;
+        proxy_set_header X-Bootstrap-Design {{ .Env.CHECKOUT_DESIGN }};
+
+        proxy_pass http://{{ .Env.SHOP_PORT_8080_TCP_ADDR }}:{{ .Env.SHOP_PORT_8080_TCP_PORT }};
+    }
+
+	location /api/product/ {
+      rewrite /api/product/(.*) /$1  break;
+
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+      proxy_pass http://{{ .Env.PRODUCT_PORT_18080_TCP_ADDR }}:{{ .Env.PRODUCT_PORT_18080_TCP_PORT }};
+  }
+
+  location /api/navigation/ {
+      rewrite /api/navigation/(.*) /$1  break;
+
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+      proxy_pass http://{{ .Env.NAVIGATION_PORT_18090_TCP_ADDR }}:{{ .Env.NAVIGATION_PORT_18090_TCP_PORT }};
+  }
+
+  location /api/cart/ {
+      rewrite /api/cart/(.*) /$1  break;
+
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+      proxy_pass http://{{ .Env.CART_PORT_18100_TCP_ADDR }}:{{ .Env.CART_PORT_18100_TCP_PORT }};
+  }
+}

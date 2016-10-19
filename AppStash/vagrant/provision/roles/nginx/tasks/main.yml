@@ -1,0 +1,15 @@
+---
+- name: install python-software-properties
+  apt: pkg=python-software-properties state=present force=yes
+
+- name: add node repository into sources list.
+  apt_repository: repo='ppa:nginx/stable' state=present
+
+- name: update cache
+  apt: update_cache=yes force=yes
+
+- name: install nginx
+  apt: pkg={{item}} state=present force=yes
+  with_items:
+    - nginx
+

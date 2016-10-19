@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.tasks.Maven_-DescriptorImpl>
+  <installations>
+    <hudson.tasks.Maven_-MavenInstallation>
+      <name>maven-3.2.2</name>
+      <properties>
+        <hudson.tools.InstallSourceProperty>
+          <installers>
+            <hudson.tasks.Maven_-MavenInstaller>
+              <id>3.2.2</id>
+            </hudson.tasks.Maven_-MavenInstaller>
+          </installers>
+        </hudson.tools.InstallSourceProperty>
+      </properties>
+    </hudson.tasks.Maven_-MavenInstallation>
+  </installations>
+</hudson.tasks.Maven_-DescriptorImpl>

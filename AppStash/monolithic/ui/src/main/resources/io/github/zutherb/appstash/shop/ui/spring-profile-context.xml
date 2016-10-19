@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <beans profile="test">
+        <bean id="testValues" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+            <property name="properties">
+                <props>
+                    <prop key="authentication.salt">4e6ab01864d726077691caa0d19a2d3f</prop>
+                    <prop key="generator.generate.orders">0</prop>
+                    <prop key="generator.drop.collections">0</prop>
+                    <prop key="generator.generationJob.rate">0</prop>
+                    <prop key="mongo.db">shop</prop>
+                    <prop key="mongo.host">localhost</prop>
+                    <prop key="mongo.port">27017</prop>
+                    <prop key="redis.cart.microservice.url">http://shop.microservice.io/api/cart</prop>
+                    <prop key="mix.panel.token">92fd25e4ab5d1371f36d650e67be9f84</prop>
+                </props>
+            </property>
+        </bean>
+
+        <context:property-placeholder system-properties-mode="OVERRIDE"
+                                      ignore-resource-not-found="false"
+                                      properties-ref="testValues"/>
+    </beans>
+
+    <beans profile="production">
+        <context:property-placeholder system-properties-mode="OVERRIDE"
+                                      ignore-resource-not-found="false"
+                                      properties-ref="productionValues"/>
+
+        <bean id="productionValues" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+            <property name="properties">
+                <props>
+                    <prop key="authentication.salt">4e6ab01864d726077691caa0d19a2d3f</prop>
+                    <prop key="generator.generate.orders">0</prop>
+                    <prop key="generator.drop.collections">0</prop>
+                    <prop key="generator.generationJob.rate">0</prop>
+                    <prop key="mongo.db">shop</prop>
+                    <prop key="mongo.host">mongodb-node</prop>
+                    <prop key="mongo.port">27017</prop>
+                    <prop key="redis.cart.microservice.url">http://shop.microservice.io/api/cart</prop>
+                    <prop key="mix.panel.token">92fd25e4ab5d1371f36d650e67be9f84</prop>
+                </props>
+            </property>
+        </bean>
+    </beans>
+
+    <beans profile="docker">
+        <bean id="dockerValues" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+            <property name="properties">
+                <props>
+                    <prop key="authentication.salt">4e6ab01864d726077691caa0d19a2d3f</prop>
+                    <prop key="generator.generate.orders">0</prop>
+                    <prop key="generator.drop.collections">0</prop>
+                    <prop key="generator.generationJob.rate">0</prop>
+                    <prop key="mongo.db">shop</prop>
+                    <prop key="mongo.host">${MONGODB_PORT_27017_TCP_ADDR}</prop>
+                    <prop key="mongo.port">${MONGODB_PORT_27017_TCP_PORT}</prop>
+                    <prop key="redis.cart.microservice.url">http://${CART_PORT_18100_TCP_ADDR}:${CART_PORT_18100_TCP_PORT}</prop>
+                    <prop key="mix.panel.token">92fd25e4ab5d1371f36d650e67be9f84</prop>
+                </props>
+            </property>
+        </bean>
+
+        <context:property-placeholder system-properties-mode="OVERRIDE"
+                                      ignore-resource-not-found="false"
+                                      properties-ref="dockerValues"/>
+    </beans>
+</beans>

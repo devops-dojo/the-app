@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:component-scan base-package="io.github.zutherb.appstash.shop.service.authentication"/>
+
+    <import resource="classpath:io/github/zutherb/appstash/shop/service/user/spring-context.xml"/>
+    <import resource="classpath:io/github/zutherb/appstash/dataloader/spring-context.xml"/>
+
+
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userDetailsService">
+            <security:password-encoder ref="userPasswordEncoder">
+                <security:salt-source system-wide="${authentication.salt}"/>
+            </security:password-encoder>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+
+    <bean id="testValues" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="authentication.salt">4e6ab01864d726077691caa0d19a2d3f</prop>
+            </props>
+        </property>
+    </bean>
+
+    <beans profile="test">
+        <context:property-placeholder system-properties-mode="OVERRIDE"
+                                      ignore-resource-not-found="false"
+                                      ignore-unresolvable="true"
+                                      properties-ref="testValues"/>
+    </beans>
+</beans>

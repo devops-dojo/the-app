@@ -1,0 +1,2 @@
+release date=23:04 17.09.2013,version=[[version]],urgency=low,by=Bernd Zuther <bernd.zuther@me.com>
+ * Initial release. (Closes: #42). Needs a tag matching the version number above (e.g. 'git tag debian/1')). Then one can call the git buildpackage tool git-dch like follows: 'git dch -N 1 -R'. This file needs to be located at '<git repository root>/debian/changelog'.

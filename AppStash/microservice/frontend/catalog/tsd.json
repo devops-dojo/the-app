@@ -1,0 +1,33 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "jquery/jquery.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    },
+    "angularjs/angular.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    },
+    "angularjs/angular-route.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    },
+    "angularjs/angular-resource.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    },
+    "bootstrap/bootstrap.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    },
+    "underscore/underscore.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    },
+    "angular-ui-bootstrap/angular-ui-bootstrap.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    },
+    "angularLocalStorage/angularLocalStorage.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+jar.baseName = "user-service"
+
+idea {
+    module {
+        name='user-service'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+            srcDir 'src/main/resources'
+        }
+    }
+    test {
+        resources {
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+
+dependencies {
+    compile project(':monolithic:service:common')
+    compile project(':monolithic:repository:user')
+
+    testCompile testDeps
+}

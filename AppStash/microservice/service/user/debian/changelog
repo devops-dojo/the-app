@@ -1,0 +1,8 @@
+package 0.0.1-0 distribution(s); urgency=urgency
+     	    [optional blank line(s), stripped]
+       * change details
+         more change details
+     	    [blank line(s), included in output of dpkg-parsechangelog]
+       * even more change details
+     	    [optional blank line(s), stripped]
+      -- maintainer name <email address>[two spaces]  date

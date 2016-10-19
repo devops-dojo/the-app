@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<org.jenkinsci.plugins.xvfb.XvfbBuildWrapper_-XvfbBuildWrapperDescriptor plugin="xvfb@1.0.13">
+  <installations>
+    <org.jenkinsci.plugins.xvfb.XvfbInstallation>
+      <name>default</name>
+      <home></home>
+      <properties>
+        <hudson.tools.InstallSourceProperty>
+          <installers/>
+        </hudson.tools.InstallSourceProperty>
+      </properties>
+    </org.jenkinsci.plugins.xvfb.XvfbInstallation>
+  </installations>
+</org.jenkinsci.plugins.xvfb.XvfbBuildWrapper_-XvfbBuildWrapperDescriptor>

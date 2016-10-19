@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+chmod +x /usr/share/shop/dataloader/bin/dataloader
+/usr/share/shop/dataloader/bin/dataloader

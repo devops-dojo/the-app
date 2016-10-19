@@ -1,0 +1,25 @@
+
+
+idea {
+    module {
+        name='recommendation-service'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+
+dependencies {
+    compile project(':monolithic:service:common')
+    compile project(':monolithic:service:authentication')
+    compile project(':monolithic:service:product')
+
+    testCompile testDeps
+}

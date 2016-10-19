@@ -1,0 +1,9 @@
+---
+logstash_version : 1.4
+elasticsearch_version : 1.1
+kibana_version : 3.1.2
+
+
+oracle_java_download_url : http://download.oracle.com/otn-pub/java/jdk/8u25-b17/jdk-8u25-linux-x64.tar.gz
+oracle_java_zip_file : /tmp/jdk-8u25-linux-x64.tar.gz
+oracle_java_folder : jdk1.8.0_25

@@ -1,0 +1,33 @@
+@startuml
+scale 2
+
+database "MongoDB" {
+}
+
+node "Backend Server" {
+    [UserService] --> MongoDB
+    [NavigationService] --> MongoDB
+    [ProductService] --> MongoDB
+    [RecommendationService] --> MongoDB
+    [OrderService] --> MongoDB
+    [UserService] --> MongoDB
+}
+
+node "Catalog Application Server" {
+    [AngularJS Frontend] --> [NavigationService]
+    [AngularJS Frontend] --> [ProductService]
+    [AngularJS Frontend] --> [RecommendationService]
+    [AngularJS Frontend] --> [UserService]
+}
+
+node "Checkout Application Server" {
+    [React Frontend] --> [NavigationService]
+    [React Frontend] --> [ProductService]
+    [React Frontend] --> [RecommendationService]
+    [React Frontend] --> [OrderService]
+    [React Frontend] --> [UserService]
+}
+
+
+
+@enduml

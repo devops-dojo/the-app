@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<head>
+    <title>Shop</title>
+</head>
+<body>
+<wicket:extend>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <form wicket:id="orderForm">
+                <div wicket:id="delieferyInfomation"></div>
+                <div wicket:id="orderItems"></div>
+                <button type="submit" class="btn btn-primary" wicket:id="submitOrder">Submit Order</button>
+                <button type="button" class="btn btn-primary" wicket:id="backToShopLink">Back to Shop</button>
+            </form>
+        </div>
+    </div>
+    <p></p>
+
+    <div class="row">
+        <div class="col-md-12" wicket:id="frequentlyBoughtWithProducts"></div>
+    </div>
+</wicket:extend>
+</body>
+</html>

@@ -1,0 +1,155 @@
+apply plugin: 'groovy'
+apply plugin: 'war'
+apply plugin: 'jettyEclipse'
+apply plugin: 'jmeter'
+apply plugin: 'docker'
+
+def warName = "monolithic-shop.war"
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        //don't move this in root script or slf4j deps will be lost
+        classpath "com.github.kulya:jmeter-gradle-plugin:1.3.4-2.13"
+    }
+}
+
+idea {
+    module {
+        name = 'ui'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/resources'
+            srcDir 'src/main/webapp'
+            srcDir 'src/main/java'
+        }
+    }
+    test {
+        resources {
+            srcDir 'src/test/java'
+            srcDir 'src/test/resources'
+            srcDir 'src/loadtest'
+        }
+    }
+    uitest {
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
+        groovy {
+            srcDir 'src/uitest/groovy'
+        }
+    }
+}
+
+configurations {
+    uitestCompile.extendsFrom testCompile
+    uitestRuntime.extendsFrom testRuntime
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "net.logstash.logback:logstash-logback-encoder:2.8"
+
+    compile commonDeps
+    compile springDeps
+    compile jacksonDeps
+    compile springSecurityDeps
+    compile wicketDeps
+    compile webAppDeps
+
+    compile project(':monolithic:service:authentication')
+    compile project(':monolithic:service:cart')
+    compile project(':monolithic:service:checkout')
+    compile project(':monolithic:service:order')
+    compile project(':monolithic:service:product')
+    compile project(':monolithic:service:recommendation')
+    compile project(':monolithic:service:user')
+    // for generating sample data automatically on startup
+    compile project(':monolithic:common:dataloader')
+    compile "com.github.fakemongo:fongo:$fongoVersion"
+
+    compile "com.mixpanel:mixpanel-java:$mixpanelVersion"
+
+    testCompile jettyDeps
+    testCompile testDeps
+
+    //If using Spock, need to depend on geb-spock
+    testCompile "org.gebish:geb-spock:$gebVersion"
+    testCompile "org.gebish:geb-junit4:$gebVersion"
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+
+    // If using JUnit, need to depend on geb-junit (3 or 4)
+    testCompile "xerces:xercesImpl:2.8.1"
+    testCompile "xml-apis:xml-apis:1.3.04"
+    testCompile "org.apache.httpcomponents:httpclient:4.3.2"
+}
+
+test {
+    exclude '**/*Spec*'
+}
+
+
+task uiTest(type: Test) {
+    testClassesDir = sourceSets.uitest.output.classesDir
+    classpath = sourceSets.uitest.runtimeClasspath
+
+    reports {
+        html.destination = reporting.file("$name/tests")
+        junitXml.destination = file("$buildDir/test-results/$name")
+    }
+
+    systemProperty "geb.build.reportsDir", reporting.file("$name/geb")
+    systemProperty "geb.env", "firefox"
+}
+
+jmeterRun.configure {
+    jmeterPropertyFile = file("${projectDir}/src/loadtest/jmeter.properties")
+    jmeterTestFiles = [file("src/loadtest/loadtest.jmx")]
+    enableReports = true
+}
+
+war {
+    archiveName = warName
+    def manifestClasspath = configurations.compile.collect { it.getName() }.join(',')
+    def cmd = "git rev-parse HEAD"
+    def proc = cmd.execute()
+    manifest {
+        attributes(
+                "Manifest-Version"       : "1.0",
+                "Created-By"             : vendor,
+                "Specification-Title"    : appName,
+                "Specification-Version"  : version,
+                "Specification-Vendor"   : vendor,
+                "Implementation-Title"   : appName,
+                "Implementation-Version" : version,
+                "Implementation-Vendor"  : vendor,
+                "Git-Revision"           : proc.text.trim(),
+                "Build"                  : "${System.getenv("JOB_NAME")}",
+                "Build-Number"           : "${System.getenv("BUILD_NUMBER")}"
+        )
+    }
+}
+
+docker {
+    maintainer = 'Bernd Zuther <bernd.zuther@codecentric.de>'
+    baseImage = 'wegenenverkeer/tomcat7-java8'
+}
+
+task packageToContainer(type: Docker) {
+    dependsOn war
+
+    applicationName = 'monolithic-shop'
+    tagVersion = "latest"
+    tag = "zutherb/${applicationName}"
+
+    addFile("$buildDir/libs/$warName", "/opt/tomcat7/webapps/shop.war")
+}

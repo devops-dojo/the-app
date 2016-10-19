@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description>&lt;p&gt;&#13;
+  After running this build the &lt;a href="http://shop.monolith.io:8080/shop/" target="_blank"&gt;Monolith Production Node&lt;/a&gt; should be running. &#13;
+  You can check the Version with the following urls:&#13;
+  &lt;ul&gt;&#13;
+    &lt;li&gt;&lt;a href="http://shop.monolith.io:8080/shop/version" target="_blank"&gt;Monolith&lt;/a&gt;&lt;/li&gt;&#13;
+    &lt;li&gt;&lt;a href="http://shop.monolith.io:8080/shop/jmx/" target="_blank"&gt;Monolith (JMX Console)&lt;/a&gt;&lt;/li&gt;&#13;
+    &lt;li&gt;&lt;a href="http://shop.monolith.io:8080/shop/performance/" target="_blank"&gt;Monolith (Performance Console)&lt;/a&gt;&lt;/li&gt;&#13;
+  &lt;/ul&gt;&#13;
+&lt;/p&gt;</description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>5</daysToKeep>
+    <numToKeep>5</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.copyartifact.CopyArtifactPermissionProperty plugin="copyartifact@1.32.1">
+      <projectNameList>
+        <string>shop-monolitic-load-test</string>
+      </projectNameList>
+    </hudson.plugins.copyartifact.CopyArtifactPermissionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>(Default)</jdk>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command/>
+    </hudson.tasks.Shell>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.32.1">
+      <project>shop-monolitic-load-test</project>
+      <filter>**/*.war</filter>
+      <target>artifacts</target>
+      <excludes/>
+      <selector class="hudson.plugins.copyartifact.WorkspaceSelector"/>
+      <flatten>true</flatten>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
+      <command>scp -o StrictHostKeyChecking=no -v ${WORKSPACE}/artifacts/monolithic-shop.war vagrant@app-server-node-2:/tmp/shop.war 
+ssh vagrant@app-server-node-2 -o StrictHostKeyChecking=no -v &lt;&lt;EOF
+sudo service tomcat7 stop
+sudo rm -rf /var/lib/tomcat7/webapps/shop*
+sudo cp /tmp/shop.war /var/lib/tomcat7/webapps/shop.war
+sudo chown tomcat7 /var/lib/tomcat7/webapps/shop.war
+sudo chgrp tomcat7 /var/lib/tomcat7/webapps/shop.war
+sudo service tomcat7 start
+curl --connect-timeout 60 http://app-server-node-2:8080/shop/version
+EOF</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.chucknorris.CordellWalkerRecorder plugin="chucknorris@0.5">
+      <factGenerator/>
+    </hudson.plugins.chucknorris.CordellWalkerRecorder>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>**/*.war</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>true</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
+  <buildWrappers/>
+</project>

@@ -1,0 +1,17 @@
+---
+- command: test -e /usr/local/{{oracle_java_folder}}/
+  register: java_exist
+  ignore_errors: true
+
+- raw: 'wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "{{oracle_java_download_url}}" -O {{oracle_java_zip_file}}'
+  when: java_exist.rc != 0
+
+- raw: 'sudo tar xzf {{oracle_java_zip_file}} --directory=/usr/local/'
+  when: java_exist.rc != 0
+
+- raw: 'sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/{{oracle_java_folder}}/bin/java" 1'
+- raw: 'sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/local/{{oracle_java_folder}}/bin/javac" 1'
+- raw: 'sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/{{oracle_java_folder}}/bin/javaws" 1'
+- raw: 'sudo update-alternatives --set "java" "/usr/local/{{oracle_java_folder}}/bin/java"'
+- raw: 'sudo update-alternatives --set "javac" "/usr/local/{{oracle_java_folder}}/bin/javac"'
+- raw: 'sudo update-alternatives --set "javaws" "/usr/local/{{oracle_java_folder}}/bin/javaws"'

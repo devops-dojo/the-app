@@ -1,0 +1,7 @@
+<div class="row">
+    <h2>{{headline}}</h2>
+
+    <div ng-init="productType = vm.productType" ng-repeat="product in products track by product.id | filter:productType">
+        <div shop-product-item product="product"></div>
+    </div>
+</div>

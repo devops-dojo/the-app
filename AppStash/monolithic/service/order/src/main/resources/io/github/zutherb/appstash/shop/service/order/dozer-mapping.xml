@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+    <mapping map-null="false">
+        <class-a>io.github.zutherb.appstash.shop.service.order.model.OrderInfo</class-a>
+        <class-b>io.github.zutherb.appstash.shop.repository.order.model.Order</class-b>
+        <field>
+            <a is-accessible="true">orderId</a>
+            <b>orderId</b>
+        </field>
+        <field type="one-way">
+            <a>user.id</a>
+            <b>userId</b>
+        </field>
+        <field relationship-type="cumulative">
+            <a is-accessible="true">orderItems</a>
+            <b>orderItems</b>
+            <a-hint>io.github.zutherb.appstash.shop.service.order.model.OrderItemInfo</a-hint>
+            <b-hint>io.github.zutherb.appstash.shop.repository.order.model.OrderItem</b-hint>
+        </field>
+        <field>
+            <a is-accessible="true">deliveryAddress</a>
+            <b>deliveryAddress</b>
+        </field>
+        <field>
+            <a is-accessible="true">sessionId</a>
+            <b>sessionId</b>
+        </field>
+        <field>
+            <a is-accessible="true">orderDate</a>
+            <b>orderDate</b>
+        </field>
+        <field>
+            <a is-accessible="true">deliveryAddress</a>
+            <b>deliveryAddress</b>
+            <a-hint>io.github.zutherb.appstash.shop.service.order.model.DeliveryAddressInfo</a-hint>
+            <b-hint>io.github.zutherb.appstash.shop.repository.order.model.DeliveryAddress</b-hint>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>io.github.zutherb.appstash.shop.service.order.model.DeliveryAddressInfo</class-a>
+        <class-b>io.github.zutherb.appstash.shop.repository.order.model.DeliveryAddress</class-b>
+        <field>
+            <a is-accessible="true">firstname</a>
+            <b>firstname</b>
+        </field>
+        <field>
+            <a is-accessible="true">lastname</a>
+            <b>lastname</b>
+        </field>
+        <field>
+            <a is-accessible="true">street</a>
+            <b>street</b>
+        </field>
+        <field>
+            <a is-accessible="true">city</a>
+            <b>city</b>
+        </field>
+        <field>
+            <a is-accessible="true">zip</a>
+            <b>zip</b>
+        </field>
+        <field>
+            <a>county</a>
+            <b is-accessible="true">county</b>
+        </field>
+        <field>
+            <a>houseNumber</a>
+            <b is-accessible="true">houseNumber</b>
+        </field>
+        <field>
+            <a>state</a>
+            <b is-accessible="true">state</b>
+        </field>
+        <field>
+            <a>countryCode</a>
+            <b is-accessible="true">countryCode</b>
+        </field>
+        <field>
+            <a>country</a>
+            <b is-accessible="true">country</b>
+        </field>
+        <field>
+            <a>longitude</a>
+            <b get-method="getLongitude" set-method="setLongitude">longitude</b>
+        </field>
+        <field>
+            <a>latitude</a>
+            <b get-method="getLatitude" set-method="setLatitude">latitude</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>io.github.zutherb.appstash.shop.service.order.model.OrderItemInfo</class-a>
+        <class-b>io.github.zutherb.appstash.shop.repository.order.model.OrderItem</class-b>
+        <field>
+            <a is-accessible="true">product</a>
+            <b>product</b>
+            <a-hint>io.github.zutherb.appstash.shop.service.product.model.ProductInfo</a-hint>
+            <b-hint>io.github.zutherb.appstash.shop.repository.product.model.Product</b-hint>
+        </field>
+        <field>
+            <a is-accessible="true">uuid</a>
+            <b>uuid</b>
+        </field>
+    </mapping>
+
+</mappings>

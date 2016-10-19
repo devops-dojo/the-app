@@ -1,0 +1,51 @@
+---
+- name: install deb repo dependencies
+  apt: pkg={{item}} state=present force=yes
+  with_items:
+    - nginx
+    - gnupg
+    - rng-tools
+    - reprepro
+    - dpkg-sig
+    - dpkg-dev
+
+- copy: src=rng-tools dest=/etc/default/rng-tools force=yes mode=0644
+  notify: restart rng-tools
+
+- name: create gnupg directory
+  sudo: yes
+  sudo_user: root
+  file: path=/root/.gnupg/ state=directory force=yes
+
+- copy: src={{item}} dest=/root/.gnupg/{{item}} force=yes mode=0644
+  sudo: yes
+  sudo_user: root
+  with_items:
+      - gpg.conf
+      - pubring.gpg
+      - random_seed
+      - secring.gpg
+      - trustdb.gpg
+
+- name: create deb repository
+  sudo: yes
+  sudo_user: root
+  file: path=/var/packages/debian/conf state=directory force=yes
+
+- copy: src={{item}} dest=/var/packages/debian/conf/{{item}} force=yes mode=0644
+  with_items:
+      - distributions
+
+- file: path=/var/packages/debian/conf/override.shop state=touch force=yes
+- copy: src=options dest=/var/packages/debian/conf/options force=yes mode=0644
+
+- copy: src=default dest=/etc/nginx/sites-enabled/default force=yes mode=0644
+  notify: restart nginx
+
+- sudo: yes
+  sudo_user: root
+  raw: gpg --armor --output /var/packages/ci-repo.gpg.key --export 18858766
+
+- sudo: yes
+  sudo_user: root
+  raw: reprepro -b /var/packages/debian/ export

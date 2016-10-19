@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<head>
+    <title>Anmeldung</title>
+</head>
+<body>
+    <wicket:extend>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Registrierung</h2>
+                <form class="form-horizontal" wicket:id="registration">
+                    <div class="control-group">
+                        <label class="control-label" >Firstname</label>
+                        <div class="controls">
+                            <input type="text" wicket:id="firstname">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" >Lastname</label>
+                        <div class="controls">
+                            <input type="text" wicket:id="lastname">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" >Username</label>
+                        <div class="controls">
+                            <input type="text" wicket:id="username">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" >Email</label>
+                        <div class="controls">
+                            <input type="text" wicket:id="email">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Password</label>
+                        <div class="controls">
+                            <input type="password" wicket:id="password">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Password (repeat)</label>
+                        <div class="controls">
+                            <input type="password" wicket:id="repeatPassword">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Street</label>
+                        <div class="controls">
+                            <input type="text" wicket:id="street">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">ZIP code</label>
+                        <div class="controls">
+                            <input type="text" wicket:id="zip">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">City</label>
+                        <div class="controls">
+                            <input type="text" wicket:id="city">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn" wicket:id="submit">Sign in</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </wicket:extend>
+</body>
+</html>

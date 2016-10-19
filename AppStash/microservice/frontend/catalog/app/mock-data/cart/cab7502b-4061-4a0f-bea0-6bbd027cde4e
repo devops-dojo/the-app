@@ -1,0 +1,16 @@
+{
+    "uuid": "f442c705-d3d7-484c-8f76-7022c088b560",
+    "cartItems": [{
+        "uuid": "9ea9fc2f-845b-4256-8c78-69637e802ab7",
+        "product": {
+            "id": "54008e98c02640a0fb716fda",
+            "articleId": "608",
+            "name": "DROID™ Pro by Motorola",
+            "urlname": "droid-pro-by-motorola",
+            "category": null,
+            "description": "The next generation of DOES.",
+            "type": null,
+            "price": 129
+        }
+    }
+]}

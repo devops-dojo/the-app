@@ -1,0 +1,125 @@
+import io.github.zutherb.appstash.shop.gradle.VersionTxtTask
+
+apply plugin: 'pkg-debian'
+apply plugin: 'docker'
+apply plugin: 'com.moowork.grunt'
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'app'
+        }
+    }
+    test {
+        resources {
+            srcDir 'test'
+        }
+    }
+}
+
+jar.baseName = "shop-catalog-frontend"
+
+idea {
+    module {
+        name='shop-catalog-frontend'
+    }
+}
+
+debian {
+    packagename = "shop-catalog-frontend"
+    publications = ['mavenStuff']
+    controlDirectory = "${projectDir}/debian/control"
+    changelogFile = "${projectDir}/debian/changelog"
+    outputFile = "${buildDir}/debian/${packagename}_${version}.deb"
+
+    data {
+        dir {
+            name = "${projectDir}/debian/data"
+            exclusions = ["**/.DS_Store", "changelog"]
+        }
+        dir {
+            name = "${buildDir}/debian-data/"
+            exclusions = ["**/.DS_Store"]
+        }
+    }
+}
+
+docker {
+    baseImage "ubuntu"
+    maintainer 'Bernd Zuther "bernd.zuther@me.com"'
+}
+
+// processes your bower.json
+task bower(type: Exec){
+    commandLine "bower", 'install'
+}
+
+task prepareDeb (type: VersionTxtTask) {
+    def htmlFolder = "${buildDir}/debian-data/usr/share/shop/frontend/catalog/html"
+    def cmd = "git rev-parse HEAD"
+    def proc = cmd.execute()
+
+    filename = "${htmlFolder}/version.txt"
+
+    manifest = manifest {
+        attributes("Manifest-Version"       : "1.0",
+                "Created-By"             : vendor,
+                "Specification-Title"    : appName,
+                "Specification-Version"  : version,
+                "Specification-Vendor"   : vendor,
+                "Implementation-Title"   : appName,
+                "Implementation-Version" : version,
+                "Implementation-Vendor"  : vendor,
+                "Git-Revision"           : proc.text.trim(),
+                "Build"                  : "${System.getenv("JOB_NAME")}",
+                "Build-Number"           : "${System.getenv("BUILD_NUMBER")}")
+    }
+
+    copy {
+        from "${projectDir}/dist/"
+        into htmlFolder
+    }
+}
+
+// makes sure on each build that grunt is installed
+grunt_build.dependsOn 'installGrunt'
+
+// processes your package.json before running grunt build
+grunt_build.dependsOn 'npmInstall'
+
+// runs "grunt build" as part of your gradle build
+build.dependsOn grunt_build
+
+clean.dependsOn grunt_clean
+
+docker {
+  maintainer = 'Bernd Zuther <bernd.zuther@codecentric.de>'
+  baseImage = 'nginx'
+}
+
+task packageToContainer(type: Docker) {
+  dependsOn clean
+  dependsOn grunt_docker
+
+  applicationName = 'catalog-frontend'
+  tagVersion = "latest"
+  tag = "zutherb/catalog-frontend"
+
+  runCommand "apt-get update -y"
+  runCommand "apt-get install -y wget"
+  runCommand "wget https://github.com/jwilder/dockerize/releases/download/v0.0.2/dockerize-linux-amd64-v0.0.2.tar.gz"
+  runCommand "tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.0.2.tar.gz"
+
+  addFile "$projectDir/docker/default.tmpl", "/etc/nginx/conf.d/default.tmpl"
+  addFile "$projectDir/dist", "/var/www/html/"
+
+  defaultCommand ([
+    "dockerize",
+    "-template",
+    "/etc/nginx/conf.d/default.tmpl:/etc/nginx/conf.d/default.conf",
+    "-stdout",
+    "/var/log/nginx/access.log",
+    "-stderr",
+    "/var/log/nginx/error.log",
+    "nginx" ])
+}

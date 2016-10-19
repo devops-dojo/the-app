@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      name: catalog-b
+      role: backend
+  name: catalog
+spec:
+  ports:
+    - name: catalog
+      port: 80
+  type: LoadBalancer
+  selector:
+      app: catalog

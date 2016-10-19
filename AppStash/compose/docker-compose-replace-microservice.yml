@@ -1,0 +1,50 @@
+mongodb:
+  image: mongo
+  command: "mongod --smallfiles"
+  ports:
+     - "27017:27017"
+     - "28017:28017"
+  volumes:
+   - /data/db:/tmp/data/db
+redis:
+  image: redis
+  ports:
+     - "6379"
+shop:
+  image: zutherb/monolithic-shop
+  ports:
+     - "8080"
+  links:
+     - mongodb
+     - cart
+  volumes:
+     - /var/log/checkout:/var/log/
+product:
+  image: zutherb/product-service:latest-go
+  ports:
+     - "18080"
+  links:
+     - mongodb
+navigation:
+  image: zutherb/navigation-service
+  ports:
+     - "18090"
+  links:
+     - mongodb
+cart:
+  image: zutherb/cart-service
+  ports:
+     - "18100"
+  links:
+     - redis
+catalog:
+  image: zutherb/catalog-frontend
+  ports:
+     - "80:80"
+  links:
+     - product
+     - navigation
+     - cart
+     - shop
+  environment:
+     - CHECKOUT_DESIGN=standard

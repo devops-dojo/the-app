@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description>&lt;p&gt;&#13;
+  After running this build the &lt;a href="http://shop.microservice.io/" target="_blank"&gt;Microservice Production Node&lt;/a&gt; should be running. &#13;
+  You can check the Version with the following urls:&#13;
+  &lt;ul&gt;&#13;
+    &lt;li&gt;&lt;a href="http://shop.microservice.io/version.txt" target="_blank"&gt;Catalog Frontend Version&lt;/a&gt;&lt;/li&gt;&#13;
+    &lt;li&gt;&lt;a href="http://shop.microservice.io/api/cart/manifest" target="_blank"&gt;Cart Microservice Manifest&lt;/a&gt;&lt;/li&gt;&#13;
+    &lt;li&gt;&lt;a href="http://shop.microservice.io/api/product/manifest" target="_blank"&gt;Product Microservice Manifest&lt;/a&gt;&lt;/li&gt;&#13;
+    &lt;li&gt;&lt;a href="http://shop.microservice.io/api/navigation/manifest" target="_blank"&gt;Navigation Microservice Manifest&lt;/a&gt;&lt;/li&gt;&#13;
+  &lt;/ul&gt;&#13;
+&lt;/p&gt;&#13;
+</description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>5</daysToKeep>
+    <numToKeep>5</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>(Default)</jdk>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command/>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>ssh vagrant@app-server-node-4 -o StrictHostKeyChecking=no -v &lt;&lt;EOF
+sudo su
+apt-get update
+echo ****************************************
+echo *         Remove Application          *
+echo **************************************** 
+apt-get clean
+echo ****************************************
+echo *         Install Application          *
+echo ****************************************
+apt-get -y install shop-registration-frontend
+apt-get -y install shop-catalog-frontend
+apt-get -y install shop-checkout-frontend
+apt-get -y install shop-product-service
+apt-get -y install shop-navigation-service
+apt-get -y install shop-cart-service
+EOF</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.chucknorris.CordellWalkerRecorder plugin="chucknorris@0.5">
+      <factGenerator/>
+    </hudson.plugins.chucknorris.CordellWalkerRecorder>
+  </publishers>
+  <buildWrappers/>
+</project>

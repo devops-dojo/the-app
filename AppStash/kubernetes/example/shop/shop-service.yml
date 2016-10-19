@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      name: shop
+      role: frontend
+  name: shop
+spec:
+  ports:
+    - name: shop
+      port: 8080
+  selector:
+      name: shop
+  sessionAffinity: ClientIP

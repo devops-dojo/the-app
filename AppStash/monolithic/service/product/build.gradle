@@ -1,0 +1,24 @@
+jar.baseName = "product-service"
+
+idea {
+    module {
+        name='product-service'
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/java'
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+
+dependencies {
+    compile project(':monolithic:service:common')
+    compile project(':monolithic:repository:product')
+
+    testCompile testDeps
+}

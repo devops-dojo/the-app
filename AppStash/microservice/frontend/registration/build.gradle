@@ -1,0 +1,24 @@
+apply plugin: 'pkg-debian'
+
+jar.baseName = "shop-registration-frontend"
+
+idea {
+    module {
+        name='shop-registration-frontend'
+    }
+}
+
+debian {
+    packagename = "shop-registration-frontend"
+    publications = ['mavenStuff']
+    controlDirectory = "${projectDir}/debian/control"
+    changelogFile = "${projectDir}/debian/changelog"
+    outputFile = "${buildDir}/debian/${packagename}_${version}.deb"
+
+    data {
+        dir {
+            name = "${projectDir}/debian/data"
+            exclusions = ["**/.DS_Store", "changelog"]
+        }
+    }
+}

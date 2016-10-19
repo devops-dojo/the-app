@@ -1,0 +1,37 @@
+apply plugin: 'pkg-debian'
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src'
+        }
+    }
+    test {
+        resources {
+            srcDir 'test'
+        }
+    }
+}
+
+jar.baseName = "shop-checkout-frontend"
+
+idea {
+    module {
+        name='shop-checkout-frontend'
+    }
+}
+
+debian {
+    packagename = "shop-checkout-frontend"
+    publications = ['mavenStuff']
+    controlDirectory = "${projectDir}/debian/control"
+    changelogFile = "${projectDir}/debian/changelog"
+    outputFile = "${buildDir}/debian/${packagename}_${version}.deb"
+
+    data {
+        dir {
+            name = "${projectDir}/debian/data"
+            exclusions = ["**/.DS_Store", "changelog"]
+        }
+    }
+}

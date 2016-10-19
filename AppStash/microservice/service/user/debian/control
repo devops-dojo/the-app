@@ -1,0 +1,13 @@
+Package: helloworld
+Version: 0.0.1-0
+Section: misc
+Priority: extra
+Architecture: all
+Depends:
+Installed-Size: 8
+Maintainer: Thomas Geymayer <tomgey@gmail.com>
+Homepage: www.tomprogs.at
+Description: Ein einfaches "hello world" Skript
+ Ein "hello world!" Skript, das in ein Deb-Paket im
+ Rahmen des Tutorials "Debian (*.deb) Pakete erstellen"
+ auf www.tomprogs.at gepackt wurde.

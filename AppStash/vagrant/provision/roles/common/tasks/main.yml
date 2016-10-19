@@ -1,0 +1,22 @@
+---
+- name: dev locale
+  action: command sudo update-locale LC_ALL=en_US.UTF-8
+- name: set default locale
+  sudo: yes
+  lineinfile: dest=/etc/default/locale
+    regexp="LC_ALL"
+    line="LC_ALL=\"en_US.UTF-8\""
+- apt: pkg={{item}} state=present force=yes update_cache=yes
+  with_items:
+    - vim
+    - redis-tools
+    - mongodb-clients
+    - curl
+    - gzip
+    - tree
+    - htop
+    - nagios-nrpe-server
+    - curl
+    - build-essential
+    - g++
+    - dc

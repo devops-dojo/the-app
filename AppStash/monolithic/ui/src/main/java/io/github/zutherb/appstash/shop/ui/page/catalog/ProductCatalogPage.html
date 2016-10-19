@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<head>
+    <title>Bestellungen</title>
+</head>
+<body>
+<wicket:extend>
+<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+    <h2>Choose your product</h2>
+    <div wicket:id="productsWrapper">
+        <div class="row" wicket:id="row">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" wicket:id="products">
+                <div wicket:id="productItem" ></div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="row">
+            <div wicket:id="recommendationPanel" class="jumbotron"></div>
+        </div>
+        <div class="row">
+            <div wicket:id="cartPanel"></div>
+        </div>
+    </div>
+</wicket:extend>
+</body>
+</html>

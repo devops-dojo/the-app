@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description/>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>1</daysToKeep>
+    <numToKeep>1</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.copyartifact.CopyArtifactPermissionProperty plugin="copyartifact@1.32.1">
+      <projectNameList>
+        <string>shop-microservice-test-deployment</string>
+      </projectNameList>
+    </hudson.plugins.copyartifact.CopyArtifactPermissionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>/var/lib/jenkins/repo-cache/appstash</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <jenkins.triggers.ReverseBuildTrigger>
+      <spec/>
+      <upstreamProjects>shop-monolitic-test-deployment</upstreamProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </jenkins.triggers.ReverseBuildTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.plugins.copyartifact.CopyArtifact plugin="copyartifact@1.32.1">
+      <project>shop-monolitic-test-deployment</project>
+      <filter>artifacts/*.war</filter>
+      <target/>
+      <excludes/>
+      <selector class="hudson.plugins.copyartifact.StatusBuildSelector"/>
+      <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
+    </hudson.plugins.copyartifact.CopyArtifact>
+    <hudson.tasks.Shell>
+      <command>./gradlew -p monolithic/ui uiTest --stacktrace -Dspring.profiles.active=test --no-daemon</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>artifacts/*.war</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
+  <buildWrappers>
+    <org.jenkinsci.plugins.xvfb.XvfbBuildWrapper plugin="xvfb@1.0.13">
+      <installationName>default</installationName>
+      <displayName>1</displayName>
+      <screen>1024x768x24</screen>
+      <debug>true</debug>
+      <timeout>0</timeout>
+      <displayNameOffset>1</displayNameOffset>
+      <additionalOptions/>
+      <shutdownWithBuild>false</shutdownWithBuild>
+      <autoDisplayName>false</autoDisplayName>
+    </org.jenkinsci.plugins.xvfb.XvfbBuildWrapper>
+  </buildWrappers>
+</project>

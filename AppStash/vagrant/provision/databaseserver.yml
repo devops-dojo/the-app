@@ -1,0 +1,13 @@
+---
+- hosts: databaseservers
+  user: vagrant
+  sudo: yes
+
+  vars_files:
+     - vars/default.yml
+
+  roles:
+    - hosts
+    - common
+    - mongodb
+    - redis

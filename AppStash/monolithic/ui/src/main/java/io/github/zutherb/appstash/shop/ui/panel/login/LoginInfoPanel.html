@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd ">
+<wicket:head />
+<body>
+    <wicket:panel>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown" id="login1">
+                <a href="#login1"
+                   class="dropdown-toggle"
+                   data-toggle="dropdown">
+                    Hello <wicket:container wicket:id="username">Label</wicket:container>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" wicket:id="logoutLnk">Log out</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </wicket:panel>
+</body>
+</html>

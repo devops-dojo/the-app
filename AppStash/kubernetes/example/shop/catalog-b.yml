@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: catalog-b
+    role: frontend
+    app: catalog
+  name: catalog-b
+spec:
+  containers:
+    - name: catalog-b
+      image: zutherb/catalog-frontend
+      ports:
+        - containerPort: 80
+      env:
+        - name: CHECKOUT_DESIGN
+          value: "amelia"

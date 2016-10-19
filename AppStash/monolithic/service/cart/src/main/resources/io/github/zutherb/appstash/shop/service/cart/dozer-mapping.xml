@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <mapping>
+        <class-a>io.github.zutherb.appstash.shop.repository.cart.model.CartItem</class-a>
+        <class-b>io.github.zutherb.appstash.shop.service.cart.model.CartItemInfo</class-b>
+        <field>
+            <a is-accessible="true">uuid</a>
+            <b is-accessible="true">uuid</b>
+        </field>
+        <field>
+            <a is-accessible="true">product</a>
+            <b is-accessible="true">productInfo</b>
+        </field>
+    </mapping>
+
+
+    <mapping>
+        <class-a>io.github.zutherb.appstash.shop.repository.cart.model.Product</class-a>
+        <class-b>io.github.zutherb.appstash.shop.service.product.model.ProductInfo</class-b>
+        <field>
+            <a is-accessible="true">id</a>
+            <b is-accessible="true">id</b>
+        </field>
+        <field>
+            <a>articleId</a>
+            <b is-accessible="true">articleId</b>
+        </field>
+        <field>
+            <a>urlname</a>
+            <b is-accessible="true">urlname</b>
+        </field>
+        <field>
+            <a>name</a>
+            <b is-accessible="true">name</b>
+        </field>
+        <field>
+            <a>description</a>
+            <b is-accessible="true">description</b>
+        </field>
+        <field>
+            <a>type</a>
+            <b is-accessible="true">type</b>
+        </field>
+        <field>
+            <a>price</a>
+            <b is-accessible="true">price</b>
+        </field>
+        <field>
+            <a>category</a>
+            <b is-accessible="true">category</b>
+        </field>
+    </mapping>
+
+</mappings>

@@ -1,0 +1,19 @@
+---
+- raw: sudo chown -R www-data:www-data /var/log/nginx
+- raw: sudo chmod -R 755 /var/log/nginx/
+- raw: sudo usermod -a -G www-data logstash
+
+- copy: src=logstash.conf dest=/etc/logstash/conf.d force=yes mode=0644
+  notify: restart logstash
+
+- name: install shop shop file
+  apt_key: url=http://ci-repo/ci-repo.gpg.key state=present
+
+
+- name: add shop repository into sources list.
+  apt_repository: repo='deb http://ci-repo/debian/ shop main' state=present
+
+- name: update cache
+  apt: update_cache=yes force=yes
+
+- file: path=/var/log/syslog owner=logstash

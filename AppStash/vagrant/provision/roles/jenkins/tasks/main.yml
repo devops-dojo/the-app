@@ -1,0 +1,154 @@
+---
+- name: install python-software-properties
+  apt: pkg=python-software-properties state=present force=yes
+
+- name: install jenkins key file
+  apt_key: url=http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key state=present
+
+- name: add jenkins repository into sources list.
+  apt_repository: repo='deb http://pkg.jenkins-ci.org/debian binary/' state=present
+
+- name: install node key file
+  apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
+
+- name: add node repository into sources list.
+  apt_repository: repo='deb https://deb.nodesource.com/node_0.12 vivid main' state=present
+
+- name: update cache
+  apt: update_cache=yes force=yes
+
+- name: install jenkins
+  apt: pkg={{item}} state=present force=yes
+  with_items:
+    - jenkins
+    - docker.io
+    - golang
+    - python-pip
+    - xvfb
+    - firefox
+    - git
+    - curl
+    - nodejs
+    - ruby2.1
+    - ruby2.1-dev
+
+- sudo: yes
+  sudo_user: root
+  npm: name={{item}} global=yes
+  with_items:
+    - grunt-cli
+    - bower
+    - typescript
+    - tsd
+
+#gem plugin does'nt work correct
+- raw: sudo gem install compass
+
+- name: install config.xml
+  sudo: yes
+  sudo_user: jenkins
+  copy: src={{item}} dest=/var/lib/jenkins/{{item}} owner=jenkins
+  with_items:
+    - config.xml
+    - jenkins.mvn.GlobalMavenConfig.xml
+    - hudson.tasks.Maven.xml
+    - org.jenkinsci.plugins.xvfb.XvfbBuildWrapper.xml
+    - org.jenkins.ci.plugins.xframe_filter.XFrameFilterPageDecorator.xml
+  notify: restart jenkins
+
+# wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
+- wait_for: port=8080 timeout=300 delay=30
+
+- name: download jenkins update-center.js
+  sudo: yes
+  sudo_user: jenkins
+  get_url: url=http://updates.jenkins-ci.org/update-center.json dest=/tmp/update-center.js owner=jenkins
+
+- name: remove first and last line javascript wrapper
+  sudo: yes
+  sudo_user: jenkins
+  raw:  sed '1d;$d' /tmp/update-center.js > /tmp/update-center.json
+
+- name: push it to the update URL
+  sudo: yes
+  sudo_user: jenkins
+  raw:  'curl -X POST -H "Accept: application/json" -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
+
+# wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
+- wait_for: port=8080 timeout=300 delay=30
+
+- name: download jenkins cli
+  sudo: yes
+  sudo_user: jenkins
+  get_url: url=http://localhost:8080/jnlpJars/jenkins-cli.jar dest=/tmp/jenkins-cli.jar owner=jenkins
+
+- name: install jenkins plugins
+  sudo: yes
+  sudo_user: jenkins
+  raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{item}}
+  with_items:
+      - git
+      - git-client
+      - chucknorris
+      - greenballs
+      - build-pipeline-plugin
+      - delivery-pipeline-plugin
+      - copyartifact
+      - performance
+      - jacoco
+      - sonar
+      - buildgraph-view
+      - xvfb
+      - ws-cleanup
+      - xframe-filter-plugin
+  notify: restart jenkins
+
+- name: restart jenkins
+  sudo: yes
+  sudo_user: jenkins
+  raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ restart
+
+# wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
+- wait_for: port=8080 timeout=300 delay=30
+
+- file: dest=/var/lib/jenkins/repo-cache/appstash mode=755 owner=jenkins group=jenkins state=directory
+
+- sudo: yes
+  sudo_user: jenkins
+  git: repo=https://github.com/zutherb/AppStash.git dest=/var/lib/jenkins/repo-cache/appstash bare=yes
+
+- sudo: yes
+  sudo_user: jenkins
+  cron: name="Update AppStash Git Repository" minute="*/60" job="cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
+
+- name: install jenkins jobs
+  sudo: yes
+  sudo_user: jenkins
+  raw: '/provision/roles/jenkins/files/restoreAllJobs.sh'
+  ignore_errors: yes
+
+- file: path=/var/lib/jenkins/.ssh/ mode=0755 owner=jenkins group=jenkins state=directory
+- file: path=/var/lib/jenkins/.ssh/known_hosts mode=0755 owner=jenkins group=jenkins state=touch
+- copy: src=id_rsa.pub dest=/var/lib/jenkins/.ssh/id_rsa.pub mode=600 group=jenkins owner=jenkins
+- copy: src=id_rsa dest=/var/lib/jenkins/.ssh/id_rsa mode=600 group=jenkins owner=jenkins
+
+- name: start jenkins deployment pipeline
+  sudo: yes
+  sudo_user: jenkins
+  command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{item}}'
+  with_items:
+    - shop-monolitic-build
+    - shop-microservice-product-service-build
+    - shop-microservice-cart-service-build
+    - shop-microservice-navigation-service-build
+    - shop-microservice-recommendation-service-build
+    - shop-microservice-product-service-build
+    - shop-microservice-dataloader-build
+    - shop-microservice-catalog-ui-build
+    - shop-microservice-checkout-ui-build
+    - shop-microservice-registration-ui-build
+  ignore_errors: yes
+
+- name: add jenkins to docker group
+  raw: gpasswd -a jenkins docker
+  sudo: yes

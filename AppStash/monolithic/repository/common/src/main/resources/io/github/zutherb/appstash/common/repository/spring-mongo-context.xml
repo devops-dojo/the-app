@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+            http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <bean id="mongoTemplate"
+          class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongo" ref="mongo"/>
+        <constructor-arg name="databaseName" value="${mongo.db}"/>
+    </bean>
+
+    <beans profile="production,docker">
+        <mongo:mongo id="mongo" host="${mongo.host}" port="${mongo.port}">
+            <mongo:options auto-connect-retry="true"
+                           threads-allowed-to-block-for-connection-multiplier="20"/>
+        </mongo:mongo>
+    </beans>
+
+    <beans profile="test">
+        <bean name="fongo" class="com.github.fakemongo.Fongo">
+            <constructor-arg value="shop"/>
+        </bean>
+
+        <bean id="mongo" class="com.mongodb.Mongo" factory-bean="fongo" factory-method="getMongo"/>
+    </beans>
+
+</beans>

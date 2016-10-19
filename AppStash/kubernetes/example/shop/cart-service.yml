@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+      name: cart
+      role: backend
+  name: cart
+spec:
+  ports:
+    - name: cart
+      port: 18100
+  selector:
+      name: cart

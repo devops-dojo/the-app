@@ -1,0 +1,48 @@
+apply plugin: 'groovy'
+apply plugin: 'spring-boot'
+apply plugin: 'application'
+apply plugin: 'pkg-debian'
+apply plugin: 'docker'
+
+jar.baseName = "dataloader-microservice"
+
+idea {
+    module {
+        name='dataloader-microservice'
+    }
+}
+
+mainClassName = "io.github.zutherb.appstash.shop.dataloader.Boot"
+
+dependencies {
+    compile project(':monolithic:common:util')
+    compile project(':monolithic:common:dataloader')
+    compile "org.springframework.boot:spring-boot-starter:1.1.4.RELEASE"
+}
+ 
+task stage(dependsOn: ['clean', 'installApp'])
+
+def debName = "dataloader"
+debian {
+    packagename = "${debName}"
+    publications = ['mavenStuff']
+    controlDirectory = "${projectDir}/debian/control"
+    changelogFile = "${projectDir}/debian/changelog"
+    outputFile = "${buildDir}/debian/${debName}_${version}.deb"
+
+    data {
+        dir {
+            name = "${buildDir}/debian-data/"
+            exclusions = ["**/.DS_Store"]
+        }
+    }
+}
+
+task prepareDeb {
+    dependsOn installApp
+
+    copy {
+        from "${buildDir}/install/"
+        into "${buildDir}/debian-data/usr/share/shop/"
+    }
+}

@@ -1,0 +1,30 @@
+127.0.0.1       localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+10.211.55.100   monitoring-node
+10.211.55.100   monitoring.microservice.io
+10.211.55.101   app-server-node-1
+10.211.55.101   test.monolith.io
+10.211.55.102   app-server-node-2
+10.211.55.102   monolith.io
+10.211.55.103   app-server-node-3
+10.211.55.103   test-shop.microservice.io
+10.211.55.103   test-checkout.microservice.io
+10.211.55.103   test-registration.microservice.io
+10.211.55.104   app-server-node-4
+10.211.55.104   shop.microservice.io
+10.211.55.104   checkout.microservice.io
+10.211.55.104   registration.microservice.io
+10.211.55.200   ci-node
+10.211.55.200   ci.microservice.io
+10.211.55.201   ci-repo
+10.211.55.201   ci-repo.microservice.io
+10.211.55.202   mongodb-node
+10.211.55.202   mongo.microservice.io
+10.211.55.202   redis.microservice.io

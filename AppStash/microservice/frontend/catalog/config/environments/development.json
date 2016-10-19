@@ -1,0 +1,10 @@
+{
+    "NAVIGATION_SERVICE_URL": "/mock-data/navigation.json",
+    "PRODUCT_SERVICE_URL": "/mock-data/products.json",
+    "CART_SERVICE_IMPL": "localstorage",
+    "CART_SERVICE_GET_URL": "/mock-data/cart/",
+    "CART_SERVICE_PUT_URL": "/mock-data/cart/create",
+    "CART_SERVICE_POST_URL": "/mock-data/cart/add",
+    "CART_SERVICE_DELETE_URL": "/mock-data/cart/removeItemFromCart",
+    "CHECKOUT_BASE_URL": "http://shop.monolith.io:8080/shop/checkout"
+}

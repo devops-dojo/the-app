@@ -1,0 +1,115 @@
+{
+    "nodes" : [
+        {
+            "node": "elasticsearch",
+            "box": "vivid64",
+            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "hostname": "monitoring-node",
+            "memory": "1024",
+            "ip": "10.211.55.100",
+            "ports":[],
+            "playbook": "provision/monitoringserver.yml",
+            "apt_cache": true,
+            "aliases" : ["monitoring.microservice.io"]
+        },
+        {
+            "node": "reposerver",
+            "box": "vivid64",
+            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "hostname": "ci-repo",
+            "memory": "256",
+            "ip": "10.211.55.201",
+            "ports":[ ],
+            "playbook": "provision/reposerver.yml",
+            "apt_cache": true,
+            "aliases" : ["ci-repo.microservice.io"]
+        },
+        {
+            "node": "dbserver",
+            "box": "vivid64",
+            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "hostname": "mongodb-node",
+            "memory": "1024",
+            "ip": "10.211.55.202",
+            "ports":[
+                {"host": 27017, "guest": 27017, "auto_correct": true},  //Mongo
+                {"host": 6379, "guest": 6379, "auto_correct": true}     //Redis
+            ],
+            "playbook": "provision/databaseserver.yml",
+            "apt_cache": true,
+            "aliases" : [
+                "redis-node",
+                "redis.microservice.io",
+                "mongo.microservice.io"
+            ]
+        },
+        {
+            "node": "appserver1",
+            "box": "vivid64",
+            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "hostname": "app-server-node-1",
+            "memory": "1536",
+            "ip": "10.211.55.101",
+            "ports":[],
+            "playbook": "provision/monolitic_appserver.yml",
+            "apt_cache": true,
+            "aliases" : ["test.monolith.io"]
+        },
+        {
+            "node": "appserver2",
+            "box": "vivid64",
+            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "hostname": "app-server-node-2",
+            "memory": "1536",
+            "ip": "10.211.55.102",
+            "ports":[],
+            "playbook": "provision/monolitic_appserver.yml",
+            "apt_cache": true,
+            "aliases" : ["shop.monolith.io"]
+        },
+        {
+            "node": "appserver3",
+            "box": "vivid64",
+            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "hostname": "app-server-node-3",
+            "memory": "2048",
+            "ip": "10.211.55.103",
+            "ports":[],
+            "playbook": "provision/micro_appserver.yml",
+            "apt_cache": false,
+            "aliases" : [
+                "test-shop.microservice.io",
+                "test-checkout.microservice.io",
+                "test-registration.microservice.io"
+            ]
+        },
+        {
+            "node": "appserver4",
+            "box": "vivid64",
+            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "hostname": "app-server-node-4",
+            "memory": "2048",
+            "ip": "10.211.55.104",
+            "ports":[],
+            "playbook": "provision/micro_appserver.yml",
+            "apt_cache": false,
+            "aliases" : [
+                "shop.microservice.io",
+                "checkout.microservice.io",
+                "registration.microservice.io"
+            ]
+        },
+        {
+            "node": "buildserver",
+            "box": "vivid64",
+            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "hostname": "ci-node",
+            "memory": "2560",
+            "ip": "10.211.55.200",
+            "ports":[],
+            "playbook": "provision/buildserver.yml",
+            "apt_cache": true,
+            "aliases" : ["ci.microservice.io"]
+        }
+    ]
+}
