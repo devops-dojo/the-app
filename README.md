@@ -1,2 +1,2 @@
 # the-app
-Sample application.
+Sample application...
