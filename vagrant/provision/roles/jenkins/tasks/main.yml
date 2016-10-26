@@ -2,25 +2,18 @@
 - name: install python-software-properties
   apt: pkg=python-software-properties state=present force=yes
 
-- name: install jenkins key file
-  apt_key: url=http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key state=present
-
-- name: add jenkins repository into sources list.
-  apt_repository: repo='deb http://pkg.jenkins-ci.org/debian binary/' state=present
-
 - name: install node key file
   apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
 
 - name: add node repository into sources list.
-  apt_repository: repo='deb https://deb.nodesource.com/node_0.12 vivid main' state=present
+  apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present
 
 - name: update cache
   apt: update_cache=yes force=yes
 
-- name: install jenkins
+- name: install pre-requisites
   apt: pkg={{item}} state=present force=yes
   with_items:
-    - jenkins
     - docker.io
     - golang
     - python-pip
@@ -28,9 +21,47 @@
     - firefox
     - git
     - curl
-    - nodejs
-    - ruby2.1
-    - ruby2.1-dev
+    - nodejs=0.12.13-1nodesource1~vivid1
+    - npm
+    - ruby
+    - ruby-dev
+
+- name: Create symlink to nodejs
+  file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
+
+- name: Add Jenkins apt repository key.
+  apt_key:
+    url: "{{ jenkins_repo_key_url }}"
+    state: present
+
+- name: Add Jenkins apt repository.
+  apt_repository:
+    repo: "{{ jenkins_repo_url }}"
+    state: present
+    update_cache: yes
+
+- name: Download specific Jenkins version.
+  get_url:
+    url: "{{ jenkins_pkg_url }}/jenkins_{{ jenkins_version }}_all.deb"
+    dest: "/tmp/jenkins.deb"
+  when: jenkins_version is defined
+
+- name: Check if we downloaded a specific version of Jenkins.
+  stat:
+    path: "/tmp/jenkins.deb"
+  register: specific_version
+
+- name: Install our specific version of Jenkins.
+  apt:
+    deb: "/tmp/jenkins.deb"
+    state: installed
+  when: specific_version.stat.exists
+
+- name: Install Jenkins from repository.
+  apt:
+    name: jenkins
+    state: installed
+  when: jenkins_version is undefined
 
 - sudo: yes
   sudo_user: root
@@ -68,6 +99,22 @@
   sudo: yes
   sudo_user: jenkins
   raw:  sed '1d;$d' /tmp/update-center.js > /tmp/update-center.json
+
+- name: Remove Jenkins security init scripts after first startup.
+  file:
+    path: "/var/lib/jenkins/init.groovy.d/basic-security.groovy"
+    state: absent
+
+- name: create init groovy directory
+  sudo: yes
+  sudo_user: jenkins
+  file: path="/var/lib/jenkins/init.groovy.d/" state=directory
+
+- name: provision Jenkins admin and anonymous users
+  sudo: yes
+  sudo_user: jenkins
+  copy: src=basic-security.groovy dest=/var/lib/jenkins/init.groovy.d/basic-security owner=jenkins
+  notify: restart jenkins
 
 - name: push it to the update URL
   sudo: yes
@@ -115,7 +162,7 @@
 
 - sudo: yes
   sudo_user: jenkins
-  git: repo=https://github.com/zutherb/AppStash.git dest=/var/lib/jenkins/repo-cache/appstash bare=yes
+  git: repo=https://github.com/devops-dojo/the-app.git dest=/var/lib/jenkins/repo-cache/appstash bare=yes
 
 - sudo: yes
   sudo_user: jenkins
@@ -124,7 +171,7 @@
 - name: install jenkins jobs
   sudo: yes
   sudo_user: jenkins
-  raw: '/provision/roles/jenkins/files/restoreAllJobs.sh'
+  raw: 'sh /provision/roles/jenkins/files/restoreAllJobs.sh'
   ignore_errors: yes
 
 - file: path=/var/lib/jenkins/.ssh/ mode=0755 owner=jenkins group=jenkins state=directory

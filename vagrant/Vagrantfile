@@ -5,11 +5,18 @@ nodes_config = (JSON.parse(File.read("nodes.json")))['nodes']
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+if ARGV[1] and \
+   (ARGV[1].split('=')[0] == "--provider" or ARGV[2])
+  provider = (ARGV[1].split('=')[1] || ARGV[2])
+else
+  provider = (ENV['VAGRANT_DEFAULT_PROVIDER'] || :virtualbox).to_sym
+end
+puts "Detected #{provider}"
 
     nodes_config.each do |node|
         node_name = node["node"] # name of node
-        config.vm.box_url = node["box_url"]
         config.ssh.insert_key = false
+        config.ssh.private_key_path = '~/.vagrant.d/insecure_private_key'
 
         # configures all forwarding ports in JSON array
         config.vm.define node_name do |config|
@@ -22,14 +29,36 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             end
 
             config.vm.hostname = node['hostname']
-            config.vm.box = node['box']
             config.vm.network :private_network, ip: node['ip']
 
             config.vm.synced_folder "provision", "/provision"
 
-            config.vm.provider :virtualbox do |vb|
-                vb.customize ["modifyvm", :id, "--memory", node['memory']]
-                vb.customize ["modifyvm", :id, "--name", node['node']]
+            if provider=="vbox"
+                config.vm.provider :virtualbox do |vb|
+                    config.vm.box = 'vivid64'
+                    config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box'
+                    vb.customize ["modifyvm", :id, "--memory", node['memory']]
+                    vb.customize ["modifyvm", :id, "--name", node['node']]
+                end
+            end
+
+            if provider=="azure"
+                config.vm.provider :azure do |azure, override|
+                  config.vm.box = 'azure'
+                  azure.vm_image_urn = 'canonical:ubuntuserver:16.04.0-DAILY-LTS:latest'
+                  azure.tenant_id = ENV['AZURE_TENANT_ID']
+                  azure.client_id = ENV['AZURE_CLIENT_ID']
+                  azure.client_secret = ENV['AZURE_CLIENT_SECRET']
+                  azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
+                  azure.resource_group_name = 'DojoLabs'
+                  azure.vm_size = node['vm_size']
+                  azure.vm_name = node['node']
+                  azure.location = 'centralus'
+                  azure.dns_name = node['hostname']
+                  azure.private_ip_allocation_method = 'Static'
+                  azure.private_ip_address = node['ip']
+                  azure.virtual_network_name = 'DojoLabsVNet'
+                end
             end
 
             if Vagrant.has_plugin?("vagrant-hostsupdater")
@@ -57,3 +86,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
     end
 end
+

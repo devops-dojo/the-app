@@ -1,11 +1,11 @@
+
 {
     "nodes" : [
         {
             "node": "elasticsearch",
-            "box": "vivid64",
-            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
-            "hostname": "monitoring-node",
+            "vm_size": "Standard_A1",
             "memory": "1024",
+            "hostname": "monitoring-node",
             "ip": "10.211.55.100",
             "ports":[],
             "playbook": "provision/monitoringserver.yml",
@@ -14,8 +14,7 @@
         },
         {
             "node": "reposerver",
-            "box": "vivid64",
-            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "vm_size": "Standard_A0",
             "hostname": "ci-repo",
             "memory": "256",
             "ip": "10.211.55.201",
@@ -26,8 +25,7 @@
         },
         {
             "node": "dbserver",
-            "box": "vivid64",
-            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
+            "vm_size": "Standard_A1",
             "hostname": "mongodb-node",
             "memory": "1024",
             "ip": "10.211.55.202",
@@ -45,10 +43,9 @@
         },
         {
             "node": "appserver1",
-            "box": "vivid64",
-            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
-            "hostname": "app-server-node-1",
+            "vm_size": "Standard_A1",
             "memory": "1536",
+            "hostname": "app-server-node-1",
             "ip": "10.211.55.101",
             "ports":[],
             "playbook": "provision/monolitic_appserver.yml",
@@ -57,10 +54,9 @@
         },
         {
             "node": "appserver2",
-            "box": "vivid64",
-            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
-            "hostname": "app-server-node-2",
+            "vm_size": "Standard_A1",
             "memory": "1536",
+            "hostname": "app-server-node-2",
             "ip": "10.211.55.102",
             "ports":[],
             "playbook": "provision/monolitic_appserver.yml",
@@ -69,10 +65,9 @@
         },
         {
             "node": "appserver3",
-            "box": "vivid64",
-            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
-            "hostname": "app-server-node-3",
+            "vm_size": "Standard_D1",
             "memory": "2048",
+            "hostname": "app-server-node-3",
             "ip": "10.211.55.103",
             "ports":[],
             "playbook": "provision/micro_appserver.yml",
@@ -85,10 +80,9 @@
         },
         {
             "node": "appserver4",
-            "box": "vivid64",
-            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
-            "hostname": "app-server-node-4",
+            "vm_size": "Standard_D1",
             "memory": "2048",
+            "hostname": "app-server-node-4",
             "ip": "10.211.55.104",
             "ports":[],
             "playbook": "provision/micro_appserver.yml",
@@ -101,10 +95,9 @@
         },
         {
             "node": "buildserver",
-            "box": "vivid64",
-            "box_url": "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box",
-            "hostname": "ci-node",
+            "vm_size": "Standard_D1",
             "memory": "2560",
+            "hostname": "ci-node",
             "ip": "10.211.55.200",
             "ports":[],
             "playbook": "provision/buildserver.yml",
@@ -113,3 +106,4 @@
         }
     ]
 }
+

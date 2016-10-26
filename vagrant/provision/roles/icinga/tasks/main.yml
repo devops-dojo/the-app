@@ -1,5 +1,7 @@
 ---
-- apt: pkg={{item}} state=present force=yes
+- apt_repository: repo='ppa:formorer/icinga'
+- apt: update_cache=yes
+- apt: pkg={{item}} state=present force=yes 
   with_items:
     - icinga
     - icinga-web
