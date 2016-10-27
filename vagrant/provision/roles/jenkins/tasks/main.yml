@@ -82,7 +82,7 @@
     - config.xml
     - jenkins.mvn.GlobalMavenConfig.xml
     - hudson.tasks.Maven.xml
-    - org.jenkinsci.plugins.xvfb.XvfbBuildWrapper.xml
+    - org.jenkinsci.plugins.xvfb.Xvfb.xml
     - org.jenkins.ci.plugins.xframe_filter.XFrameFilterPageDecorator.xml
   notify: restart jenkins
 

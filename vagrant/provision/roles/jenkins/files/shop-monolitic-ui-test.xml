@@ -71,16 +71,18 @@
     </hudson.tasks.ArtifactArchiver>
   </publishers>
   <buildWrappers>
-    <org.jenkinsci.plugins.xvfb.XvfbBuildWrapper plugin="xvfb@1.0.13">
+    <org.jenkinsci.plugins.xvfb.Xvfb plugin="xvfb@1.1.3">
       <installationName>default</installationName>
       <displayName>1</displayName>
       <screen>1024x768x24</screen>
       <debug>true</debug>
       <timeout>0</timeout>
       <displayNameOffset>1</displayNameOffset>
-      <additionalOptions/>
+      <additionalOptions></additionalOptions>
       <shutdownWithBuild>false</shutdownWithBuild>
       <autoDisplayName>false</autoDisplayName>
-    </org.jenkinsci.plugins.xvfb.XvfbBuildWrapper>
+      <assignedLabels></assignedLabels>
+      <parallelBuild>false</parallelBuild>
+    </org.jenkinsci.plugins.xvfb.Xvfb>
   </buildWrappers>
 </project>
