@@ -2,4 +2,4 @@
 
 . ./.env
 
-vagrant up --provider=azure --no-parallel 2>&1 | tee -a vagrant.log
+vagrant up --provider=azure --no-parallel 2>&1 | ts | tee -a vagrant.log

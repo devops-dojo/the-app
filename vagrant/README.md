@@ -61,6 +61,7 @@ cd install
 - Install Vagrant
 ```
 sudo apt-get update
+sudo apt-get install moreutils
 wget https://releases.hashicorp.com/vagrant/1.8.6/vagrant_1.8.6_x86_64.deb
 dpkg -i vagrant_1.8.6_x86_64.deb
 vagrant box add azure https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box
@@ -132,6 +133,15 @@ to configure them.
 ```
 
 :clock2: The process will take between 1 and 2 hours (serial). Plan in advance.
+
+In case a step fails in the Ansible playbook, you can run it again using this command:
+
+```
+/usr/bin/ansible-playbook --connection=ssh --timeout=30 \
+   --extra-vars=ansible_ssh_user='vagrant' --inventory-file=provision/hosts \
+   -v --private-key=~/.vagrant.d/insecure_private_key \
+   --limit=ci-node provision/buildserver.yml
+```
 
 ### Nodes
 
