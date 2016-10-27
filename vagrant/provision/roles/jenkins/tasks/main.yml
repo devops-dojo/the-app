@@ -21,8 +21,7 @@
     - firefox
     - git
     - curl
-    - nodejs=0.12.13-1nodesource1~vivid1
-    - npm
+    - nodejs=0.12.17-1nodesource1~xenial1
     - ruby
     - ruby-dev
 
