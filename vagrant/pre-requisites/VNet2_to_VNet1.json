@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VNet1": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "VNet1ResourceGroup": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "VNet2": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "VNet2ResourceGroup": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "addressPrefix": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "location": {
+      "defaultValue": null,
+      "type": "String"
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+      "apiVersion": "2016-06-01",
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "name": "[concat(parameters('VNet2'), '/To', parameters('VNet1'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": false,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false,
+        "remoteVirtualNetwork": {
+           "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('VNet1ResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('VNet1'))]"
+        }
+      }
+    }
+
+  ]
+}

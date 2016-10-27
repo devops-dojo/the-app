@@ -1,0 +1,73 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VNet1": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "VNet1ResourceGroup": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "VNet2": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "VNet2ResourceGroup": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "addressPrefix": {
+      "defaultValue": null,
+      "type": "String"
+    },
+    "location": {
+      "defaultValue": null,
+      "type": "String"
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+    {  
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('VNet1')]",
+      "apiVersion": "2016-03-30",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "default",
+            "properties": {
+              "addressPrefix": "[parameters('addressPrefix')]"
+            }
+          }
+        ]
+      },
+      "resources": [],
+      "dependsOn": []
+    },
+    {
+      "apiVersion": "2016-06-01",
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "name": "[concat(parameters('VNet1'), '/To', parameters('VNet2'))]",
+      "dependsOn": ["[parameters('VNet1')]"],
+      "location": "[parameters('location')]",
+      "properties": {
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": false,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false,
+        "remoteVirtualNetwork": {
+           "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('VNet2ResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('VNet2'))]"
+        }
+      }
+    }
+  ]
+}

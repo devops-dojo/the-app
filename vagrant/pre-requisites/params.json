@@ -1,0 +1,9 @@
+{
+  "VNet1":              { "value": "DojoLabsVNet" },
+  "VNet1ResourceGroup": { "value": "DojoLabs"},
+  "VNet2":              { "value": "Dojo-vnet"},
+  "VNet2ResourceGroup": { "value": "Dojo"},
+  "addressPrefix":      { "value": "10.211.55.0/24"},
+  "location":           { "value": "centralus"}
+  
+}
