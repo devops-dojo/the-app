@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+chmod +x /usr/share/shop/cart/bin/cart
+chmod +x /etc/init.d/cart
+
+update-rc.d cart defaults
+
+service cart force-reload
