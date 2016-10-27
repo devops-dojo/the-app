@@ -48,7 +48,7 @@ module.exports = function (grunt) {
           }
         },
 
-        typescript: {
+        ts: {
             base: {
                 src: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
                 dest: '.tmp/scripts/eshop.js',
@@ -89,11 +89,11 @@ module.exports = function (grunt) {
             },
             ts: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
-                tasks: ['typescript']
+                tasks: ['ts']
             },
             tsTest: {
                 files: ['test/spec/{,*/}*.ts'],
-                tasks: ['typescript:test']
+                tasks: ['ts:test']
             },
             compass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -544,7 +544,7 @@ module.exports = function (grunt) {
         },
 
         preprocessors: {
-            '**/*.ts': ['typescript']
+            '**/*.ts': ['ts']
         },
 
         typescriptPreprocessor: {
@@ -599,7 +599,7 @@ module.exports = function (grunt) {
             'clean:server',
             'replace:development',
             'tsd',
-            'typescript',
+            'ts',
             'copy:glyphicons',
             'wiredep',
             'configureProxies',
@@ -618,7 +618,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'clean:server',
         'tsd',
-        'typescript',
+        'ts',
         'concurrent:test',
         'autoprefixer',
         'connect:test',
@@ -628,7 +628,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'tsd',
-        'typescript',
+        'ts',
         'replace:production',
         'wiredep',
         'useminPrepare',
@@ -648,7 +648,7 @@ module.exports = function (grunt) {
   grunt.registerTask('docker', [
     'clean:dist',
     'tsd',
-    'typescript',
+    'ts',
     'replace:docker',
     'wiredep',
     'useminPrepare',
