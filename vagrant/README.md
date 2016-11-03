@@ -159,17 +159,17 @@ or `vagrant ssh buildserver`.
 
 Vagrant-Name  | IP            | Hostname           | Application                 | Forward
 --------------|---------------|--------------------|-----------------------------|--------------------------------------------------------------------
-buildserver   | 10.211.55.200 | ci-node            | Jenkins                     | http://ci-node.centralus.cloudapp.azure.com:8080/
-reposerver    | 10.211.55.201 | ci-repo            | Artifact Repository (NGINX) | http://ci-repo.centralus.cloudapp.azure.com
+buildserver   | 10.211.55.200 | ci-node            | Jenkins                     | http://ci-node.eastus.cloudapp.azure.com:8080/
+reposerver    | 10.211.55.201 | ci-repo            | Artifact Repository (NGINX) | http://ci-repo.eastus.cloudapp.azure.com
 dbserver      | 10.211.55.202 | mongodb-node       | MongoDB                     | localhost:27017
 dbserver      | 10.211.55.202 | redis-node         | Redis                       | localhost:6379
-appserver1    | 10.211.55.101 | app-server-node-1  | Legacy Shop                 | http://app-server-node-1.centralus.cloudapp.azure.com:8080/shop/
-appserver1    | 10.211.55.101 | app-server-node-1  | Probe                       | http://app-server-node-1.centralus.cloudapp.azure.com:8080/probe/ (admin / topsecret)
-appserver2    | 10.211.55.102 | app-server-node-2  | Legacy Shop                 | http://app-server-node-2.centralus.cloudapp.azure.com:8080/shop/
-appserver2    | 10.211.55.102 | app-server-node-2  | Probe                       | http://app-server-node-2.centralus.cloudapp.azure.com:8080/probe/ (admin / topsecret)
-appserver3    | 10.211.55.103 | app-server-node-3  | Microservice Shop           | http://app-server-node-3.centralus.cloudapp.azure.com/
-appserver4    | 10.211.55.104 | app-server-node-4  | Microservice Shop           | http://app-server-node-4.centralus.cloudapp.azure.com/
-elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring-node.centralus.cloudapp.azure.com/
-elasticsearch | 10.211.55.100 | monitoring-node    | Nagios                      | http://monitoring-node.centralus.cloudapp.azure.com/nagios3/ (nagiosadmin / admin123)
-elasticsearch | 10.211.55.100 | monitoring-node    | Icinga                      | http://monitoring-node.centralus.cloudapp.azure.com/icinga/ (icingaadmin / admin123)
+appserver1    | 10.211.55.101 | app-server-node-1  | Legacy Shop                 | http://app-server-node-1.eastus.cloudapp.azure.com:8080/shop/
+appserver1    | 10.211.55.101 | app-server-node-1  | Probe                       | http://app-server-node-1.eastus.cloudapp.azure.com:8080/probe/ (admin / topsecret)
+appserver2    | 10.211.55.102 | app-server-node-2  | Legacy Shop                 | http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/
+appserver2    | 10.211.55.102 | app-server-node-2  | Probe                       | http://app-server-node-2.eastus.cloudapp.azure.com:8080/probe/ (admin / topsecret)
+appserver3    | 10.211.55.103 | app-server-node-3  | Microservice Shop           | http://app-server-node-3.eastus.cloudapp.azure.com/
+appserver4    | 10.211.55.104 | app-server-node-4  | Microservice Shop           | http://app-server-node-4.eastus.cloudapp.azure.com/
+elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring-node.eastus.cloudapp.azure.com/
+elasticsearch | 10.211.55.100 | monitoring-node    | Nagios                      | http://monitoring-node.eastus.cloudapp.azure.com/nagios3/ (nagiosadmin / admin123)
+elasticsearch | 10.211.55.100 | monitoring-node    | Icinga                      | http://monitoring-node.eastus.cloudapp.azure.com/icinga/ (icingaadmin / admin123)
 
