@@ -21,13 +21,13 @@ The automated process with Vagrant/Ansible provisions and configures the CD pipe
 +---------------+    |    +--------------+  |  +-------------+
                      |                      |
                      |    +--------------+  |  +-------------+   +--------------+
-                     |    |reposerver    |  |  |appserver1   |   |appserver3    |
+                     |    |reposerver    |  |  |appservr1 TST|   |appservr3 TST |
                      |    |              |  |  |(monolithic) |   |(microservice)|
                      |    |              |  |  |             |   |              |
                      |    +--------------+  |  +-------------+   +--------------+
                      |                      |
                      |    +--------------+  |  +-------------+   +--------------+
-                     |    |buildserver   |  |  |appserver2   |   |appserver4    |
+                     |    |buildserver   |  |  |appservr2 PRO|   |appservr4 PRO |
                      |    |              |  |  |(monolithic) |   |(microservice)|
                      |    |              |  |  |             |   |              |
                      |    +--------------+  |  +-------------+   +--------------+
