@@ -63,7 +63,7 @@ cd install
 sudo apt-get update
 sudo apt-get install moreutils
 wget https://releases.hashicorp.com/vagrant/1.8.6/vagrant_1.8.6_x86_64.deb
-dpkg -i vagrant_1.8.6_x86_64.deb
+sudo dpkg -i vagrant_1.8.6_x86_64.deb
 vagrant box add azure https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box
 ```
 - Install Vagrant plugins:
