@@ -3,7 +3,7 @@
 ## Introduction
 This application and its continuous delivery pipeline is used as training
 material during the DevOps Dojo green belt training. It leverages the work from
-[Bernd Zuther](https://github.com/devops-dojo/the-app/).
+[Bernd Zuther](https://github.com/zutherb/).
 
 ## Overview
 This application gives software architects and developers an example how a
