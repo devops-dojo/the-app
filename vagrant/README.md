@@ -146,6 +146,21 @@ In case a step fails in the Ansible playbook, you can run it again using this co
    --limit=ci-node provision/buildserver.yml
 ```
 
+### Deploy application on servers
+
+You have to run the [Production Deployment Builds](http://ci-node.eastus.cloudapp.azure.com:8080/view/Production%20Deployment/) on the
+[Jenkins CI Server](http://jenkins-ci.org/) after you have boot up the cluster. Otherwise you can not use the production urls
+that are given in the next section. Therefore you have to run the following two builds:
+
+- [Microservice Production Deployment](http://ci-node.eastus.cloudapp.azure.com:8080/view/Production%20Deployment/job/shop-microservice-production-deployment/build?delay=0sec)
+- [Monolith Production Deployment](http://ci-node.eastus.cloudapp.azure.com:8080/view/Production%20Deployment/job/shop-monolitic-production-deployment/build?delay=0sec)
+
+Please check if all builds are green sometimes the catalog ui build fails and must be re run until it is green.
+
+![CI-Node](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/production-deployment.png)
+
+After you have complete this, the cluster is fully installed and you can start to work with it.
+
 ### Nodes
 
 Here is a list of nodes, with a link when you can access them from the public
@@ -172,4 +187,3 @@ appserver4    | 10.211.55.104 | app-server-node-4  | Microservice Shop PRO      
 elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring-node.eastus.cloudapp.azure.com/
 elasticsearch | 10.211.55.100 | monitoring-node    | Nagios                      | http://monitoring-node.eastus.cloudapp.azure.com/nagios3/ (nagiosadmin / admin123)
 elasticsearch | 10.211.55.100 | monitoring-node    | Icinga                      | http://monitoring-node.eastus.cloudapp.azure.com/icinga/ (icingaadmin / admin123)
-
