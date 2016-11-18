@@ -2,8 +2,7 @@
 
 ## Introduction
 This application and its continuous delivery pipeline is used as training
-material during the DevOps Dojo green belt training. It leverages the work from
-[Bernd Zuther](https://github.com/zutherb/).
+material during the DevOps Dojo green belt training.
 
 ## Overview
 This application gives software architects and developers an example how a
@@ -84,7 +83,44 @@ See [vagrant directory](/vagrant) on installing the cluster of machines to run t
 If you just want to run the application, use Docker: [Docker](/compose/README.md)
 
 
-###CI-Node
+## The application
+
+###Microservice Appserver
+
+The microservice based online shop is deployed on the microservice appserver
+which is a reference implementation for the given use cases in the
+[Overview](https://github.com/devops-dojo/the-app/#overview). You can reach the
+online shop under the following url
+http://app-server-node-4.eastus.cloudapp.azure.com/.
+
+![Microservice Appserver](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/microservice-appserver.png)
+
+The microservice based online shop consists of two frontend parts as you can see
+in the deployment diagram in the [overview
+section](https://github.com/devops-dojo/the-app/#overview). The first part is an
+AngularJS Catalog Frontend that makes it possible to see a catalog for mobiles
+as well as a catalog for tablets. Furthermore a user is able to create a cart.
+If a user wants to order a created cart there is same clue logic in the
+[monolithic web
+application](https://github.com/devops-dojo/the-app/#monolith-appserver) that a
+cart which was created in the AngularJS Catalog Frontend can be order with the
+checkout of the Wicket online shop on the monolith appserver.
+
+
+###Monolith Appserver
+
+The monolith online shop is deployed on the Monolith Appserver which is a
+reference implementation for the given use cases in the
+[Overview](https://github.com/devops-dojo/the-app/#overview). You can reach the
+online shop under the following url
+http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/ .
+
+![Monolith Appserver](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/monolith-appserver.png)
+
+
+## The Continuous Delivery pipeline
+
+### CI-Node
 
 A Jenkins build server is running on the CI-Node. Jenkins is an open source continuous integration tool written in Java
 that provides a continuous integration services for software development which supports different SCM tools. Furthermore
@@ -95,62 +131,8 @@ You can reach the jenkins that builds and deploy the monolith and microservice a
 
 ![CI-Node](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/ci-node.png)
 
-###Monolith Appserver
 
-The monolith online shop is deployed on the Monolith Appserver which is a reference implementation for the given use
-cases in the [Overview](https://github.com/devops-dojo/the-app/#overview). You can reach the online shop under the following
-url http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/ .
-
-![Monolith Appserver](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/monolith-appserver.png)
-
-Furthermore you can reach the [PSI Probe](https://code.google.com/p/psi-probe/) monitoring and log analysis services
-under the following url http://app-server-node-2.eastus.cloudapp.azure.com:8080/probe/. The user credentials are admin / topsecret.
-
-PSI Probe is a community-driven fork of Lambda Probe, which is intended to replace the Tomcat Manager and should make
-it easier to manage and monitor an instance of Apache Tomcat. PSI Probe does not require any changes to an existing app
-and it provides many features through a web-accessible interface that becomes available simply by deploying it to your
-server. These features include:
-
-- Requests: Monitor traffic in real-time, even on a per-application basis.
-- Sessions: Browse/search attributes, view last IP, expire, estimate size.
-- Logs: View contents, download, change levels at runtime.
-- Threads: View execution stack, kill.
-- JVM: Memory usage charts, advise GC.
-
-![Probe](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/probe.png)
-![Probe](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/probe-log.png)
-
-Moreover you access the performance monitor [JETM](http://jetm.void.fm/) under the following url http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/performance/
-which is a small and free library that is included in the monolith online shop, that helps locating performance problems
-in existing Java applications. JETM enables developers to track down performance issues on demand, either programmatic
-or declarative with minimal impact on application performance, even in production.
-
-![JETM Overview](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/performance-overview.png)
-![JETM Request view](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/performance-request-view.png)
-
-[JMX](http://en.wikipedia.org/wiki/Java_Management_Extensions) is a natural way to have access to technical management,
-e.g. for tuning, statistics, log levels and so on. Unfortunately, it lacks a lightweight tool to expose mbeans and to browse
-them securely on any application and environment without heavy infrastructure setup. [JMiniX](https://code.google.com/p/jminix/)
-provides such a feature. You can reach JMiniX under the following url http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/jmx/.
-
-![JMiniX](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/jminix.png)
-
-###Microservice Appserver
-
-The microservice based online shop is deployed on the microservice appserver which is a reference implementation for the
-given use cases in the [Overview](https://github.com/devops-dojo/the-app/#overview). You can reach the online shop under the
-following url http://app-server-node-4.eastus.cloudapp.azure.com/.
-
-![Microservice Appserver](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/microservice-appserver.png)
-
-The microservice based online shop consists of two frontend parts as you can see in the deployment diagram in the
-[overview section](https://github.com/devops-dojo/the-app/#overview). The first part is an AngularJS Catalog Frontend that
-makes it possible to see a catalog for mobiles as well as a catalog for tablets. Furthermore a user is able to create a
-cart. If a user wants to order a created cart there is same clue logic in the [monolithic web application](https://github.com/devops-dojo/the-app/#monolith-appserver)
-that a cart which was created in the AngularJS Catalog Frontend can be order with the checkout of the Wicket online shop
-on the monolith appserver.
-
-###Monitoring Server
+### Monitoring Server
 
 Monitoring a monolithic web application is no major pain as you can see in the [monolith appserver section](https://github.com/devops-dojo/the-app/#monolith-appserver).
 A distributed web application, like it is shown in the [microservice appserver section](https://github.com/devops-dojo/the-app/#microservice-appserver),
@@ -166,6 +148,7 @@ products or create a cart. Furthermore there is a legacy JEE web application
 which is deployed in a [Tomcat Webserver](http://tomcat.apache.org/). An user
 can order its cart with that legacy JEE web application.
 
+#### Icinga
 Icinga is an open source network and computer system monitoring application. It
 was originally created as a fork of the Nagios system monitoring application.
 Icinga is attempting to get past perceived short-comings in Nagios development
@@ -177,6 +160,7 @@ the Icinga core.
 ![Icinga Status Map](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/icinga-status-map.png)
 ![Icinga Status Report](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/icinga-status.png)
 
+#### Kibana
 Kibana is a browser based analytics and search interface for Elasticsearch that was developed primarily to view
 Logstash event data. Logstash is a tool that can be used to collect, process and forward events and log messages.
 Collection is accomplished via number of configurable input plugins including raw socket/packet communication,
@@ -186,10 +170,51 @@ events to a variety of external programs including Elasticsearch, local files an
 
 ![Kibana](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/kibana.png)
 
+#### PSI Probe
+Furthermore you can reach the [PSI Probe](https://code.google.com/p/psi-probe/)
+monitoring and log analysis services under the following url
+http://app-server-node-2.eastus.cloudapp.azure.com:8080/probe/. The user
+credentials are admin / topsecret.
+
+PSI Probe is a community-driven fork of Lambda Probe, which is intended to replace the Tomcat Manager and should make
+it easier to manage and monitor an instance of Apache Tomcat. PSI Probe does not require any changes to an existing app
+and it provides many features through a web-accessible interface that becomes available simply by deploying it to your
+server. These features include:
+
+- Requests: Monitor traffic in real-time, even on a per-application basis.
+- Sessions: Browse/search attributes, view last IP, expire, estimate size.
+- Logs: View contents, download, change levels at runtime.
+- Threads: View execution stack, kill.
+- JVM: Memory usage charts, advise GC.
+
+![Probe](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/probe.png)
+![Probe](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/probe-log.png)
+
+#### JETM
+JETM performance monitor [JETM](http://jetm.void.fm/) is at the following url
+http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/performance/. JETM
+is a small and free library that is included in the monolith online shop, that
+helps locating performance problems in existing Java applications. JETM enables
+developers to track down performance issues on demand, either programmatic or
+declarative with minimal impact on application performance, even in production.
+
+![JETM Overview](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/performance-overview.png)
+![JETM Request view](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/performance-request-view.png)
+
+#### JMX
+[JMX](http://en.wikipedia.org/wiki/Java_Management_Extensions) is a natural way to have access to technical management,
+e.g. for tuning, statistics, log levels and so on. Unfortunately, it lacks a lightweight tool to expose mbeans and to browse
+them securely on any application and environment without heavy infrastructure setup. [JMiniX](https://code.google.com/p/jminix/)
+provides such a feature. You can reach JMiniX under the following url http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/jmx/.
+
+![JMiniX](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/jminix.png)
+
+## Credits
+A lot of this repository leverages the work from [Bernd Zuther](https://github.com/zutherb/).
+
 ## Contact
 
 If you have any questions or remarks, please use the [issue tracker](https://github.com/devops-dojo/the-app/issues)
-
 
 ## Licensing
 
