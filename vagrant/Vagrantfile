@@ -33,10 +33,10 @@ puts "Detected #{provider}"
 
             config.vm.synced_folder "provision", "/provision"
 
-            if provider=="vbox"
+            if provider=="virtualbox"
+                config.vm.box = 'vivid64'
+                config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box'
                 config.vm.provider :virtualbox do |vb|
-                    config.vm.box = 'vivid64'
-                    config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box'
                     vb.customize ["modifyvm", :id, "--memory", node['memory']]
                     vb.customize ["modifyvm", :id, "--name", node['node']]
                 end
@@ -73,16 +73,21 @@ puts "Detected #{provider}"
                 config.cache.enable :npm
             end
 
-            config.vm.provision "ansible" do |ansible|
-                  ansible.playbook = node['playbook']
-                  ansible.inventory_path = "provision/hosts"
-                  ansible.limit = node['hostname']
+	    config.vm.provision "shell" do |s|
+	        s.path       = "scripts/provision.sh" 
+		s.privileged = false
+		s.args       = ["--inventory-file=", "--limit='monitoring-node'", "provision/monitoringserver.yml"]
+
+            #config.vm.provision "ansible" do |ansible|
+            #      ansible.playbook = node['playbook']
+            #      ansible.inventory_path = "provision/hosts"
+            #      ansible.limit = node['hostname']
                   #for better debugging set 'v' to 'vvvv'
-                  ansible.verbose = 'v'
-                  ansible.ask_vault_pass = false
-                  ansible.raw_arguments  = "--user=vagrant"
-                  ansible.raw_arguments  = "--private-key=~/.vagrant.d/insecure_private_key"
-            end
+            #      ansible.verbose = 'v'
+            #      ansible.ask_vault_pass = false
+            #      ansible.raw_arguments  = "--user=vagrant"
+            #      ansible.raw_arguments  = "--private-key=~/.vagrant.d/insecure_private_key"
+            #end
         end
     end
 end
