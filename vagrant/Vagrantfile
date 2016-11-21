@@ -13,6 +13,12 @@ else
 end
 puts "Detected #{provider}"
 
+    if Vagrant.has_plugin?("vagrant-proxyconf")
+      config.proxy.http     = ENV['http_proxy'] || ""
+      config.proxy.https    = ENV['https_proxy'] || ""
+      config.proxy.no_proxy = "localhost,127.0.0.1,.hpecorp.net,github.hpe.com"
+    end
+
     nodes_config.each do |node|
         node_name = node["node"] # name of node
         config.ssh.insert_key = false
@@ -34,8 +40,7 @@ puts "Detected #{provider}"
             config.vm.synced_folder "provision", "/provision"
 
             if provider=="virtualbox"
-                config.vm.box = 'vivid64'
-                config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box'
+                config.vm.box = 'bento/ubuntu-16.04'
                 config.vm.provider :virtualbox do |vb|
                     vb.customize ["modifyvm", :id, "--memory", node['memory']]
                     vb.customize ["modifyvm", :id, "--name", node['node']]
@@ -74,9 +79,15 @@ puts "Detected #{provider}"
             end
 
 	    config.vm.provision "shell" do |s|
-	        s.path       = "scripts/provision.sh" 
-		s.privileged = false
-		s.args       = ["--inventory-file=", "--limit='monitoring-node'", "provision/monitoringserver.yml"]
+	        ansible_limit    = "--limit=" + node['hostname']
+	        s.path           = "scripts/provision.sh" 
+		s.privileged     = false
+		s.args           = ["--inventory-file=provision/hosts", 
+		                    ansible_limit, 
+				    "--extra-vars='ansible_ssh_user=vagrant'", 
+				    "--user=vagrant", 
+				    node['playbook']]
+	    end
 
             #config.vm.provision "ansible" do |ansible|
             #      ansible.playbook = node['playbook']
