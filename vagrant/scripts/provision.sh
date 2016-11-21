@@ -9,7 +9,7 @@ if [ ! -f /usr/bin/ansible-playbook ]
 fi
 
 # Clone repository
-git clone https://github.com/devops-dojo/the-app.git
+git clone https://github.hpe.com/olivier-jacques/the-app.git
 cd the-app/vagrant/provision
 
 echo "RUNNING ansible-playbook -c local " $@
