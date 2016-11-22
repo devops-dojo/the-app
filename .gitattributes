@@ -4,3 +4,4 @@
 # Make sure we force Linux style for some text files
 # This is needed as Vagrant sync the directory 'as is' to the VM
 *.sh text eol=lf
+*.txt text eol=lf

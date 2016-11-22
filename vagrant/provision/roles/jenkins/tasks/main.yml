@@ -32,12 +32,14 @@
   apt_key:
     url: "{{ jenkins_repo_key_url }}"
     state: present
+  when: jenkins_version is undefined
 
 - name: Add Jenkins apt repository.
   apt_repository:
     repo: "{{ jenkins_repo_url }}"
     state: present
     update_cache: yes
+  when: jenkins_version is undefined
 
 - name: Download specific Jenkins version.
   get_url:
@@ -75,6 +77,24 @@
 
 #gem plugin does'nt work correct
 - raw: sudo gem install compass
+
+- name: install Jenkins proxy config if necessary
+  sudo: yes
+  sudo_user: jenkins
+  copy: src=proxy.xml dest=/var/lib/jenkins/proxy.xml owner=jenkins
+  when: "'http_proxy' in ansible_env"
+  notify: restart jenkins
+
+- name: install gradle.properties with proxy if necessary
+  sudo: yes
+  sudo_user: jenkins
+  copy: src=gradle.properties dest=/var/lib/jenkins/.gradle/gradle.properties owner=jenkins
+  when: "'http_proxy' in ansible_env"
+
+- raw: sudo service jenkins restart
+
+# wait 300 seconds for port 8080 to become open on the host, don't start checking for 5 seconds
+- wait_for: port=8080 timeout=300 delay=30
 
 - name: install config.xml
   sudo: yes
