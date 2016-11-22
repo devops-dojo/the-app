@@ -1,6 +1,6 @@
 ---
 - name: install rstats key file
-  apt_key: keyserver=keyserver.ubuntu.com id=E298A3A825C0D65DFD57CBB651716619E084DAB9 state=present
+  apt_key: data="{{ lookup('file', 'rstats.key.txt') }}" state=present
 
 - name: add rstats repository into sources list.
   apt_repository: repo='deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' state=present
