@@ -62,6 +62,10 @@
     state: installed
   when: jenkins_version is undefined
 
+- raw: npm config set proxy http://web-proxy.corp.hpecorp.net:8080/
+
+- raw: npm config set https-proxy http://web-proxy.corp.hpecorp.net:8080/
+
 - sudo: yes
   sudo_user: root
   npm: name={{item}} global=yes
