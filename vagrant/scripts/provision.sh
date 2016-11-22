@@ -2,15 +2,17 @@
 
 if [ ! -f /usr/bin/ansible-playbook ]
     then
-    apt-get install software-properties-common
-    apt-add-repository ppa:ansible/ansible
-    apt-get update
-    apt-get install -y ansible
+    sudo apt-get install software-properties-common
+    sudo apt-add-repository ppa:ansible/ansible
+    sudo apt-get update
+    sudo apt-get install -y ansible
 fi
 
 # Clone repository
-git clone https://github.hpe.com/olivier-jacques/the-app.git
-cd the-app/vagrant/provision
+git clone https://github.com/devops-dojo/the-app.git
+cd the-app/vagrant
+
+ls -alrt
 
 echo "RUNNING ansible-playbook -c local " $@
 
