@@ -8,9 +8,8 @@ if [ ! -f /usr/bin/ansible-playbook ]
     sudo apt-get install -y ansible
 fi
 
-# Clone repository
-git clone https://github.com/devops-dojo/the-app.git
-cd the-app/vagrant
+# This directory is synced by vagrant
+cd /provision
 
 ls -alrt
 

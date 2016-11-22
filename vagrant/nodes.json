@@ -8,7 +8,7 @@
             "hostname": "monitoring-node",
             "ip": "10.211.55.100",
             "ports":[],
-            "playbook": "provision/monitoringserver.yml",
+            "playbook": "monitoringserver.yml",
             "apt_cache": true,
             "aliases" : ["monitoring.microservice.io"]
         },
@@ -19,7 +19,7 @@
             "memory": "256",
             "ip": "10.211.55.201",
             "ports":[ ],
-            "playbook": "provision/reposerver.yml",
+            "playbook": "reposerver.yml",
             "apt_cache": true,
             "aliases" : ["ci-repo.microservice.io"]
         },
@@ -33,7 +33,7 @@
                 {"host": 27017, "guest": 27017, "auto_correct": true},  //Mongo
                 {"host": 6379, "guest": 6379, "auto_correct": true}     //Redis
             ],
-            "playbook": "provision/databaseserver.yml",
+            "playbook": "databaseserver.yml",
             "apt_cache": true,
             "aliases" : [
                 "redis-node",
@@ -48,7 +48,7 @@
             "hostname": "app-server-node-1",
             "ip": "10.211.55.101",
             "ports":[],
-            "playbook": "provision/monolitic_appserver.yml",
+            "playbook": "monolitic_appserver.yml",
             "apt_cache": true,
             "aliases" : ["test.monolith.io"]
         },
@@ -59,7 +59,7 @@
             "hostname": "app-server-node-2",
             "ip": "10.211.55.102",
             "ports":[],
-            "playbook": "provision/monolitic_appserver.yml",
+            "playbook": "monolitic_appserver.yml",
             "apt_cache": true,
             "aliases" : ["shop.monolith.io"]
         },
@@ -70,7 +70,7 @@
             "hostname": "app-server-node-3",
             "ip": "10.211.55.103",
             "ports":[],
-            "playbook": "provision/micro_appserver.yml",
+            "playbook": "micro_appserver.yml",
             "apt_cache": false,
             "aliases" : [
                 "test-shop.microservice.io",
@@ -85,7 +85,7 @@
             "hostname": "app-server-node-4",
             "ip": "10.211.55.104",
             "ports":[],
-            "playbook": "provision/micro_appserver.yml",
+            "playbook": "micro_appserver.yml",
             "apt_cache": false,
             "aliases" : [
                 "shop.microservice.io",
@@ -100,7 +100,7 @@
             "hostname": "ci-node",
             "ip": "10.211.55.200",
             "ports":[],
-            "playbook": "provision/buildserver.yml",
+            "playbook": "buildserver.yml",
             "apt_cache": true,
             "aliases" : ["ci.microservice.io"]
         }
