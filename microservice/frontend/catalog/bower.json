@@ -18,8 +18,8 @@
     "angular-local-storage": "https://github.com/grevory/angular-local-storage.git#0.1.5"
   },
   "devDependencies": {
-    "angular-mocks": "http://github.com/angular/bower-angular-mocks.git#1.2.28",
-    "angular-scenario": "http://github.com/angular/bower-angular-scenario.git#1.2.28"
+    "angular-mocks": "https://github.com/angular/bower-angular-mocks.git#1.2.28",
+    "angular-scenario": "https://github.com/angular/bower-angular-scenario.git#1.2.28"
   },
   "appPath": "app"
 }
