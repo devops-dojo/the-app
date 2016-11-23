@@ -1,4 +1,4 @@
-Source: shop-cart-service
+Source: shop-navigation-service
 Section: web
 Priority: optional
 Version: [[version]]
@@ -6,7 +6,7 @@ Maintainer: Bernd Zuther <bernd.zuther@me.com>
 Homepage: http://www.bernd-zuther.de/
 Vcs-Git: https://github.com/zutherb/AppStash.git
 Vcs-Browser: https://github.com/zutherb/AppStash
-Package: shop-cart-service
+Package: shop-navigation-service
 Architecture: amd64
 Depends:
-Description: Cart Service
+Description: Navigation Service
