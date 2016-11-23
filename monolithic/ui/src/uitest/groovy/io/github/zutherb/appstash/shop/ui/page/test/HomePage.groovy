@@ -9,5 +9,6 @@ class HomePage extends Page {
         results(wait: true) { $("li a.tabletLink") }
         result { i -> results[i] }
         catalogLink { result(0) }
+        homeLink { result(0) }
     }
 }
