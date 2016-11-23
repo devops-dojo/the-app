@@ -69,6 +69,18 @@
       <fingerprint>false</fingerprint>
       <defaultExcludes>true</defaultExcludes>
     </hudson.tasks.ArtifactArchiver>
+    <htmlpublisher.HtmlPublisher plugin="htmlpublisher@1.11">
+       <reportTargets>
+         <htmlpublisher.HtmlPublisherTarget>
+           <reportName>UI Tests HTML Report</reportName>
+           <reportDir>monolithic/ui/build/reports/uiTest/tests</reportDir>
+           <reportFiles>index.html</reportFiles>
+           <alwaysLinkToLastBuild>false</alwaysLinkToLastBuild>
+           <keepAll>false</keepAll>
+           <allowMissing>false</allowMissing>
+         </htmlpublisher.HtmlPublisherTarget>
+       </reportTargets>
+    </htmlpublisher.HtmlPublisher>
   </publishers>
   <buildWrappers>
     <org.jenkinsci.plugins.xvfb.Xvfb plugin="xvfb@1.1.3">
