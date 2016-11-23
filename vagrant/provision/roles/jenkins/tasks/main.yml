@@ -18,7 +18,7 @@
     - golang
     - python-pip
     - xvfb
-    - firefox
+    - firefox=45.0.2+build1-0ubuntu1
     - git
     - curl
     - nodejs=0.12.17-1nodesource1~xenial1
@@ -64,7 +64,16 @@
     state: installed
   when: jenkins_version is undefined
 
-- raw: npm config set registry "http://registry.npmjs.org/"
+
+- name: Configure npm registry for current install user if proxy set
+  shell: npm config set registry {{ nodejs_npm_registry }}
+  when: "'http_proxy' in ansible_env"
+
+- name: Configure npm registry for Jenkins user if proxy set
+  shell: npm config set registry {{ nodejs_npm_registry }}
+  become: true
+  become_user: jenkins
+  when: "'http_proxy' in ansible_env"
 
 - sudo: yes
   sudo_user: root
@@ -172,6 +181,7 @@
       - xvfb
       - ws-cleanup
       - xframe-filter-plugin
+      - htmlpublisher
   notify: restart jenkins
 
 - name: restart jenkins
