@@ -85,6 +85,9 @@
   when: "'http_proxy' in ansible_env"
   notify: restart jenkins
 
+- name: create .gradle directory
+  file: path=/var/lib/jenkins/.gradle state=directory owner=jenkins
+
 - name: install gradle.properties with proxy if necessary
   sudo: yes
   sudo_user: jenkins
