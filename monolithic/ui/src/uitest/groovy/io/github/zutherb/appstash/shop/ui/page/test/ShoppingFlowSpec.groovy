@@ -12,7 +12,7 @@ add vm params: -Dgeb.build.reportsDir="/tmp/geb" -Dgeb.env="firefox"
 class ShoppingFlowSpec extends GebReportingSpec {
 
 
-    def "ordering"() {
+    def "Full ordering flow"() {
         when:
         to HomePage
 
