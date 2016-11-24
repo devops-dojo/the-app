@@ -14,4 +14,12 @@
 - raw: sudo update-rc.d elasticsearch defaults
 - raw: sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch
 - raw: sudo chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
-- raw: sudo service elasticsearch start
+
+- name: insert/update elasticsearch configuration block
+  blockinfile:
+    dest: /etc/elasticsearch/elasticsearch.yml
+    block: |
+      http.cors.enabled: true
+      http.cors.allow-origin: http://monitoring.microservice.io
+
+- raw: sudo service elasticsearch restart
