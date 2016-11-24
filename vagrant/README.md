@@ -45,11 +45,11 @@ Microsoft Azure public cloud.
 ## Installing
 
 
-### DojoInstaller VM
+### Dojo Jump VM
 
-- On Azure, create an Ubuntu 16.10 VM (Standard_A1 or Standard_A0).
-- Create the VM in location "Central US" (centralus).
-- :exclamation: If you can't use "centralus" location, make sure to update
+- On Azure, create an Ubuntu 16.04 VM (Standard_A1 or Standard_A0).
+- Create the VM in location "East US" (eastus).
+- :exclamation: If you can't use "eastus" location, make sure to update
 [`pre-requisites/params.json`](pre-requisites/params.json), [`pre-requisites/pre-requisites.sh`](pre-requisites/pre-requisites.sh) and [`Vagrantfile`](Vagrantfile) to update the location.
 - Make sure that the VirtualNetwork is called "Dojo-vnet" (or update the
   [params.json](pre-requisites/params.json) file)
@@ -92,7 +92,15 @@ sudo apt-get install ansible
 git clone https://github.com/devops-dojo/the-app.git
 cd the-app/vagrant
 ```
-- Create Azure cloud credentials .env file
+- Get your Azure's application details which is used to provision resources:
+  - tenant_id: from help/show diagnostics
+  - subscription_id: from subscription screen
+  - client_id / client_secret: create a new application from "App Registrations" *
+    and get a key. client_id = Application ID, client_secret = Application key
+  - In Azure Subscription / IAM: add the application you just created and give it
+    contributor permissions
+
+- Create Azure cloud credentials .env file with the information from previous step
 
   You need a `.env`  file which includes your Azure details in `~/the-app/vagrant`.
 This file is sourced by several install scripts.
