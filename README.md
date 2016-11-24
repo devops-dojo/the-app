@@ -91,7 +91,7 @@ The microservice based online shop is deployed on the microservice appserver
 which is a reference implementation for the given use cases in the
 [Overview](https://github.com/devops-dojo/the-app/#overview). You can reach the
 online shop under the following url
-http://app-server-node-4.eastus.cloudapp.azure.com/.
+http://shop.microservice.io/.
 
 ![Microservice Appserver](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/microservice-appserver.png)
 
@@ -113,7 +113,7 @@ The monolith online shop is deployed on the Monolith Appserver which is a
 reference implementation for the given use cases in the
 [Overview](https://github.com/devops-dojo/the-app/#overview). You can reach the
 online shop under the following url
-http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/ .
+http://shop.monolith.io:8080/shop/ .
 
 ![Monolith Appserver](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/monolith-appserver.png)
 
@@ -127,7 +127,7 @@ that provides a continuous integration services for software development which s
 Jenkins can execute different build scripts like [Gradle](http://gradle.org/) as well as arbitrary
 shell scripts and Windows batch commands.
 
-You can reach the jenkins that builds and deploy the monolith and microservice application under the following url http://ci-node.eastus.cloudapp.azure.com:8080/.
+You can reach the jenkins that builds and deploy the monolith and microservice application under the following url http://ci.microservice.io:8080/.
 
 ![CI-Node](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/ci-node.png)
 
@@ -173,7 +173,7 @@ events to a variety of external programs including Elasticsearch, local files an
 #### PSI Probe
 Furthermore you can reach the [PSI Probe](https://code.google.com/p/psi-probe/)
 monitoring and log analysis services under the following url
-http://app-server-node-2.eastus.cloudapp.azure.com:8080/probe/. The user
+http://shop.monolith.io:8080/probe/. The user
 credentials are admin / topsecret.
 
 PSI Probe is a community-driven fork of Lambda Probe, which is intended to replace the Tomcat Manager and should make
@@ -192,7 +192,7 @@ server. These features include:
 
 #### JETM
 JETM performance monitor [JETM](http://jetm.void.fm/) is at the following url
-http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/performance/. JETM
+http://shop.monolith.io:8080/shop/performance/. JETM
 is a small and free library that is included in the monolith online shop, that
 helps locating performance problems in existing Java applications. JETM enables
 developers to track down performance issues on demand, either programmatic or
@@ -205,7 +205,7 @@ declarative with minimal impact on application performance, even in production.
 [JMX](http://en.wikipedia.org/wiki/Java_Management_Extensions) is a natural way to have access to technical management,
 e.g. for tuning, statistics, log levels and so on. Unfortunately, it lacks a lightweight tool to expose mbeans and to browse
 them securely on any application and environment without heavy infrastructure setup. [JMiniX](https://code.google.com/p/jminix/)
-provides such a feature. You can reach JMiniX under the following url http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/jmx/.
+provides such a feature. You can reach JMiniX under the following url http://shop.monolith.io:8080/shop/jmx/.
 
 ![JMiniX](https://raw.githubusercontent.com/devops-dojo/the-app/master/external/images/jminix.png)
 
