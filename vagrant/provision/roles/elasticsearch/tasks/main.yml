@@ -12,4 +12,6 @@
   apt: pkg=elasticsearch state=present force=yes
 
 - raw: sudo update-rc.d elasticsearch defaults
+- raw: sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch
+- raw: sudo chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
 - raw: sudo service elasticsearch start
