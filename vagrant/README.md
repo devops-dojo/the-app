@@ -180,8 +180,8 @@ dbserver      | 10.211.55.202 | mongodb-node       | MongoDB                    
 dbserver      | 10.211.55.202 | redis-node         | Redis                       | redis.microservice.io:6379
 appserver1    | 10.211.55.101 | app-server-node-1  | Legacy Shop TST             | http://test.monolith.io:8080/shop/
 appserver1    | 10.211.55.101 | app-server-node-1  | Probe TST                   | http://test.monolith.io:8080/probe/ (admin / topsecret)
-appserver2    | 10.211.55.102 | app-server-node-2  | Legacy Shop PRO             | http://monolith.io:8080/shop/
-appserver2    | 10.211.55.102 | app-server-node-2  | Probe PRO                   | http://monolith.io:8080/probe/ (admin / topsecret)
+appserver2    | 10.211.55.102 | app-server-node-2  | Legacy Shop PRO             | http://shop.monolith.io:8080/shop/
+appserver2    | 10.211.55.102 | app-server-node-2  | Probe PRO                   | http://shop.monolith.io:8080/probe/ (admin / topsecret)
 appserver3    | 10.211.55.103 | app-server-node-3  | Microservice Shop TST       | http://test-shop.microservice.io/
 appserver4    | 10.211.55.104 | app-server-node-4  | Microservice Shop PRO       | http://shop.microservice.io/
 elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring.microservice.io/
