@@ -92,13 +92,24 @@ sudo apt-get install ansible
 git clone https://github.com/devops-dojo/the-app.git
 cd the-app/vagrant
 ```
+- Create insecure_private_key.pub in cd /home/YOUR_USER/.vagrant.d
+  Copy the content from here: https://github.com/mitchellh/vagrant/blob/master/keys/vagrant.pub
+  
+- Install azure cli with npm
+```
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+sudo apt-get install -y nodejs
+npm install -g azure-cli
+```  
 - Get your Azure's application details which is used to provision resources:
   - tenant_id: from help/show diagnostics
   - subscription_id: from subscription screen
   - client_id / client_secret: create a new application from "App Registrations" *
     and get a key. client_id = Application ID, client_secret = Application key
   - In Azure Subscription / IAM: add the application you just created and give it
-    contributor permissions
+    contributor permissions:
+    portal.azure.com > More services > Subscriptions > Visual Studio Enterprise > Access Control (IAM) > Add > Select a Role >  Contributor
+    Add users > THE_APP_YOU_CREATED_IN_PREVIOUS_STEP > select > ok
 
 - Create Azure cloud credentials .env file with the information from previous step
 
@@ -131,6 +142,7 @@ Dojo resource group.
 
 ```
 cd pre-requisites
+azure login
 pre-requisites.sh
 cd ..
 ```
