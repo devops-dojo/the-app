@@ -10,6 +10,12 @@ fi
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/etc/init.d
 . /lib/lsb/init-functions
 
+if [ -r /etc/default/navigation ]; then
+        . /etc/default/navigation
+        export MONGODB_PORT_27017_TCP_ADDR
+        export MONGODB_PORT_27017_TCP_PORT
+fi
+
 start_service() {
         log_daemon_msg "Starting navigation service"
         nohup $BASE_DIRECTORY/navigation > /var/log/navigation.log 2>&1 &
