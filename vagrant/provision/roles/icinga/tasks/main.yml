@@ -1,10 +1,9 @@
 ---
 - apt_repository: repo='ppa:formorer/icinga'
 - apt: update_cache=yes
-- apt: pkg={{item}} state=present force=yes 
+- apt: pkg={{item}} state=present force=yes
   with_items:
     - icinga
-    - icinga-web
 
 - file: src=/etc/nagios3/conf.d/{{item}} dest=/etc/icinga/objects/{{item}} state=link
   with_items:
