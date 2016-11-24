@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
   <description>&lt;p&gt;&#13;
-  After running this build the &lt;a href="http://http://test.monolith.io:8080/shop/:8080/shop/" target="_blank"&gt;Monolith Production Node&lt;/a&gt; should be running. &#13;
+  After running this build the &lt;a href="http://test.monolith.io:8080/shop/" target="_blank"&gt;Monolith TEST Node&lt;/a&gt; should be running. &#13;
   You can check the Version with the following urls:&#13;
   &lt;ul&gt;&#13;
-    &lt;li&gt;&lt;a href="http://http://test.monolith.io:8080/shop/:8080/shop/version" target="_blank"&gt;Monolith&lt;/a&gt;&lt;/li&gt;&#13;
-    &lt;li&gt;&lt;a href="http://http://test.monolith.io:8080/shop/:8080/shop/jmx/" target="_blank"&gt;Monolith (JMX Console)&lt;/a&gt;&lt;/li&gt;&#13;
-    &lt;li&gt;&lt;a href="http://http://test.monolith.io:8080/shop/:8080/shop/performance/" target="_blank"&gt;Monolith (Performance Console)&lt;/a&gt;&lt;/li&gt;&#13;
+    &lt;li&gt;&lt;a href="http://test.monolith.io:8080/shop/version" target="_blank"&gt;Monolith&lt;/a&gt;&lt;/li&gt;&#13;
+    &lt;li&gt;&lt;a href="http://test.monolith.io:8080/shop/jmx/" target="_blank"&gt;Monolith (JMX Console)&lt;/a&gt;&lt;/li&gt;&#13;
+    &lt;li&gt;&lt;a href="http://test.monolith.io:8080/shop/performance/" target="_blank"&gt;Monolith (Performance Console)&lt;/a&gt;&lt;/li&gt;&#13;
   &lt;/ul&gt;&#13;
 &lt;/p&gt;</description>
   <logRotator class="hudson.tasks.LogRotator">
@@ -58,7 +58,7 @@
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>scp -o StrictHostKeyChecking=no -v ${WORKSPACE}/artifacts/monolithic-shop.war vagrant@app-server-node-1:/tmp/shop.war 
+      <command>scp -o StrictHostKeyChecking=no -v ${WORKSPACE}/artifacts/monolithic-shop.war vagrant@app-server-node-1:/tmp/shop.war
 ssh vagrant@app-server-node-1 -o StrictHostKeyChecking=no -v &lt;&lt;EOF
 sudo service tomcat7 stop
 sudo rm -rf /var/lib/tomcat7/webapps/shop*

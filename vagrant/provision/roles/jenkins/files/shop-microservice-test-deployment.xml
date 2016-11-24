@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
   <description>&lt;p&gt;&#13;
-  After running this build the &lt;a href="http://test-shop.microservice.io/" target="_blank"&gt;Microservice Production Node&lt;/a&gt; should be running. &#13;
+  After running this build the &lt;a href="http://test-shop.microservice.io/" target="_blank"&gt;Microservice TEST Node&lt;/a&gt; should be running. &#13;
   You can check the Version with the following urls:&#13;
   &lt;ul&gt;&#13;
     &lt;li&gt;&lt;a href="http://test-shop.microservice.io/version.txt" target="_blank"&gt;Catalog Frontend Version&lt;/a&gt;&lt;/li&gt;&#13;
@@ -46,7 +46,7 @@
       <command>ssh vagrant@app-server-node-3 -o StrictHostKeyChecking=no -v &lt;&lt;EOF
 sudo su
 apt-get update
-apt-get autoclean  
+apt-get autoclean
 apt-get -y install shop-registration-frontend
 apt-get -y install shop-catalog-frontend
 apt-get -y install shop-checkout-frontend
