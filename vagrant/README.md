@@ -148,12 +148,12 @@ In case a step fails in the Ansible playbook, you can run it again using this co
 
 ### Deploy application on servers
 
-You have to run the [Production Deployment Builds](http://ci-node.eastus.cloudapp.azure.com:8080/view/Production%20Deployment/) on the
+You have to run the [Production Deployment Builds](http://ci.microservice.io:8080/view/Production%20Deployment/) on the
 [Jenkins CI Server](http://jenkins-ci.org/) after you have boot up the cluster. Otherwise you can not use the production urls
 that are given in the next section. Therefore you have to run the following two builds:
 
-- [Microservice Production Deployment](http://ci-node.eastus.cloudapp.azure.com:8080/view/Production%20Deployment/job/shop-microservice-production-deployment/build?delay=0sec)
-- [Monolith Production Deployment](http://ci-node.eastus.cloudapp.azure.com:8080/view/Production%20Deployment/job/shop-monolitic-production-deployment/build?delay=0sec)
+- [Microservice Production Deployment](http://ci.microservice.io:8080/view/Production%20Deployment/job/shop-microservice-production-deployment/build?delay=0sec)
+- [Monolith Production Deployment](http://ci.microservice.io:8080/view/Production%20Deployment/job/shop-monolitic-production-deployment/build?delay=0sec)
 
 Please check if all builds are green sometimes the catalog ui build fails and must be re run until it is green.
 
@@ -174,16 +174,16 @@ or `vagrant ssh buildserver`.
 
 Vagrant-Name  | IP            | Hostname           | Application                 | Forward
 --------------|---------------|--------------------|-----------------------------|--------------------------------------------------------------------
-buildserver   | 10.211.55.200 | ci-node            | Jenkins                     | http://ci-node.eastus.cloudapp.azure.com:8080/
-reposerver    | 10.211.55.201 | ci-repo            | Artifact Repository (NGINX) | http://ci-repo.eastus.cloudapp.azure.com
-dbserver      | 10.211.55.202 | mongodb-node       | MongoDB                     | localhost:27017
-dbserver      | 10.211.55.202 | redis-node         | Redis                       | localhost:6379
-appserver1    | 10.211.55.101 | app-server-node-1  | Legacy Shop TST             | http://app-server-node-1.eastus.cloudapp.azure.com:8080/shop/
-appserver1    | 10.211.55.101 | app-server-node-1  | Probe TST                   | http://app-server-node-1.eastus.cloudapp.azure.com:8080/probe/ (admin / topsecret)
-appserver2    | 10.211.55.102 | app-server-node-2  | Legacy Shop PRO             | http://app-server-node-2.eastus.cloudapp.azure.com:8080/shop/
-appserver2    | 10.211.55.102 | app-server-node-2  | Probe PRO                   | http://app-server-node-2.eastus.cloudapp.azure.com:8080/probe/ (admin / topsecret)
-appserver3    | 10.211.55.103 | app-server-node-3  | Microservice Shop TST       | http://app-server-node-3.eastus.cloudapp.azure.com/
-appserver4    | 10.211.55.104 | app-server-node-4  | Microservice Shop PRO       | http://app-server-node-4.eastus.cloudapp.azure.com/
-elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring-node.eastus.cloudapp.azure.com/
-elasticsearch | 10.211.55.100 | monitoring-node    | Nagios                      | http://monitoring-node.eastus.cloudapp.azure.com/nagios3/ (nagiosadmin / admin123)
-elasticsearch | 10.211.55.100 | monitoring-node    | Icinga                      | http://monitoring-node.eastus.cloudapp.azure.com/icinga/ (icingaadmin / admin123)
+buildserver   | 10.211.55.200 | ci-node            | Jenkins                     | http://ci.microservice.io:8080/
+reposerver    | 10.211.55.201 | ci-repo            | Artifact Repository (NGINX) | http://ci-repo.microservice.io
+dbserver      | 10.211.55.202 | mongodb-node       | MongoDB                     | mongo.microservice.io:27017
+dbserver      | 10.211.55.202 | redis-node         | Redis                       | redis.microservice.io:6379
+appserver1    | 10.211.55.101 | app-server-node-1  | Legacy Shop TST             | http://test.monolith.io:8080/shop/
+appserver1    | 10.211.55.101 | app-server-node-1  | Probe TST                   | http://test.monolith.io:8080/probe/ (admin / topsecret)
+appserver2    | 10.211.55.102 | app-server-node-2  | Legacy Shop PRO             | http://monolith.io:8080/shop/
+appserver2    | 10.211.55.102 | app-server-node-2  | Probe PRO                   | http://monolith.io:8080/probe/ (admin / topsecret)
+appserver3    | 10.211.55.103 | app-server-node-3  | Microservice Shop TST       | http://test-shop.microservice.io/
+appserver4    | 10.211.55.104 | app-server-node-4  | Microservice Shop PRO       | http://shop.microservice.io/
+elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring.microservice.io/
+elasticsearch | 10.211.55.100 | monitoring-node    | Nagios                      | http://monitoring.microservice.io/nagios3/ (nagiosadmin / admin123)
+elasticsearch | 10.211.55.100 | monitoring-node    | Icinga                      | http://monitoring.microservice.io/icinga/ (icingaadmin / admin123)
