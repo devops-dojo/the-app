@@ -5,103 +5,92 @@ nodes_config = (JSON.parse(File.read("nodes.json")))['nodes']
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-if ARGV[1] and \
-   (ARGV[1].split('=')[0] == "--provider" or ARGV[2])
-  provider = (ARGV[1].split('=')[1] || ARGV[2])
-else
-  provider = (ENV['VAGRANT_DEFAULT_PROVIDER'] || :virtualbox).to_sym
-end
-puts "Detected #{provider}"
+  if ARGV[1] and \
+     (ARGV[1].split('=')[0] == "--provider" or ARGV[2])
+    provider = (ARGV[1].split('=')[1] || ARGV[2])
+  else
+    provider = (ENV['VAGRANT_DEFAULT_PROVIDER'] || :virtualbox).to_sym
+  end
+  puts "Detected #{provider}"
 
-    if Vagrant.has_plugin?("vagrant-proxyconf")
-      config.proxy.http     = ENV['http_proxy'] || ""
-      config.proxy.https    = ENV['http_proxy'] || ""
-      config.apt_proxy.http = ENV['http_proxy'] || ""
-      config.apt_proxy.https= nil
-      config.proxy.no_proxy = "localhost,127.0.0.1,.hpecorp.net,github.hpe.com,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-repo,mongodb-node"
-    end
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http     = ENV['http_proxy'] || ""
+    config.proxy.https    = ENV['http_proxy'] || ""
+    config.apt_proxy.http = ENV['http_proxy'] || ""
+    config.apt_proxy.https= nil
+    config.proxy.no_proxy = "localhost,127.0.0.1,.hpecorp.net,github.hpe.com,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-repo,mongodb-node"
+  end
 
-    nodes_config.each do |node|
-        node_name = node["node"] # name of node
-        config.ssh.insert_key = false
-        config.ssh.private_key_path = '~/.vagrant.d/insecure_private_key'
+  nodes_config.each do |node|
+    node_name = node["node"] # name of node
+    config.ssh.insert_key = false
+    config.ssh.private_key_path = '~/.vagrant.d/insecure_private_key'
 
-        # configures all forwarding ports in JSON array
-        config.vm.define node_name do |config|
-            ports = node['ports']
-            ports.each do |port|
-                config.vm.network :forwarded_port,
-                host: port['host'],
-                guest: port['guest'],
-                auto_correct: port['auto_correct']
-            end
+    # For each node
+    config.vm.define node_name do |config|
+      ports = node['ports']
+      ports.each do |port|
+        config.vm.network :forwarded_port,
+        host: port['host'],
+        guest: port['guest'],
+        auto_correct: port['auto_correct']
+      end
 
-            config.vm.hostname = node['hostname']
-            config.vm.network :private_network, ip: node['ip']
+      config.vm.hostname = node['hostname']
+      config.vm.network :private_network, ip: node['ip']
 
-            config.vm.synced_folder "provision", "/provision"
+      config.vm.synced_folder "provision", "/provision"
 
-            if provider=="virtualbox"
-                config.vm.box = 'bento/ubuntu-16.04'
-                config.vm.provider :virtualbox do |vb|
-                    vb.customize ["modifyvm", :id, "--memory", node['memory']]
-                    vb.customize ["modifyvm", :id, "--name", node['node']]
-                    vb.customize ["modifyvm", :id, "--cpus", node['cpus']]
-                end
-            end
-
-            if provider=="azure"
-                config.vm.provider :azure do |azure, override|
-                  config.vm.box = 'azure'
-                  azure.vm_image_urn = 'canonical:ubuntuserver:16.04.0-DAILY-LTS:latest'
-                  azure.tenant_id = ENV['AZURE_TENANT_ID']
-                  azure.client_id = ENV['AZURE_CLIENT_ID']
-                  azure.client_secret = ENV['AZURE_CLIENT_SECRET']
-                  azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
-                  azure.resource_group_name = 'DojoLabs'
-                  azure.vm_size = node['vm_size']
-                  azure.vm_name = node['node']
-                  azure.location = 'centralus'
-                  azure.dns_name = node['hostname']
-                  azure.private_ip_allocation_method = 'Static'
-                  azure.private_ip_address = node['ip']
-                  azure.virtual_network_name = 'DojoLabsVNet'
-                end
-            end
-
-            if Vagrant.has_plugin?("vagrant-hostsupdater")
-                config.hostsupdater.aliases = node['aliases']
-            end
-
-            if Vagrant.has_plugin?("vagrant-cachier") && node['apt_cache']
-                config.cache.scope = :machine
-                config.cache.enable :apt
-                config.cache.enable :gem
-                config.cache.enable :bower
-                config.cache.enable :npm
-            end
-
-	    config.vm.provision "shell" do |s|
-	        ansible_limit    = "--limit=" + node['hostname']
-	        s.path           = "scripts/provision.sh"
-		s.privileged     = false
-		s.args           = ["--inventory-file=hosts",
-		                    ansible_limit,
-				    "--extra-vars='ansible_ssh_user=vagrant'",
-				    "--user=vagrant",
-				    node['playbook']]
-	    end
-
-            #config.vm.provision "ansible" do |ansible|
-            #      ansible.playbook = node['playbook']
-            #      ansible.inventory_path = "provision/hosts"
-            #      ansible.limit = node['hostname']
-                  #for better debugging set 'v' to 'vvvv'
-            #      ansible.verbose = 'v'
-            #      ansible.ask_vault_pass = false
-            #      ansible.raw_arguments  = "--user=vagrant"
-            #      ansible.raw_arguments  = "--private-key=~/.vagrant.d/insecure_private_key"
-            #end
+      if provider=="virtualbox"
+        config.vm.box = 'bento/ubuntu-16.04'
+        config.vm.provider :virtualbox do |vb|
+          vb.customize ["modifyvm", :id, "--memory", node['memory']]
+          vb.customize ["modifyvm", :id, "--name", node['node']]
+          vb.customize ["modifyvm", :id, "--cpus", node['cpus']]
         end
+      end
+
+      if provider=="azure"
+        config.vm.provider :azure do |azure, override|
+          config.vm.box = 'azure'
+          azure.vm_image_urn = 'canonical:ubuntuserver:16.04.0-DAILY-LTS:latest'
+          azure.tenant_id = ENV['AZURE_TENANT_ID']
+          azure.client_id = ENV['AZURE_CLIENT_ID']
+          azure.client_secret = ENV['AZURE_CLIENT_SECRET']
+          azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
+          azure.resource_group_name = 'DojoLabs'
+          azure.vm_size = node['vm_size']
+          azure.vm_name = node['node']
+          azure.location = 'centralus'
+          azure.dns_name = node['hostname']
+          azure.private_ip_allocation_method = 'Static'
+          azure.private_ip_address = node['ip']
+          azure.virtual_network_name = 'DojoLabsVNet'
+        end
+      end
+
+      if Vagrant.has_plugin?("vagrant-hostsupdater")
+        config.hostsupdater.aliases = node['aliases']
+      end
+
+      if Vagrant.has_plugin?("vagrant-cachier") && node['apt_cache']
+        config.cache.scope = :machine
+        config.cache.enable :apt
+        config.cache.enable :gem
+        config.cache.enable :bower
+        config.cache.enable :npm
+      end
+
+      config.vm.provision "shell" do |s|
+        ansible_limit    = "--limit=" + node['hostname']
+        s.path           = "scripts/provision.sh"
+    		s.privileged     = false
+    		s.args           = ["--inventory-file=hosts",
+    	                    ansible_limit,
+              				    "--extra-vars='ansible_ssh_user=vagrant'",
+              				    "--user=vagrant",
+              				    node['playbook']]
+      end
     end
+  end
 end
