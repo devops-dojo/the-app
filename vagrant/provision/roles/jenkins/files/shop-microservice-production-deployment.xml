@@ -39,6 +39,12 @@ echo ****************************************
 echo *         Remove Application          *
 echo **************************************** 
 apt-get clean
+dpkg --remove --force-all shop-registration-frontend
+dpkg --remove --force-all shop-catalog-frontend
+dpkg --remove --force-all shop-checkout-frontend
+dpkg --remove --force-all shop-product-service
+dpkg --remove --force-all shop-navigation-service
+dpkg --remove --force-all shop-cart-service
 echo ****************************************
 echo *         Install Application          *
 echo ****************************************
