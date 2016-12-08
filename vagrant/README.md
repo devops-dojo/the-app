@@ -1,23 +1,21 @@
-# Pre-requisites
-
-## Overall infrastructure
+# Overall infrastructure
 
 The automated process with Vagrant/Ansible provisions and configures the CD pipeline and the application.
 
 
 ```
-.     "Dojo"                 "DojoLabs"
-  Resource Group           Resource Group
-
-+---------------+ Peering +--------------+
-|   Dojo|VNet   +----------|DojoLabsVNet |
-+---------------+         +--------------+
+.     "Dojo"                 "DojoLabs"     |
+  Resource Group           Resource Group   |
+                                            |  Only Azure
++---------------+ Peering +--------------+  |
+|   Dojo|VNet   +----------|DojoLabsVNet |  |
++---------------+         +--------------+  |
                      |
-                     |                      +
+                     |                       
 +---------------+    |    +--------------+  |  +-------------+
 | DojoInstaller |    |    |elasticsearch |  |  |dbserver     |
 |      VM       |    |    |              |  |  |             |
-|               |    |    |              |  |  |             |
+| (only Azure)  |    |    |              |  |  |             |
 +---------------+    |    +--------------+  |  +-------------+
                      |                      |
                      |    +--------------+  |  +-------------+   +--------------+
@@ -37,17 +35,113 @@ The automated process with Vagrant/Ansible provisions and configures the CD pipe
 
 ```
 
+
+# Installing
+
+There are 3 options to install the 8 VMs which compose the environment:
+
+1. Locally on Virtualbox
+2. On pre-existing servers or VMs
+3. In Azure public or private cloud
+
+## 1. Locally in Virtualbox
+Provided that you have a big enough PC or MAC (16GB memory), you can install
+everything locally. This has been successfully tested on Windows 7, Windows 10
+and MacOS X laptops/desktops.
+
+* Tools used on your Windows or MAC or Linux physical host:
+  * Vagrant
+  * Virtualbox
+* Tools on guest machines:
+  * Ansible (automatically installed by host)
+
+
+Procedure for local install:
+* Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+* Install [Vagrant](https://www.vagrantup.com/downloads.html)
+* Install Vagrant plugins:
+```
+vagrant plugin install vagrant-hostsupdater
+```
+* Install additional vagrant plugin if you are behind a web proxy:
+```
+vagrant plugin install vagrant-proxyconf
+```
+* Clone the repository
+```
+git clone https://github.com/devops-dojo/the-app.git
+cd the-app/vagrant
+```
+* Start provisioning (create VM, use Ansible to install applications)
+```
+vagrant up --provider=virtualbox --provision
+```
+* Once everything is done (:coffee:), wait for the [Jenkins jobs](http://ci-node:8080) to complete
+* All nodes are accessible following [this table](#nodes)
+* Deploy the application as per [this](#deploy-application-on-servers)
+
+## 2. In existing servers or VMs
+You can also install the environment on existing virtual machines. You need 8
+VMs with **Ubuntu 16.04**. Check the
+[`nodes.json`](https://github.com/devops-dojo/the-app/blob/master/vagrant/nodes.json)
+file for host names and details on sizing.
+
+* Tools used on host machine: Not applicable
+* Tools on guest machines: Ansible
+
+***Note***: all VMs need to run **Ubuntu 16.04** (Xenial) before attempting
+to use Ansible.
+
+Procedure to install on existing machines:
+
+* Only if you are behind a web proxy:
+
+```
+export http_proxy=http://web-proxy:port
+export https_proxy=http://web-proxy:port
+export no_proxy=localhost,127.0.0.1,.hpecorp.net,github.hpe.com,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-repo,mongodb-node
+
+echo 'http_proxy=http://web-proxy:port
+https_proxy=http://web-proxy:port
+no_proxy=localhost,127.0.0.1,.hpecorp.net,github.hpe.com,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-repo,mongodb-node' | sudo tee --append /etc/environment
+```
+
+* Clone the repository
+
+```
+git clone https://github.com/devops-dojo/the-app.git
+sudo cp -pR the-app/vagrant/provision /provision
+
+cd the-app/vagrant/scripts
+```
+* Start provisioning: pick one of the line, depending on the server you need to provision:
+
+```
+sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=monitoring-node monitoringserver.yml
+sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=ci-repo reposerver.yml
+sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=mongodb-node databaseserver.yml
+sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=app-server-node-1 monolitic_appserver.yml
+sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=app-server-node-2 monolitic_appserver.yml
+sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=app-server-node-3 micro_appserver.yml
+sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=app-server-node-4 micro_appserver.yml
+sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=ci-node buildserver.yml
+```
+* Once everything is done (:coffee:), wait for the [Jenkins jobs](http://ci-node:8080) to complete
+* All nodes are accessible following [this table](#nodes)
+* Deploy the application as per [this](#deploy-application-on-servers)
+
+## 3. On Azure Cloud
+
 The DojoInstaller VM is permanent and is used as a controller for the rest
 of the provisioning process.
-Although designed originally with Vagrant/Virtualbox, the process is now leveraging
-Microsoft Azure public cloud.
 
-## Installing
+* Tools used on host machine: Vagrant with [Azure provider](https://github.com/ojacques/vagrant-azure)
+* Tools on guest machines: Ansible
 
 
-### Dojo Jump VM
+### Azure's Dojo Installer VM
 
-- On Azure, create an Ubuntu 16.04 VM (Standard_A1 or Standard_A0).
+- On Azure, create an **Ubuntu 16.04 VM** (Standard_A1 or Standard_A0), or even smaller
 - Create the VM in location "East US" (eastus).
 - :exclamation: If you can't use "eastus" location, make sure to update
 [`pre-requisites/params.json`](pre-requisites/params.json), [`pre-requisites/pre-requisites.sh`](pre-requisites/pre-requisites.sh) and [`Vagrantfile`](Vagrantfile) to update the location.
@@ -94,7 +188,7 @@ cd the-app/vagrant
 ```
 - Create insecure_private_key.pub in cd /home/YOUR_USER/.vagrant.d
   Copy the content from here: https://github.com/mitchellh/vagrant/blob/master/keys/vagrant.pub
-  
+
 - Install azure cli with npm
 ```
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
@@ -130,9 +224,9 @@ export VAGRANT_LOG=error
 You're done installing the DojoInstaller VM. Let's provision our Dojo
 lab using vagrant!
 
-## Provision DojoLabs
+### Provision DojoLabs
 
-### Setting up DojoLabs resource group
+#### Setting up DojoLabs resource group
 
 `pre-requisites.sh` will:
 - Create DojoLabs resource Group
@@ -147,7 +241,7 @@ pre-requisites.sh
 cd ..
 ```
 
-### Provision application and Pipeline
+#### Provision application and Pipeline
 
 Launch the script which starts Vagrant to provision the VMs, and Ansible
 to configure them.
@@ -166,7 +260,7 @@ In case a step fails in the Ansible playbook, you can run it again using this co
    --limit=ci-node provision/buildserver.yml
 ```
 
-### Deploy application on servers
+# Deploy application on servers
 
 You have to run the [Production Deployment Builds](http://ci.microservice.io:8080/view/Production%20Deployment/) on the
 [Jenkins CI Server](http://jenkins-ci.org/) after you have boot up the cluster. Otherwise you can not use the production urls
@@ -181,12 +275,12 @@ Please check if all builds are green sometimes the catalog ui build fails and mu
 
 After you have complete this, the cluster is fully installed and you can start to work with it.
 
-### Nodes
+# Nodes
 
 Here is a list of nodes, with a link when you can access them from the public
 internet.
 
-Note that 10.x.x.x IP addresses cannot be reached, except from the provisioning VM (thanks to virtual network peering) or any other VM in DojoLabsVNet.
+Note that 10.x.x.x IP addresses cannot be reached except from the provisioning system (thanks to virtual network peering). All hosts are aliased using `/etc/hosts`
 
 To `ssh` to a box from the provisioning VM, just type `ssh vagrant@10.211.55.200`
 or `vagrant ssh buildserver`.
