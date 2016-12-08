@@ -2,10 +2,11 @@
 
 if [ ! -f /usr/bin/ansible-playbook ]
     then
-    sudo apt-get install software-properties-common
-    sudo apt-add-repository ppa:ansible/ansible
-    sudo apt-get update
-    sudo apt-get install -y ansible
+    sudo -E apt-get install -y software-properties-common
+    sudo -E apt-key install ansible.key.txt
+    sudo -E apt-add-repository -y ppa:ansible/ansible
+    sudo -E apt-get update
+    sudo -E apt-get install -y --allow-unauthenticated ansible
 fi
 
 # This directory is synced by vagrant
