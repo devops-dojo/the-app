@@ -40,9 +40,9 @@ The automated process with Vagrant/Ansible provisions and configures the CD pipe
 
 There are 3 options to install the 8 VMs which compose the environment:
 
-1. Locally on Virtualbox
-2. On pre-existing servers or VMs
-3. In Azure public or private cloud
+1. [Locally on Virtualbox](#1-locally-in-virtualbox)
+2. [On pre-existing servers or VMs](#2-in-existing-servers-or-vms)
+3. [In Azure public or private cloud](#3-on-azure-cloud)
 
 ## 1. Locally in Virtualbox
 Provided that you have a big enough PC or MAC (16GB memory), you can install
