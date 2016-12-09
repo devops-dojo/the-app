@@ -193,7 +193,7 @@ cd the-app/vagrant
 ```
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
-npm install -g azure-cli
+sudo npm install -g azure-cli
 ```  
 - Get your Azure's application details which is used to provision resources:
   - tenant_id: from help/show diagnostics
