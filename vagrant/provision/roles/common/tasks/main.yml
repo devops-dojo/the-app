@@ -6,6 +6,9 @@
   lineinfile: dest=/etc/default/locale
     regexp="LC_ALL"
     line="LC_ALL=\"en_US.UTF-8\""
+- authorized_key:
+    user: vagrant
+    key: "{{ lookup('file', '/provision/roles/jenkins/files/id_rsa.pub') }}"
 - apt: pkg={{item}} state=present force=yes update_cache=yes
   with_items:
     - vim
