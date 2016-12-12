@@ -12,7 +12,7 @@ ff02::2 ip6-allrouters
 10.211.55.101   app-server-node-1
 10.211.55.101   test.monolith.io
 10.211.55.102   app-server-node-2
-10.211.55.102   monolith.io
+10.211.55.102   shop.monolith.io
 10.211.55.103   app-server-node-3
 10.211.55.103   test-shop.microservice.io
 10.211.55.103   test-checkout.microservice.io
