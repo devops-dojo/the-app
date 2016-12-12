@@ -67,13 +67,13 @@
 
 - name: Configure npm registry for current install user if proxy set
   shell: npm config set registry {{ nodejs_npm_registry }}
-  when: "'http_proxy' in ansible_env"
+  when: ansible_env.http_proxy is defined
 
 - name: Configure npm registry for Jenkins user if proxy set
   shell: npm config set registry {{ nodejs_npm_registry }}
   become: true
   become_user: jenkins
-  when: "'http_proxy' in ansible_env"
+  when: ansible_env.http_proxy is defined
 
 - sudo: yes
   sudo_user: root
@@ -91,7 +91,7 @@
   sudo: yes
   sudo_user: jenkins
   copy: src=proxy.xml dest=/var/lib/jenkins/proxy.xml owner=jenkins
-  when: "'http_proxy' in ansible_env"
+  when: ansible_env.http_proxy is defined
   notify: restart jenkins
 
 - name: create .gradle directory
@@ -101,7 +101,7 @@
   sudo: yes
   sudo_user: jenkins
   copy: src=gradle.properties dest=/var/lib/jenkins/.gradle/gradle.properties owner=jenkins
-  when: "'http_proxy' in ansible_env"
+  when: ansible_env.http_proxy is defined
 
 - raw: sudo service jenkins restart
 
