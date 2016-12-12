@@ -53,7 +53,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       if provider=="azure"
         config.vm.provider :azure do |azure, override|
           config.vm.box = 'azure'
-          azure.vm_image_urn = 'canonical:ubuntuserver:16.04.0-DAILY-LTS:latest'
+          azure.vm_image_urn = 'canonical:ubuntuserver:16.04-DAILY-LTS:latest'
           azure.tenant_id = ENV['AZURE_TENANT_ID']
           azure.client_id = ENV['AZURE_CLIENT_ID']
           azure.client_secret = ENV['AZURE_CLIENT_SECRET']
