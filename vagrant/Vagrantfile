@@ -84,12 +84,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.provision "shell" do |s|
         ansible_limit    = "--limit=" + node['hostname']
         s.path           = "scripts/provision.sh"
-    		s.privileged     = false
-    		s.args           = ["--inventory-file=hosts",
-    	                    ansible_limit,
-              				    "--extra-vars='ansible_ssh_user=vagrant'",
-              				    "--user=vagrant",
-              				    node['playbook']]
+        s.privileged     = false
+        s.args           = ["--inventory-file=hosts",
+                            ansible_limit,
+                            "--extra-vars='ansible_ssh_user=vagrant'",
+                            "--user=vagrant",
+                            node['playbook']]
       end
     end
   end
