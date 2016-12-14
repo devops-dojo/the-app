@@ -62,7 +62,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           azure.vm_size = node['vm_size']
           azure.vm_name = node['node']
           azure.location = 'centralus'
-          azure.dns_name = node['hostname']
+          azure.dns_name = node['hostname'] + "-" + ENV['LAB_SUFFIX']
           azure.private_ip_allocation_method = 'Static'
           azure.private_ip_address = node['ip']
           azure.virtual_network_name = 'DojoLabsVNet'
