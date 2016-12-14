@@ -16,4 +16,5 @@
     - nagios-server
     - icinga
 
-  environment: "{{proxy_env}}"   # Make sure to set/unset proxy in vars/default.yml
+  environment:
+    "{{ (with_proxy) | ternary( proxy_env, {}) }}"   # use proxy_env only when with_proxy is true
