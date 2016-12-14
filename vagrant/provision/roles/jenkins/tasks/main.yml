@@ -67,13 +67,13 @@
 
 - name: Configure npm registry for current install user if proxy set
   shell: npm config set registry {{ nodejs_npm_registry }}
-  when: ansible_env.http_proxy is defined
+  when: with_proxy
 
 - name: Configure npm registry for Jenkins user if proxy set
   shell: npm config set registry {{ nodejs_npm_registry }}
   become: true
   become_user: jenkins
-  when: ansible_env.http_proxy is defined
+  when: with_proxy
 
 - sudo: yes
   sudo_user: root
@@ -91,8 +91,19 @@
   sudo: yes
   sudo_user: jenkins
   copy: src=proxy.xml dest=/var/lib/jenkins/proxy.xml owner=jenkins
-  when: ansible_env.http_proxy is defined
+  when: with_proxy
   notify: restart jenkins
+- name: Tune Jenkins proxy per global variable
+  sudo: yes
+  sudo_user: jenkins
+  blockinfile:
+    dest: /var/lib/jenkins/proxy.xml
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    insertafter: "<proxy>"
+    content: |
+      <name>{{http_proxy_host}}</name>
+      <port>{{http_proxy_port}}</port>
+  when: with_proxy
 
 - name: create .gradle directory
   file: path=/var/lib/jenkins/.gradle state=directory owner=jenkins
@@ -101,7 +112,19 @@
   sudo: yes
   sudo_user: jenkins
   copy: src=gradle.properties dest=/var/lib/jenkins/.gradle/gradle.properties owner=jenkins
-  when: ansible_env.http_proxy is defined
+  when: with_proxy
+- name: Tune gradle proxy per global variable
+  sudo: yes
+  sudo_user: jenkins
+  blockinfile:
+    dest: /var/lib/jenkins/.gradle/gradle.properties
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    content: |
+      systemProp.http.proxyHost={{http_proxy_host}}
+      systemProp.http.proxyPort={{http_proxy_port}}
+      systemProp.https.proxyHost={{http_proxy_host}}
+      systemProp.https.proxyPort={{http_proxy_port}}
+  when: with_proxy
 
 - raw: sudo service jenkins restart
 

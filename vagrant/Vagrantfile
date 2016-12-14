@@ -13,13 +13,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
   puts "Detected #{provider}"
 
-  if Vagrant.has_plugin?("vagrant-proxyconf")
-    config.proxy.http     = ENV['http_proxy'] || ""
-    config.proxy.https    = ENV['http_proxy'] || ""
-    config.apt_proxy.http = ENV['http_proxy'] || ""
-    config.apt_proxy.https= nil
-    config.proxy.no_proxy = "localhost,127.0.0.1,.hpecorp.net,github.hpe.com,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-repo,mongodb-node"
-  end
+#  if Vagrant.has_plugin?("vagrant-proxyconf")
+#    config.proxy.http     = ENV['http_proxy'] || ""
+#    config.proxy.https    = ENV['http_proxy'] || ""
+#    config.apt_proxy.http = ENV['http_proxy'] || ""
+#    config.apt_proxy.https= nil
+#    config.proxy.no_proxy = "localhost,127.0.0.1,.hpecorp.net,github.hpe.com,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-repo,mongodb-node"
+#  end
 
   nodes_config.each do |node|
     node_name = node["node"] # name of node

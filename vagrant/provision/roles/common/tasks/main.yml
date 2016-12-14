@@ -6,9 +6,18 @@
   lineinfile: dest=/etc/default/locale
     regexp="LC_ALL"
     line="LC_ALL=\"en_US.UTF-8\""
-- authorized_key:
+- authorized_key: # Needed when provisioning outside Vagrant (plain Ansible)
     user: vagrant
     key: "{{ lookup('file', '/provision/roles/jenkins/files/id_rsa.pub') }}"
+- name: Add http_proxy for internal hosts
+  lineinfile: dest=/etc/environment regexp="^http_proxy" line="http_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}"
+  when: with_proxy
+- name: Add https_proxy for internal hosts
+  lineinfile: dest=/etc/environment regexp="^https_proxy" line="https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}"
+  when: with_proxy
+- name: Add no_proxy for internal hosts
+  lineinfile: dest=/etc/environment regexp="^no_proxy" line="no_proxy={{no_proxy}}"
+  when: with_proxy
 - apt: pkg={{item}} state=present force=yes update_cache=yes
   with_items:
     - vim

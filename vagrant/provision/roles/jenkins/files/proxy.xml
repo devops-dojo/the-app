@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <proxy>
+<!-- BEGIN ANSIBLE MANAGED BLOCK -->
   <name>web-proxy.corp.hpecorp.net</name>
   <port>8080</port>
+<!-- END ANSIBLE MANAGED BLOCK -->
   <noProxyHost>localhost,127.0.0.1</noProxyHost>
   <secretPassword></secretPassword>
 </proxy>
-

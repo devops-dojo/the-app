@@ -142,8 +142,8 @@ of the provisioning process.
 ### Azure's Dojo Installer VM
 
 - On Azure, create an **Ubuntu 16.04 VM** (Standard_A1 or Standard_A0), or even smaller
-- Create the VM in location "East US" (eastus).
-- :exclamation: If you can't use "eastus" location, make sure to update
+- Create the VM in location "Central US" (centralus).
+- :exclamation: If you can't use "centralus" location, make sure to update
 [`pre-requisites/params.json`](pre-requisites/params.json), [`pre-requisites/pre-requisites.sh`](pre-requisites/pre-requisites.sh) and [`Vagrantfile`](Vagrantfile) to update the location.
 - Make sure that the VirtualNetwork is called "Dojo-vnet" (or update the
   [params.json](pre-requisites/params.json) file)
@@ -251,13 +251,13 @@ to configure them.
 
 :clock2: The process will take between 1 and 2 hours (serial). Plan in advance.
 
-In case a step fails in the Ansible playbook, you can run it again using this command:
+In case a step fails in the Ansible playbook, you can ssh to the box and run it
+again using this command:
 
 ```
-/usr/bin/ansible-playbook --connection=ssh --timeout=30 \
-   --extra-vars=ansible_ssh_user='vagrant' --inventory-file=provision/hosts \
+ansible-playbook -c local --extra-vars=ansible_ssh_user='vagrant' --inventory-file=/provision/hosts \
    -v --private-key=~/.vagrant.d/insecure_private_key \
-   --limit=ci-node provision/buildserver.yml
+   --limit=ci-node /provision/buildserver.yml
 ```
 
 # Deploy application on servers

@@ -11,3 +11,5 @@
     - common
     - oracle-java
     - jenkins
+
+  environment: "{{proxy_env}}"   # Make sure to set/unset proxy in vars/default.yml

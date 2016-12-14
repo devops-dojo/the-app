@@ -3,7 +3,7 @@
 if [ ! -f /usr/bin/ansible-playbook ]
     then
     sudo -E apt-get install -y software-properties-common
-    sudo -E apt-key install ansible.key.txt
+    sudo -E apt-key add ansible.key.txt
     sudo -E apt-add-repository -y ppa:ansible/ansible
     sudo -E apt-get update
     sudo -E apt-get install -y --allow-unauthenticated ansible
