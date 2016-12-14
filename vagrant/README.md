@@ -63,16 +63,13 @@ Procedure for local install:
 ```
 vagrant plugin install vagrant-hostsupdater
 ```
-* Install additional vagrant plugin if you are behind a web proxy:
-```
-vagrant plugin install vagrant-proxyconf
-```
 * Clone the repository
 ```
 git clone https://github.com/devops-dojo/the-app.git
 cd the-app/vagrant
 ```
-* Tweak web proxy if needed in `provision/vars/default.yml`
+* By default, boxes are meant to be configured behind a web proxy. Tweak with_proxy and/or web proxy host/port
+if needed in `provision/vars/default.yml`
 * Start provisioning (create VM, use Ansible to install applications)
 ```
 vagrant up --provider=virtualbox --provision
@@ -95,18 +92,6 @@ to use Ansible.
 
 Procedure to install on existing machines:
 
-* Only if you are behind a web proxy:
-
-```
-export http_proxy=http://web-proxy:port
-export https_proxy=http://web-proxy:port
-export no_proxy=localhost,127.0.0.1,.hpecorp.net,github.hpe.com,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-repo,mongodb-node
-
-echo 'http_proxy=http://web-proxy:port
-https_proxy=http://web-proxy:port
-no_proxy=localhost,127.0.0.1,.hpecorp.net,github.hpe.com,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-repo,mongodb-node' | sudo tee --append /etc/environment
-```
-
 * Clone the repository
 
 ```
@@ -115,19 +100,20 @@ sudo cp -pR the-app/vagrant/provision /provision
 
 cd the-app/vagrant/scripts
 ```
-* Tweak web proxy if needed in `../provision/vars/default.yml`
+* By default, boxes are meant to be configured behind a web proxy. Tweak with_proxy and/or web proxy host/port
+if needed in `../provision/vars/default.yml`
 
 * Start provisioning: pick one of the line, depending on the server you need to provision:
 
 ```
-sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=monitoring-node monitoringserver.yml
-sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=ci-repo reposerver.yml
-sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=mongodb-node databaseserver.yml
-sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=app-server-node-1 monolitic_appserver.yml
-sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=app-server-node-2 monolitic_appserver.yml
-sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=app-server-node-3 micro_appserver.yml
-sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=app-server-node-4 micro_appserver.yml
-sh ./provision.sh --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant --limit=ci-node buildserver.yml
+sh ./provision.sh --limit=monitoring-node monitoringserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
+sh ./provision.sh --limit=ci-repo reposerver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
+sh ./provision.sh --limit=mongodb-node databaseserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
+sh ./provision.sh --limit=app-server-node-1 monolitic_appserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
+sh ./provision.sh --limit=app-server-node-2 monolitic_appserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
+sh ./provision.sh --limit=app-server-node-3 micro_appserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
+sh ./provision.sh --limit=app-server-node-4 micro_appserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
+sh ./provision.sh --limit=ci-node buildserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
 ```
 * Once everything is done (:coffee:), wait for the [Jenkins jobs](http://ci-node:8080) to complete
 * All nodes are accessible following [this table](#nodes)
