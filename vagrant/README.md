@@ -163,7 +163,6 @@ vagrant box add azure https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box
 - Install Vagrant plugins:
 ```
 vagrant plugin install vagrant-hostsupdater
-vagrant plugin install vagrant-proxyconf
 ```
 - Install the custom Azure provider for Vagrant:
 ```
@@ -185,6 +184,10 @@ sudo apt-get install ansible
 ```
 git clone https://github.com/devops-dojo/the-app.git
 cd the-app/vagrant
+```
+- As we are not behind a web proxy (public cloud), let's tweak the default Ansible config:
+```
+sed -i -e 's#with_proxy: true#with_proxy: false#' provision/vars/default.yml
 ```
 - Create insecure_private_key.pub in cd /home/YOUR_USER/.vagrant.d
   Copy the content from here: https://github.com/mitchellh/vagrant/blob/master/keys/vagrant.pub
