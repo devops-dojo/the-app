@@ -268,7 +268,7 @@ ansible-playbook -c local --extra-vars=ansible_ssh_user='vagrant' --inventory-fi
 
 If you want to delete a machine and create it again from scratch, run:
 ```
-vagrant up --provider=azure --no-parallel buildserver
+LAB_SUFFIX=team1 vagrant up --provider=azure --no-parallel buildserver
 ```
 
 # Deploy application on servers
