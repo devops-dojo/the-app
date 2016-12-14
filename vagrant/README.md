@@ -72,6 +72,7 @@ vagrant plugin install vagrant-proxyconf
 git clone https://github.com/devops-dojo/the-app.git
 cd the-app/vagrant
 ```
+* Tweak web proxy if needed in `provision/vars/default.yml`
 * Start provisioning (create VM, use Ansible to install applications)
 ```
 vagrant up --provider=virtualbox --provision
@@ -114,6 +115,8 @@ sudo cp -pR the-app/vagrant/provision /provision
 
 cd the-app/vagrant/scripts
 ```
+* Tweak web proxy if needed in `../provision/vars/default.yml`
+
 * Start provisioning: pick one of the line, depending on the server you need to provision:
 
 ```
