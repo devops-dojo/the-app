@@ -266,6 +266,11 @@ ansible-playbook -c local --extra-vars=ansible_ssh_user='vagrant' --inventory-fi
    --limit=ci-node /provision/buildserver.yml
 ```
 
+If you want to delete a machine and create it again from scratch, run:
+```
+vagrant up --provider=azure --no-parallel buildserver
+```
+
 # Deploy application on servers
 
 You have to run the [Production Deployment Builds](http://ci.microservice.io:8080/view/Production%20Deployment/) on the
