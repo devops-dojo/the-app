@@ -28,7 +28,7 @@ module.exports = function (grunt) {
         // Project settings
         yeoman: appConfig,
 
-        tsd: {
+        typings: {
           refresh: {
             options: {
               // execute a command
@@ -38,12 +38,8 @@ module.exports = function (grunt) {
               latest: true,
 
               // specify config file
-              config: 'tsd.json',
+              config: 'typings.json',
 
-              // experimental: options to pass to tsd.API
-              opts: {
-                // props from tsd.Options
-              }
             }
           }
         },
@@ -598,7 +594,7 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'replace:development',
-            'tsd',
+            'typings',
             'ts',
             'copy:glyphicons',
             'wiredep',
@@ -617,7 +613,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'clean:server',
-        'tsd',
+        'typings',
         'ts',
         'concurrent:test',
         'autoprefixer',
@@ -627,7 +623,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'tsd',
+        'typings',
         'ts',
         'replace:production',
         'wiredep',
@@ -647,7 +643,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('docker', [
     'clean:dist',
-    'tsd',
+    'typings',
     'ts',
     'replace:docker',
     'wiredep',

@@ -1,0 +1,13 @@
+{
+  "name": "eshop-catalog",
+  "globalDependencies": {
+    "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
+    "angular": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
+    "angular-route": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular-route.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
+    "angular-resource": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular-resource.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
+    "bootstrap": "github:DefinitelyTyped/DefinitelyTyped/bootstrap/bootstrap.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
+    "underscore": "github:DefinitelyTyped/DefinitelyTyped/underscore/underscore.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
+    "angular-ui-bootstrap": "github:DefinitelyTyped/DefinitelyTyped/angular-ui-bootstrap/angular-ui-bootstrap.d.ts#1da639a106527e0c4010b354a1efe52a3059a291",
+    "angularLocalStorage": "github:DefinitelyTyped/DefinitelyTyped/angularLocalStorage/angularLocalStorage.d.ts#1da639a106527e0c4010b354a1efe52a3059a291"
+  }
+}
