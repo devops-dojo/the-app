@@ -73,10 +73,10 @@
       <errorFailedThreshold>0</errorFailedThreshold>
       <errorUnstableThreshold>0</errorUnstableThreshold>
       <errorUnstableResponseTimeThreshold/>
-      <relativeFailedThresholdPositive>0.0</relativeFailedThresholdPositive>
-      <relativeFailedThresholdNegative>0.0</relativeFailedThresholdNegative>
-      <relativeUnstableThresholdPositive>0.0</relativeUnstableThresholdPositive>
-      <relativeUnstableThresholdNegative>0.0</relativeUnstableThresholdNegative>
+      <relativeFailedThresholdPositive>-999.0</relativeFailedThresholdPositive>
+      <relativeFailedThresholdNegative>-999.0</relativeFailedThresholdNegative>
+      <relativeUnstableThresholdPositive>25.0</relativeUnstableThresholdPositive>
+      <relativeUnstableThresholdNegative>-999.0</relativeUnstableThresholdNegative>
       <nthBuildNumber>0</nthBuildNumber>
       <modeRelativeThresholds>false</modeRelativeThresholds>
       <configType>ART</configType>
