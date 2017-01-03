@@ -28,6 +28,9 @@
   copy: src=nagios.cfg dest=/etc/nagios3/nagios.cfg force=yes mode=0644
 
 - sudo: yes
+  copy: src=disk.cfg dest=/etc/nagios-plugins/config/disk.cfg force=yes mode=0644
+
+- sudo: yes
   raw: mkdir -p /var/log/nagios/
 
 - sudo: yes
