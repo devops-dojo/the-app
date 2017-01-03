@@ -2,7 +2,10 @@
 
 <div class="well">
     <table class="table table-striped" ng-controller="CartController">
-        <thead>
+        <thead>    
+            <tr>
+                <td colspan="3"><img src="/images/20-percent-off.png" class="img-responsive"></td>
+            </tr>
             <tr>
                 <th>Name</th>
                 <th style="text-align: right;">Price</th>
@@ -20,11 +23,17 @@
         </tbody>
         <tfoot>
             <tr>
-                <td>Subtotal</td>
+                <td>You save</td>
                 <td style="text-align: right;" colspan="2">
-                    {{vm.getTotalSum() | currency}}
+                    {{vm.getTotalSum() * (20/100) | currency}}
                 </td>
             </tr>
+            <tr>
+                <td>Subtotal</td>
+                <td style="text-align: right;" colspan="2">
+                    {{vm.getTotalSum() - (vm.getTotalSum() * (20/100)) | currency}}
+                </td>
+            </tr>          
             <tr>
                 <td colspan="3">
                     <a ng-href="{{vm.cartBaseURL}}?cart={{vm.cartId}}" class="btn btn-primary">Proceed to Checkout</a>
