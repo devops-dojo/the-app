@@ -53,14 +53,14 @@ class CartController {
             sum += elem.product.price;
         });
               
-        sum = sum - (sum * (globalDiscount/100))
+        sum = sum - (sum * (this.globalDiscount/100))
         return sum;
     }
 
     getDiscountSum(): number {
-        var sum:number = getTotalSum();
+        var sum:number = this.getTotalSum();
       
-        sum = sum * (globalDiscount/100);
+        sum = sum * (this.globalDiscount/100);
         return sum;
     }
 
