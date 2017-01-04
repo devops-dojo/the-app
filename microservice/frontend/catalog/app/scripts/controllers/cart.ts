@@ -7,6 +7,7 @@ interface ICartScope extends ng.IScope {
 class CartController {
     private cartId: string;
     private cartBaseURL: string;
+    private globalDiscount: number;
     private cartItems: ICartItem[] = [];
 
     static $inject = ['$scope', '$rootScope', 'cartServiceResolver', 'configuration'];
@@ -19,6 +20,7 @@ class CartController {
         this.cartService.getAll().then((data: ICartItem[]) => this.cartItems = data );
 
         this.cartBaseURL = configuration.CHECKOUT_BASE_URL;
+        this.globalDiscount = configuration.GLOBAL_DISCOUNT;
 
         $scope.vm = this;
 
@@ -50,8 +52,18 @@ class CartController {
         _.each(this.cartItems, function(elem:ICartItem){
             sum += elem.product.price;
         });
+              
+        sum = sum - (sum * (globalDiscount/100))
         return sum;
     }
+
+    getDiscountSum(): number {
+        var sum:number = getTotalSum();
+      
+        sum = sum * (globalDiscount/100);
+        return sum;
+    }
+
 }
 
 eshop.controller('cartController', CartController);
