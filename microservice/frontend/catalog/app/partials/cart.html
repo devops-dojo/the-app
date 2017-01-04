@@ -3,7 +3,7 @@
 <div class="well">
     <table class="table table-striped" ng-controller="CartController">
         <thead>    
-            <tr>
+            <tr ng-show="vm.globalDiscount>0">
                 <td colspan="3"><img src="/images/20-percent-off.png" class="img-responsive"></td>
             </tr>
             <tr>
@@ -22,7 +22,7 @@
             </tr>
         </tbody>
         <tfoot>
-            <tr>
+            <tr ng-show="vm.globalDiscount>0">
                 <td>You save</td>
                 <td style="text-align: right;" colspan="2">
                     {{vm.getTotalSum() * (20/100) | currency}}
