@@ -6,5 +6,6 @@
     "CART_SERVICE_PUT_URL": "/api/cart/create",
     "CART_SERVICE_POST_URL": "/api/cart/add",
     "CART_SERVICE_DELETE_URL": "/api/cart/removeItemFromCart",
-    "CHECKOUT_BASE_URL": "/shop/checkout"
+    "CHECKOUT_BASE_URL": "/shop/checkout", 
+    "GLOBAL_DISCOUNT": 25, 
 }
