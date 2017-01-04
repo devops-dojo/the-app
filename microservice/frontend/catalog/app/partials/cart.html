@@ -4,7 +4,8 @@
     <table class="table table-striped" ng-controller="CartController">
         <thead>    
             <tr ng-show="vm.globalDiscount>0">
-                <td colspan="3"><img src="/images/20-percent-off.png" class="img-responsive"></td>
+                <td colspan="3"><h1>All store {{vm.globalDiscount}}% off</h1>                  
+                  <img src="/images/20-percent-off.png" class="img-responsive"></td>
             </tr>
             <tr>
                 <th>Name</th>
