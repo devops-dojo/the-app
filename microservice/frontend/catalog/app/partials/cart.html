@@ -25,13 +25,13 @@
             <tr ng-show="vm.globalDiscount>0">
                 <td>You save</td>
                 <td style="text-align: right;" colspan="2">
-                    {{vm.getTotalSum() * (20/100) | currency}}
+                    {{vm.getTotalDiscount() | currency}}
                 </td>
             </tr>
             <tr>
                 <td>Subtotal</td>
                 <td style="text-align: right;" colspan="2">
-                    {{vm.getTotalSum() - (vm.getTotalSum() * (20/100)) | currency}}
+                    {{vm.getTotalSum() | currency}}
                 </td>
             </tr>          
             <tr>
