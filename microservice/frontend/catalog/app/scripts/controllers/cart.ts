@@ -58,7 +58,10 @@ class CartController {
     }
 
     getDiscountSum(): number {
-        var sum:number = this.getTotalSum();
+        var sum:number = 0;
+        _.each(this.cartItems, function(elem:ICartItem){
+            sum += elem.product.price;
+        });
       
         sum = sum * (this.globalDiscount/100);
         return sum;
