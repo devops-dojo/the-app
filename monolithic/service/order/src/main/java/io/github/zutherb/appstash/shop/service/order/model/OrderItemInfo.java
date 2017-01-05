@@ -25,16 +25,10 @@ public class OrderItemInfo implements Serializable {
     public ProductInfo getProduct() {
         return product;
     }
-
-    public BigDecimal getDiscountSum() {
-        BigDecimal discountSum = BigDecimal.ZERO;
-        discountSum = discountSum.add(product.getPrice()*(0.25/100));
-        return discountSum;
-    }    
-    
+  
     public BigDecimal getTotalSum() {
         BigDecimal totalSum = BigDecimal.ZERO;
-        totalSum = totalSum.add(product.getPrice()-(product.getPrice()*(0.25/100)));
+        totalSum = totalSum.add(product.getPrice());
         return totalSum;
     }
 
