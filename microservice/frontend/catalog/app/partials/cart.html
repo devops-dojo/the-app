@@ -25,7 +25,7 @@
             <tr ng-show="vm.globalDiscount>0">
                 <td>You save</td>
                 <td style="text-align: right;" colspan="2">
-                    {{vm.getTotalDiscount() | currency}}
+                    {{vm.getDiscountSum() | currency}}
                 </td>
             </tr>
             <tr>
