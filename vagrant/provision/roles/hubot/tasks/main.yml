@@ -1,6 +1,16 @@
 ---
 - name: install hubot files
-  copy: src=ninjabot dest=/var/lib/jenkins/ninjabot group=jenkins owner=jenkins
+  copy: src=ninjabot dest=/var/lib/jenkins group=jenkins owner=jenkins
+  notify:
+    - "restart hubot service"
+
+- name: add exec permission for ninjabot/start.sh
+  file: path=/var/lib/jenkins/ninjabot/start.sh mode=0755 owner=jenkins group=jenkins state=file
+
+- name: add exec permission for ninjabot/bin/hubot
+  file: path=/var/lib/jenkins/ninjabot/bin/hubot mode=0755 owner=jenkins group=jenkins state=file
 
 - name: install hubot service
   copy: src=hubot.service dest=/etc/systemd/system/hubot.service force=true owner=root
+  notify:
+    - "restart hubot service"

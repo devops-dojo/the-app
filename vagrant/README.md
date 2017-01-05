@@ -96,7 +96,7 @@ Procedure to install on existing machines:
 
 ```
 git clone https://github.com/devops-dojo/the-app.git
-sudo cp -pR the-app/vagrant/provision /provision
+sudo cp -pR the-app/vagrant/provision/* /provision
 
 cd the-app/vagrant/scripts
 ```
