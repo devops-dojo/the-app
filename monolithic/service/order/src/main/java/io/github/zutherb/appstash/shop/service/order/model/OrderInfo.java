@@ -69,14 +69,23 @@ public class OrderInfo implements Serializable {
         return deliveryAddress;
     }
 
+    public BigDecimal getDiscountSum() {
+        BigDecimal totalSum = BigDecimal.ZERO;
+        for (OrderItemInfo orderItemInfo : orderItems) {
+            totalSum = totalSum.add(orderItemInfo.getTotalSum());
+        }
+        return totalSum * (0.25/100);
+    }
+
     public BigDecimal getTotalSum() {
         BigDecimal totalSum = BigDecimal.ZERO;
         for (OrderItemInfo orderItemInfo : orderItems) {
             totalSum = totalSum.add(orderItemInfo.getTotalSum());
         }
-        return totalSum;
+        return totalSum - (totalSum * (0.25/100));
     }
-
+    
+    
     public Long getOrderId() {
         return orderId;
     }
