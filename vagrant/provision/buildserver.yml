@@ -11,6 +11,7 @@
     - common
     - oracle-java
     - jenkins
+    - hubot
 
   environment:
     "{{ (with_proxy) | ternary( proxy_env, {}) }}"   # use proxy_env only when with_proxy is true

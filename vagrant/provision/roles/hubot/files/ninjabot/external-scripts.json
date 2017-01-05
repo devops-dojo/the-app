@@ -1,0 +1,7 @@
+[
+  "hubot-help",
+  "hubot-redis-brain",
+  "hubot-rules",
+  "hubot-shipit",
+  "hubot-pubsub"
+]

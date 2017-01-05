@@ -1,0 +1,6 @@
+---
+- name: install hubot files
+  copy: src=ninjabot dest=/var/lib/jenkins/ninjabot group=jenkins owner=jenkins
+
+- name: install hubot service
+  copy: src=hubot.service dest=/etc/systemd/system/hubot.service force=true owner=root
