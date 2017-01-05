@@ -274,10 +274,10 @@ After you have complete this, the cluster is fully installed and you can start t
 
 # Nodes
 
-Here is a list of nodes, with a link when you can access them from the public
-internet.
+Here is a list of nodes with links for the services.
 
-Note that 10.x.x.x IP addresses cannot be reached except from the provisioning system (thanks to virtual network peering). All hosts are aliased using `/etc/hosts`
+Note that 10.x.x.x IP addresses cannot be reached except from the provisioning system from another host of the cluser.
+All hosts are aliased using `/etc/hosts` - hence links like microservice.io and monolith.io. 
 
 To `ssh` to a box from the provisioning VM, just type `ssh vagrant@10.211.55.200`
 or `vagrant ssh buildserver`.
