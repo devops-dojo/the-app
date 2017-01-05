@@ -36,7 +36,7 @@ public class CartPanel extends AbstractShopBasePanel {
 
     public CartPanel(String id) {
         super(id);
-
+        add(discountSum());
         add(totalSum());
         add(checkoutLink());
         add(cartView());
@@ -46,6 +46,10 @@ public class CartPanel extends AbstractShopBasePanel {
         add(new HighLightBehavior());
     }
 
+    private Label totalSum() {
+        return new Label("discount", new PriceModel(new PropertyModel<>(cart, "discountSum")));
+    }
+        
     private Label totalSum() {
         return new Label("price", new PriceModel(new PropertyModel<>(cart, "totalSum")));
     }
