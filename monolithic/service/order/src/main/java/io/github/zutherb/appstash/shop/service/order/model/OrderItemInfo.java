@@ -28,8 +28,8 @@ public class OrderItemInfo implements Serializable {
 
     public BigDecimal getDiscountSum() {
         BigDecimal discountSum = BigDecimal.ZERO;
-        totalSum = discountSum.add(product.getPrice()*(0.25/100));
-        return totalSum;
+        discountSum = discountSum.add(product.getPrice()*(0.25/100));
+        return discountSum;
     }    
     
     public BigDecimal getTotalSum() {
