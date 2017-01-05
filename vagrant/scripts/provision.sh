@@ -21,6 +21,6 @@ if [ ! -f /usr/bin/ansible-playbook ]
 fi
 
 
-echo "RUNNING ansible-playbook -c local " $@
+echo "RUNNING ansible-playbook -c local --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant " $@
 
-ansible-playbook -c local "$@"
+ansible-playbook -c local --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant "$@"

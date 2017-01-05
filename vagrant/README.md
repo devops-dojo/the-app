@@ -103,17 +103,17 @@ cd the-app/vagrant/scripts
 * By default, boxes are meant to be configured behind a web proxy. Tweak with_proxy and/or web proxy host/port
 if needed in `../provision/vars/default.yml`
 
-* Start provisioning: pick one of the line, depending on the server you need to provision:
+* Start provisioning: for each host, pick one of the line, depending on the host you need to provision:
 
 ```
-sh ./provision.sh --limit=monitoring-node monitoringserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
-sh ./provision.sh --limit=ci-repo reposerver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
-sh ./provision.sh --limit=mongodb-node databaseserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
-sh ./provision.sh --limit=app-server-node-1 monolitic_appserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
-sh ./provision.sh --limit=app-server-node-2 monolitic_appserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
-sh ./provision.sh --limit=app-server-node-3 micro_appserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
-sh ./provision.sh --limit=app-server-node-4 micro_appserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
-sh ./provision.sh --limit=ci-node buildserver.yml --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant
+sh ./provision.sh --limit=monitoring-node monitoringserver.yml
+sh ./provision.sh --limit=ci-repo reposerver.yml
+sh ./provision.sh --limit=mongodb-node databaseserver.yml
+sh ./provision.sh --limit=app-server-node-1 monolitic_appserver.yml
+sh ./provision.sh --limit=app-server-node-2 monolitic_appserver.yml
+sh ./provision.sh --limit=app-server-node-3 micro_appserver.yml
+sh ./provision.sh --limit=app-server-node-4 micro_appserver.yml
+sh ./provision.sh --limit=ci-node buildserver.yml
 ```
 * Once everything is done (:coffee:), wait for the [Jenkins jobs](http://ci-node:8080) to complete
 * All nodes are accessible following [this table](#nodes)
