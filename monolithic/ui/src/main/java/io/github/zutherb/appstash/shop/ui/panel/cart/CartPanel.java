@@ -46,7 +46,7 @@ public class CartPanel extends AbstractShopBasePanel {
         add(new HighLightBehavior());
     }
 
-    private Label totalSum() {
+    private Label discountSum() {
         return new Label("discount", new PriceModel(new PropertyModel<>(cart, "discountSum")));
     }
         
