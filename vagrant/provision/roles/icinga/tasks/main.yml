@@ -33,4 +33,12 @@
     - htpasswd.users
     - icinga.cfg
     - cgi.cfg
+    - commands.cfg
   notify: restart icinga
+
+- sudo: yes
+  copy: src=contacts_icinga.cfg dest=/etc/icinga/objects/contacts_icinga.cfg force=yes mode=0644
+  notify: restart icinga
+
+- sudo: yes
+  copy: src=slack_nagios.sh dest=/usr/local/bin/slack_nagios.sh force=yes mode=0755
