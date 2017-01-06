@@ -1,7 +1,0 @@
----
-- systemd:
-    state: restarted
-    enabled: yes
-    daemon_reload: yes
-    name: hubot
-    listen: "restart hubot service"

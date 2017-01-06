@@ -1,16 +1,37 @@
 ---
+- group:
+    name: hubot
+    state: present
+
+- user:
+    name: hubot
+    group: hubot
+
 - name: install hubot files
-  copy: src=ninjabot dest=/var/lib/jenkins group=jenkins owner=jenkins
-  notify:
-    - "restart hubot service"
+  copy: src=ninjabot dest=/home/hubot group=hubot owner=hubot
+
+- name: Tweak proxy if needed
+  sudo: yes
+  sudo_user: hubot
+  blockinfile:
+    dest: /home/hubot/ninjabot/.env.template
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    content: |
+      export http_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
+      export https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
+  when: with_proxy
 
 - name: add exec permission for ninjabot/start.sh
-  file: path=/var/lib/jenkins/ninjabot/start.sh mode=0755 owner=jenkins group=jenkins state=file
+  file: path=/home/hubot/ninjabot/start.sh mode=0755 owner=hubot group=hubot state=file
 
 - name: add exec permission for ninjabot/bin/hubot
-  file: path=/var/lib/jenkins/ninjabot/bin/hubot mode=0755 owner=jenkins group=jenkins state=file
+  file: path=/home/hubot/ninjabot/bin/hubot mode=0755 owner=hubot group=hubot state=file
 
 - name: install hubot service
   copy: src=hubot.service dest=/etc/systemd/system/hubot.service force=true owner=root
-  notify:
-    - "restart hubot service"
+
+- systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: hubot
