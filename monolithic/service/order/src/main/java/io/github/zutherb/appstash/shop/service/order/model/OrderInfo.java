@@ -74,7 +74,7 @@ public class OrderInfo implements Serializable {
         for (OrderItemInfo orderItemInfo : orderItems) {
             totalSum = totalSum.add(orderItemInfo.getTotalSum());
         }
-        return totalSum * (0.25/100);
+        return totalSum.multiply(0.25/100);
     }
 
     public BigDecimal getTotalSum() {
@@ -82,7 +82,7 @@ public class OrderInfo implements Serializable {
         for (OrderItemInfo orderItemInfo : orderItems) {
             totalSum = totalSum.add(orderItemInfo.getTotalSum());
         }
-        return totalSum - (totalSum * (0.25/100));
+        return totalSum - (totalSum.multiply(0.25/100));
     }
     
     
