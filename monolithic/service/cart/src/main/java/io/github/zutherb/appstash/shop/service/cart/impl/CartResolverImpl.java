@@ -69,6 +69,11 @@ public class CartResolverImpl implements CartResolver {
     public BigDecimal getTotalSum() {
         return getCartDelegator().getProvider().getTotalSum();
     }
+    
+    @Override
+    public BigDecimal getDiscountSum() {
+        return getCartDelegator().getProvider().getDiscountSum();
+    }    
 
     @ManagedOperation
     @Override
