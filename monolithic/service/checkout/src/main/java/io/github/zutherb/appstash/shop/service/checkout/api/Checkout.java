@@ -11,4 +11,5 @@ import java.util.List;
 public interface Checkout {
     List<OrderItemInfo> getOrderItemInfos();
     BigDecimal getTotalSum();
+    BigDecimal getDiscountSum();
 }
