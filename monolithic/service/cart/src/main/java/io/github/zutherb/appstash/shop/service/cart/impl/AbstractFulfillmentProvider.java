@@ -12,7 +12,18 @@ public abstract class AbstractFulfillmentProvider {
         for (CartItemInfo cartItemInfo : getAllItems()) {
             sum = sum.add(cartItemInfo.getTotalSum());
         }
-        return sum;
+        double fraction = 0.25/100;        
+        return sum.subtract(sum.multiply(new BigDecimal(fraction)));
+    }
+    
+    public BigDecimal getDiscountSum() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (CartItemInfo cartItemInfo : getAllItems()) {
+            sum = sum.add(cartItemInfo.getTotalSum());
+        }
+        
+        double fraction = 0.25/100;
+        return sum.multiply(new BigDecimal(fraction));
     }
 
     public abstract List<CartItemInfo> getAllItems();
