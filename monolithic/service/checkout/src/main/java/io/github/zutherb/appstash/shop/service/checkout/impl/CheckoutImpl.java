@@ -45,4 +45,10 @@ public class CheckoutImpl implements Checkout {
     public BigDecimal getTotalSum() {
         return cart.getTotalSum();
     }
+    
+    @Override
+    public BigDecimal getDiscountSum() {
+        return cart.getDiscountSum();
+    }
+    
 }
