@@ -13,4 +13,5 @@ public interface CartFulfillmentProvider {
     void clear();
     boolean isEmpty();
     BigDecimal getTotalSum();
+    BigDecimal getDiscountSum();
 }
