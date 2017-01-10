@@ -25,7 +25,7 @@ public abstract class AbstractFulfillmentProvider {
         }
         
         double fraction = 25/100;
-        sum = sum.multiply(new BigDecimal(fraction));
+        sum = sum.multiply(new BigDecimal(Double.toString(fraction)));
         return sum;
     }
 
