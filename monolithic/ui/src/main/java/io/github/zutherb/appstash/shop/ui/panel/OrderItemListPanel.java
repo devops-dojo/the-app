@@ -22,12 +22,17 @@ public class OrderItemListPanel extends Panel {
     public OrderItemListPanel(String id, IModel<OrderInfo> orderInfoModel) {
         super(id, orderInfoModel);
         add(orderItemList());
+        add(discountSum());
         add(totalSum());
     }
 
+    private Component discountSum() {
+        return new Label("discountSum", new PriceModel(new PropertyModel<>(getDefaultModel(), "discountSum")));
+    }    
+    
     private Component totalSum() {
         return new Label("totalSum", new PriceModel(new PropertyModel<>(getDefaultModel(), "totalSum")));
-    }
+    }        
 
     private Component orderItemList() {
         return new ListView<OrderItemInfo>("orderItems", new PropertyModel<List<OrderItemInfo>>(getDefaultModel(), "orderItems")) {
