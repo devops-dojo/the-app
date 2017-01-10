@@ -5,6 +5,7 @@ import io.github.zutherb.appstash.shop.service.user.model.UserInfo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
