@@ -3,6 +3,7 @@ package io.github.zutherb.appstash.shop.service.cart.impl;
 import io.github.zutherb.appstash.shop.service.cart.model.CartItemInfo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public abstract class AbstractFulfillmentProvider {
