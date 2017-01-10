@@ -45,6 +45,7 @@ public class OrderItemListPanel extends Panel {
                 orderItem.add(new Label("product", new PropertyModel<String>(orderItem.getModel(), "product.name")));
                 orderItem.add(new Label("description", new PropertyModel<String>(orderItem.getModel(), "product.description")));
                 orderItem.add(new Label("totalSum", new PriceModel(new PropertyModel<>(orderItem.getModel(), "totalSum"))));
+                orderItem.add(new Label("discountSum", new PriceModel(new PropertyModel<>(orderItem.getModel(), "discountSum"))));
             }
 
             @Override
