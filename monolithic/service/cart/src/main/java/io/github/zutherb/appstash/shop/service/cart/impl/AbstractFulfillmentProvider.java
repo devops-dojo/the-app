@@ -24,8 +24,11 @@ public abstract class AbstractFulfillmentProvider {
             sum = sum.add(cartItemInfo.getTotalSum());
         }
         
-        BigDecimal fraction = BigDecimal.valueOf(25/100);
-        return sum.multiply(fraction);
+        double discountPercent = 25/100;
+        BigDecimal decimalDiscountPercent = new BigDecimal(Double.toString(discountPercent));
+        BigDecimal discountAmount = sum.multiply(decimalDiscountPercent);
+        discountAmount = discountAmount.setScale(2, RoundingMode.HALF_UP);
+        return discountAmount;
         
     }
 
