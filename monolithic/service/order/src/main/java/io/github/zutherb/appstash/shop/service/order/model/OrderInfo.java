@@ -74,8 +74,11 @@ public class OrderInfo implements Serializable {
         for (OrderItemInfo orderItemInfo : orderItems) {
             totalSum = totalSum.add(orderItemInfo.getTotalSum());
         }
-        BigDecimal fraction = BigDecimal.valueOf(25/100);
-        return totalSum.multiply(fraction);
+        double discountPercent = 25/100;
+        BigDecimal decimalDiscountPercent = new BigDecimal(Double.toString(discountPercent));
+        BigDecimal discountAmount = totalSum.multiply(decimalDiscountPercent);
+        discountAmount = discountAmount.setScale(2, RoundingMode.HALF_UP);
+        return discountAmount;
     }
 
     public BigDecimal getTotalSum() {
