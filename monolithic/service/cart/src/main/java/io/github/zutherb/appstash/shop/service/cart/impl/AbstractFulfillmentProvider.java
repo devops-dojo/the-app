@@ -25,7 +25,8 @@ public abstract class AbstractFulfillmentProvider {
         }
         
         double fraction = 25/100;
-        return sum.multiply(new BigDecimal(Double.toString(fraction)));
+        // return sum.multiply(new BigDecimal(Double.toString(fraction)));
+        return new BigDecimal("25.50");
     }
 
     public abstract List<CartItemInfo> getAllItems();
