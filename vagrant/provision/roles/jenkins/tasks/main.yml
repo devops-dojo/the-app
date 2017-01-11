@@ -21,7 +21,7 @@
     - firefox=45.0.2+build1-0ubuntu1
     - git
     - curl
-    - nodejs=0.12.17-1nodesource1~xenial1
+    - nodejs=0.12.18-1nodesource1~xenial1
     - ruby
     - ruby-dev
 
