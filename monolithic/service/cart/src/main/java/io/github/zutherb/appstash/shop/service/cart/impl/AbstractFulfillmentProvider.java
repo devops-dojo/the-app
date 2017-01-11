@@ -24,13 +24,10 @@ public abstract class AbstractFulfillmentProvider {
         for (CartItemInfo cartItemInfo : getAllItems()) {
             sum = sum.add(cartItemInfo.getTotalSum());
         }
-        
-        double discountPercent = 25/100;
-        BigDecimal decimalDiscountPercent = new BigDecimal(Double.toString(discountPercent));
-        BigDecimal discountAmount = sum.multiply(decimalDiscountPercent);
-        discountAmount = discountAmount.setScale(2, RoundingMode.HALF_UP);
-        return discountAmount;
-        
+
+        double factor = 25/100.0;
+        double result = sum.doubleValue() * factor;
+        return new BigDecimal(result);
     }
 
     public abstract List<CartItemInfo> getAllItems();
