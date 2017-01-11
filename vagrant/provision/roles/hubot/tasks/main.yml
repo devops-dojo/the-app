@@ -33,6 +33,8 @@
 - name: add exec permission for ninjabot/bin/hubot
   file: path=/home/hubot/ninjabot/bin/hubot mode=0755 owner=hubot group=hubot state=file
 
+- copy: src=id_rsa dest=/home/hubot/.ssh/id_rsa mode=600 group=hubot owner=hubot
+
 - name: install hubot service
   copy: src=hubot.service dest=/etc/systemd/system/hubot.service force=true owner=root
 

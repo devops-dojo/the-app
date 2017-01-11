@@ -5,6 +5,7 @@
 #   hubot service stop|start|restart|status [all|cart|product|navigation|monolith] [test|pro]
 #
 
+
 module.exports = (robot) ->
   robot.respond /service (start|stop|restart|status)\s*(all|cart|product|navigation|monolith)?\s*(test|pro)?/i, (msg) ->
 
@@ -26,10 +27,9 @@ module.exports = (robot) ->
         when 'undefined'
           msg.send "Please specify a service amongst all, cart, product, navigation or monolith."
         when 'all'
+          msg.send "Querying all services status..."
           for service in all_micro_services
-            msg.send "Executing #{command} on #{service} on #{micro_host}..."
             runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{micro_host} 'sudo /etc/init.d/#{service} #{command}'"
-          msg.send "Executing #{command} for monolith on #{mono_host}..."
           runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{mono_host} 'sudo service tomcat7 #{command}'"
         when 'monolith'
           msg.send "Executing #{command} for monolith on #{mono_host}..."
@@ -38,14 +38,33 @@ module.exports = (robot) ->
           msg.send "Executing #{command} on #{service} on #{micro_host}..."
           runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{micro_host} 'sudo /etc/init.d/#{service} #{command}'"
 
+respond = (msg, str, wrap = '```') ->
+  len = 3000
+  _size = Math.ceil(str.length / len)
+  _ret = new Array(_size)
+  _offset = undefined
+  _i = 0
+  while _i < _size
+    _offset = _i * len
+    _ret[_i] = str.substring(_offset, _offset + len)
+    _i++
+  msg.send "#{wrap}#{_ret[0]}#{wrap}"
+  unless _ret.length == 1
+    x = 1
+    setInterval (->
+      msg.send "#{wrap}#{x+1} of #{_ret.length}\n#{_ret[x]}#{wrap}"
+      if _ret.length == x+1
+        clearInterval this
+      else
+        x++
+    ), 8000
 
 # Run a shell command
 runCommand = (msg, cmd) ->
   @exec = require('child_process').exec
   @exec cmd, (error, stdout, stderr) ->
-    if error
-      msg.send error
-      msg.send stderr
-    else
-      if !!stdout
-        msg.send '```' + stdout + '```'
+    if stdout? && stdout != ''
+      stdout = stdout.replace /-classpath.*\n/, ""
+      respond msg, stdout
+    if stderr? && stderr != ''
+      respond msg, stderr
