@@ -21,7 +21,7 @@
       export https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
   when: with_proxy
 
-- name: Configure npm registry for Jenkins user if proxy set
+- name: Configure npm registry for Hubot user if proxy set
   shell: npm config set registry {{ nodejs_npm_registry }}
   become: true
   become_user: hubot
