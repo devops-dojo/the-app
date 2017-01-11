@@ -13,10 +13,9 @@ public abstract class AbstractFulfillmentProvider {
         for (CartItemInfo cartItemInfo : getAllItems()) {
             sum = sum.add(cartItemInfo.getTotalSum());
         }
-        // double fraction = 25/100;        
-        // return sum.subtract(sum.multiply(new BigDecimal(fraction)));
-        
-        return sum;
+         double factor = 25/100.0; 
+        double result = sum.doubleValue() - (sum.doubleValue() * factor);
+        return new BigDecimal(result);
     }
     
     public BigDecimal getDiscountSum() {
