@@ -21,6 +21,12 @@
       export https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
   when: with_proxy
 
+- name: Configure npm registry for Jenkins user if proxy set
+  shell: npm config set registry {{ nodejs_npm_registry }}
+  become: true
+  become_user: hubot
+  when: with_proxy
+
 - name: add exec permission for ninjabot/start.sh
   file: path=/home/hubot/ninjabot/start.sh mode=0755 owner=hubot group=hubot state=file
 
