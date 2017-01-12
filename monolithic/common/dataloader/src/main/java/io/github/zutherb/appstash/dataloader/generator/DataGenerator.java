@@ -106,11 +106,11 @@ public class DataGenerator {
     @PostConstruct
     @Scheduled(fixedRate = 5000)
     public void initializeDatabase() throws IOException {
-        logger.info("reinitialize database if need");
         cleanCollections();
         createSupplierList();
 
         if (productRepository.findAll().isEmpty()) {
+            logger.info("Database is empty: populating it");
             createProducts();
             createUsers();
             createOrders();
