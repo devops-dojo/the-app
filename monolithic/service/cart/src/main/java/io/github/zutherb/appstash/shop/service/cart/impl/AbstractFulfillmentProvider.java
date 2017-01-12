@@ -6,7 +6,6 @@ import io.github.zutherb.appstash.common.util.Config;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import io.github.zutherb.appstash.shop.Config;
 
 public abstract class AbstractFulfillmentProvider {
     
