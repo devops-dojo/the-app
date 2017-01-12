@@ -1,7 +1,7 @@
 package io.github.zutherb.appstash.shop.service.cart.impl;
 
 import io.github.zutherb.appstash.shop.service.cart.model.CartItemInfo;
-import io.github.zutherb.appstash.shop.Config;
+import io.github.zutherb.appstash.common.util.Config;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
