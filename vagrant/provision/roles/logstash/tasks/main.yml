@@ -16,3 +16,6 @@
    - logstash
    - logstash-contrib
 
+- raw: sudo update-rc.d logstash defaults
+
+- raw: sudo update-rc.d logstash enable
