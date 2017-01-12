@@ -13,7 +13,7 @@ public class Config {
 
 		try {
 
-			input = new FileInputStream("config.properties");
+			input = io.github.zutherb.appstash.common.util.Config.class.getResourceAsStream("config.properties");
 
 			// load a properties file
 			prop.load(input);
