@@ -2,6 +2,7 @@ package io.github.zutherb.appstash.shop.service.order.model;
 
 import io.github.zutherb.appstash.shop.service.user.model.UserInfo;
 import io.github.zutherb.appstash.shop.service.user.model.UserInfo;
+import io.github.zutherb.appstash.shop.Config;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -75,7 +76,8 @@ public class OrderInfo implements Serializable {
         for (OrderItemInfo orderItemInfo : orderItems) {
             totalSum = totalSum.add(orderItemInfo.getTotalSum());
         }
-        double factor = 25/100.0;
+        double globalDiscount = Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"));
+        double factor = globalDiscount/100.0;
         double result = totalSum.doubleValue() * factor;
         return new BigDecimal(result);
     }
@@ -85,7 +87,8 @@ public class OrderInfo implements Serializable {
         for (OrderItemInfo orderItemInfo : orderItems) {
             totalSum = totalSum.add(orderItemInfo.getTotalSum());
         }
-        double factor = 25/100.0;
+        double globalDiscount = Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"));
+        double factor = globalDiscount/100.0;
         double result = totalSum.doubleValue() - (totalSum.doubleValue() * factor);
         return new BigDecimal(result);
     }
