@@ -2,7 +2,7 @@ package io.github.zutherb.appstash.shop.service.order.model;
 
 import io.github.zutherb.appstash.shop.service.user.model.UserInfo;
 import io.github.zutherb.appstash.shop.service.user.model.UserInfo;
-import io.github.zutherb.appstash.shop.Config;
+import io.github.zutherb.appstash.common.util.Config;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
