@@ -2,6 +2,7 @@ package io.github.zutherb.appstash.shop.repository.order.model;
 
 import io.github.zutherb.appstash.shop.repository.product.model.Product;
 import io.github.zutherb.appstash.shop.repository.product.model.ProductType;
+import io.github.zutherb.appstash.common.util.Config;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class OrderTest {
     public void setUp() throws Exception {
         order = new Order();
 
-        Product product = new Product("1", ProductType.HANDY, "product", 4);
+        Product product = new Product("1", ProductType.HANDY, "product", 5);
 
         OrderItem orderItem1 = new OrderItem(product);
         OrderItem orderItem2 = new OrderItem(product);
@@ -35,6 +36,16 @@ public class OrderTest {
 
     @Test
     public void testGetTotalSum() throws Exception {
-        assertEquals(BigDecimal.valueOf(8).compareTo(order.getTotalSum()), 0);
+        double globalDiscount = Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"));
+        double total = 10.0 - (10.0 * (globalDiscount/100.0));
+        assertEquals(BigDecimal.valueOf(total).compareTo(order.getTotalSum()), 0);
     }
+    
+    @Test
+    public void testGetDiscountSum() throws Exception {
+        double globalDiscount = Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"));
+        double discount = 10.0 * (globalDiscount/100.0);        
+        assertEquals(BigDecimal.valueOf(discount).compareTo(order.getDiscountSum()), 0);
+    }
+    
 }
