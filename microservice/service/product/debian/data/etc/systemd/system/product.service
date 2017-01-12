@@ -1,0 +1,18 @@
+; Product systemd service unit file
+; Place in e.g. `/etc/systemd/system/product.service`, then `systemctl daemon-reload` and `service product start`.
+
+[Unit]
+Description=Product
+Requires=network.target
+After=network.target
+
+[Service]
+ExecStart=/usr/share/shop/product/bin/product -Dconfig.file=/etc/product/application.conf > /var/log/product.log 2>&1
+Type=simple
+WorkingDirectory=/usr/share/shop/product/bin/
+User=root
+Restart=on-abort
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

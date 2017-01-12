@@ -1,0 +1,19 @@
+; Cart systemd service unit file
+; Place in e.g. `/etc/systemd/system/cart.service`, then `systemctl daemon-reload` and `service cart start`.
+
+[Unit]
+Description=Cart
+Requires=network.target
+After=network.target
+
+[Service]
+ExecStart=/usr/share/shop/cart/bin/cart > /var/log/cart.log 2>&1
+EnvironmentFile=/etc/default/cart
+Type=simple
+WorkingDirectory=/usr/share/shop/cart/bin/
+User=root
+Restart=on-abort
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

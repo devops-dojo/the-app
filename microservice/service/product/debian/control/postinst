@@ -2,8 +2,10 @@
 set -e
 
 chmod +x /usr/share/shop/product/bin/product
-chmod +x /etc/init.d/product
+update-rc.d product remove
+rm -f /etc/init.d/product
 
-update-rc.d product defaults
+systemctl daemon-reload
+systemctl enable product.service
 
-service product force-reload
+service product restart

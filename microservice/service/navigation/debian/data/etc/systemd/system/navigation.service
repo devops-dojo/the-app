@@ -1,0 +1,19 @@
+; Navigation systemd service unit file
+; Place in e.g. `/etc/systemd/system/navigation.service`, then `systemctl daemon-reload` and `service navigation start`.
+
+[Unit]
+Description=Navigation
+Requires=network.target
+After=network.target
+
+[Service]
+ExecStart=/usr/share/shop/navigation/bin/navigation > /var/log/navigation.log 2>&1
+EnvironmentFile=/etc/default/navigation
+Type=simple
+WorkingDirectory=/usr/share/shop/navigation/bin/
+User=root
+Restart=on-abort
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
