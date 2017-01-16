@@ -19,3 +19,6 @@
 
 - raw: cp -r /tmp/kibana-{{kibana_version}}/* /var/www/html/
   notify: restart httpd
+
+- name: install default dashboard
+  copy: src=default.json dest=/var/www/html/app/dashboards/default.json group=vagrant owner=www
