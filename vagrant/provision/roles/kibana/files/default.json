@@ -32,7 +32,52 @@
         },
         "3": {
           "id": 3,
+          "color": "#1F78C1",
+          "alias": "http200",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "field:server_response=\"200\""
+        },
+        "4": {
+          "id": 4,
           "color": "#EF843C",
+          "alias": "http302",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "field:server_response=\"302\""
+        },
+        "5": {
+          "id": 5,
+          "color": "#BF1B00",
+          "alias": "http404",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "field:server_response=\"404\""
+        },
+        "6": {
+          "id": 6,
+          "color": "#705DA0",
+          "alias": "http304",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "field:server_response=\"304\""
+        },
+        "7": {
+          "id": 7,
+          "color": "#BA43A9",
+          "alias": "http500",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "field:server_response=\"500\""
+        },
+        "8": {
+          "id": 8,
+          "color": "#508642",
           "alias": "",
           "pin": false,
           "type": "lucene",
@@ -44,7 +89,12 @@
         0,
         1,
         2,
-        3
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
       ]
     },
     "filter": {
@@ -52,7 +102,7 @@
         "0": {
           "type": "time",
           "field": "@timestamp",
-          "from": "now-24h",
+          "from": "now-2d",
           "to": "now",
           "mandate": "must",
           "active": true,
@@ -67,21 +117,11 @@
           "active": true,
           "alias": "",
           "id": 1
-        },
-        "2": {
-          "type": "terms",
-          "field": "_type",
-          "value": "appstash-log",
-          "mandate": "mustNot",
-          "active": true,
-          "alias": "",
-          "id": 2
         }
       },
       "ids": [
         0,
-        1,
-        2
+        1
       ]
     }
   },
@@ -95,7 +135,7 @@
       "panels": [
         {
           "error": false,
-          "span": 3,
+          "span": 2,
           "editable": true,
           "group": [
             "default"
@@ -107,7 +147,11 @@
               0,
               1,
               2,
-              3
+              3,
+              4,
+              5,
+              6,
+              7
             ]
           },
           "field": "_type",
@@ -127,44 +171,6 @@
           "counter_pos": "none",
           "title": "Document types",
           "spyable": true,
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": ""
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "group": [
-            "default"
-          ],
-          "type": "terms",
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0,
-              1,
-              2,
-              3
-            ]
-          },
-          "field": "_type",
-          "exclude": [],
-          "missing": true,
-          "other": true,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "title": "Log types",
           "tmode": "terms",
           "tstat": "total",
           "valuefield": ""
@@ -204,7 +210,7 @@
           },
           "auto_int": true,
           "resolution": 100,
-          "interval": "10m",
+          "interval": "30m",
           "intervals": [
             "auto",
             "1s",
@@ -242,6 +248,83 @@
             "query_as_alias": true
           },
           "title": "Micro - Mono"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "histogram",
+          "loadingEditor": false,
+          "mode": "count",
+          "time_field": "@timestamp",
+          "value_field": null,
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_format": "none",
+          "grid": {
+            "max": null,
+            "min": 0
+          },
+          "queries": {
+            "mode": "selected",
+            "ids": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "annotate": {
+            "enable": false,
+            "query": "*",
+            "size": 20,
+            "field": "_type",
+            "sort": [
+              "_score",
+              "desc"
+            ]
+          },
+          "auto_int": true,
+          "resolution": 100,
+          "interval": "30m",
+          "intervals": [
+            "auto",
+            "1s",
+            "1m",
+            "5m",
+            "10m",
+            "30m",
+            "1h",
+            "3h",
+            "12h",
+            "1d",
+            "1w",
+            "1y"
+          ],
+          "lines": false,
+          "fill": 0,
+          "linewidth": 3,
+          "points": false,
+          "pointradius": 5,
+          "bars": true,
+          "stack": true,
+          "spyable": true,
+          "zoomlinks": true,
+          "options": true,
+          "legend": true,
+          "show_query": true,
+          "interactive": true,
+          "legend_counts": true,
+          "timezone": "browser",
+          "percentage": false,
+          "zerofill": true,
+          "derivative": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "title": "HTTP Status"
         },
         {
           "span": 1,
@@ -300,6 +383,9 @@
             "host",
             "type",
             "level",
+            "method",
+            "server_response",
+            "request_page",
             "message"
           ],
           "highlight": [],
@@ -313,7 +399,11 @@
               0,
               1,
               2,
-              3
+              3,
+              4,
+              5,
+              6,
+              7
             ]
           },
           "field_list": true,
@@ -361,16 +451,16 @@
       "query": "*",
       "pinned": true,
       "history": [
+        "field:server_response=\"500\"",
+        "field:server_response=\"304\"",
+        "field:server_response=\"404\"",
+        "field:server_response=\"302\"",
+        "field:server_response=\"200\"",
         "host: \"app-server-node-4\"",
+        "host: \"app-server-node-2\"",
         "message: \"was submited\" AND type:\"catalina-log\"",
-        "*",
-        "host: app-server-node-4",
-        "host: app-server-node-2",
-        "*host:app-server-node-4",
-        "message: \"was submited\"",
-        "host: app-server-node-2 OR host:app-server-node-4",
-        "type: appstash-log AND host:app-server-node-2",
-        "type: appstash-log"
+        "field:server_response=500",
+        "field:server_response=304"
       ],
       "remember": 10,
       "enable": true
@@ -378,7 +468,7 @@
     {
       "type": "filtering",
       "collapse": true,
-      "notice": true,
+      "notice": false,
       "enable": true
     }
   ],
