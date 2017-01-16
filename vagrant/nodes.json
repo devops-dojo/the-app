@@ -4,8 +4,8 @@
         {
             "node": "elasticsearch",
             "vm_size": "Standard_A1",
-            "memory": "1024",
-	    "cpus": "1",
+            "memory": "2048",
+	    "cpus": "2",
             "hostname": "monitoring-node",
             "ip": "10.211.55.100",
             "ports":[],
