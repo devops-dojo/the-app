@@ -32,7 +32,7 @@
         },
         "3": {
           "id": 3,
-          "color": "#1F78C1",
+          "color": "#7EB26D",
           "alias": "http200",
           "pin": true,
           "type": "lucene",
@@ -59,7 +59,7 @@
         },
         "6": {
           "id": 6,
-          "color": "#705DA0",
+          "color": "#F2C96D",
           "alias": "http304",
           "pin": true,
           "type": "lucene",
@@ -68,7 +68,7 @@
         },
         "7": {
           "id": 7,
-          "color": "#BA43A9",
+          "color": "#E24D42",
           "alias": "http500",
           "pin": true,
           "type": "lucene",
@@ -151,7 +151,8 @@
               4,
               5,
               6,
-              7
+              7,
+              8
             ]
           },
           "field": "_type",
@@ -403,7 +404,8 @@
               4,
               5,
               6,
-              7
+              7,
+              8
             ]
           },
           "field_list": true,
@@ -468,7 +470,7 @@
     {
       "type": "filtering",
       "collapse": true,
-      "notice": false,
+      "notice": true,
       "enable": true
     }
   ],
@@ -507,5 +509,5 @@
       "filter_id": 0
     }
   ],
-  "refresh": false
+  "refresh": "10s"
 }
