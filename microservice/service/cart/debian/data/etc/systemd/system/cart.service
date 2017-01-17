@@ -7,7 +7,7 @@ Requires=network.target
 After=network.target
 
 [Service]
-ExecStart=/usr/share/shop/cart/bin/cart > /var/log/cart.log 2>&1
+ExecStart=/bin/sh -c '/usr/share/shop/cart/bin/cart > /var/log/cart.log 2>&1'
 EnvironmentFile=/etc/default/cart
 Type=simple
 WorkingDirectory=/usr/share/shop/cart/bin/

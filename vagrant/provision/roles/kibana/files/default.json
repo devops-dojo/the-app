@@ -383,11 +383,13 @@
             "@timestamp",
             "host",
             "type",
-            "level",
-            "method",
-            "server_response",
-            "request_page",
-            "message"
+            "loglevel",
+            "verb",
+            "response",
+            "request",
+            "class",
+            "message",
+            "stack_trace"
           ],
           "highlight": [],
           "sortable": true,
@@ -469,7 +471,7 @@
     },
     {
       "type": "filtering",
-      "collapse": true,
+      "collapse": false,
       "notice": true,
       "enable": true
     }
