@@ -1,14 +1,14 @@
 #!/bin/bash -x
 
 # Refresh local copy if requested
-if [ $1 = "-local"]; then
+if [ $1 = "-local" ]; then
   if [ ! -d "~/the-app" ]; then
     git clone https://github.com/devops-dojo/the-app.git ~/the-app
   fi
 
   cd ~/the-app
   git pull
-  sudo rsync -aHAXvh --update vagrant/provision /provision/
+  sudo rsync -aHAXvh --update vagrant/provision /
   shift
 fi
 

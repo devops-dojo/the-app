@@ -21,4 +21,4 @@
   notify: restart httpd
 
 - name: install default dashboard
-  copy: src=default.json dest=/var/www/html/app/dashboards/default.json group=vagrant owner=www
+  copy: src=default.json dest=/var/www/html/app/dashboards/default.json group=www owner=vagrant
