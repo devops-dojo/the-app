@@ -10,5 +10,6 @@ class HomePage extends Page {
         result { i -> results[i] }
         catalogLink { result(0) }
         homeLink { result(0) }
+        $("td[id=discountLabel]").text() == "You save"
     }
 }
