@@ -7,3 +7,4 @@
 *.txt text eol=lf
 *.yml text eol=lf
 hubot text eol=lf
+default text eol=lf
