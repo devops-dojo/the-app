@@ -32,16 +32,18 @@ public class TrackingServiceImpl implements TrackingService {
 
     @Override
     public void trackPurchase(OrderInfo order) {
-        try {
-            ClientDelivery delivery = mapToPurchaseDelivery(order);
+        if (order!=null && order.getUser()!=null){
+            try {
+                ClientDelivery delivery = mapToPurchaseDelivery(order);
 
-            JSONObject user = mapToUserJSONObject(order.getUser());
+                JSONObject user = mapToUserJSONObject(order.getUser());
 
-            MixpanelAPI mixpanel = new MixpanelAPI();
-            mixpanel.deliver(delivery);
-            mixpanel.sendMessage(user);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while tacking", e);
+                MixpanelAPI mixpanel = new MixpanelAPI();
+                mixpanel.deliver(delivery);
+                mixpanel.sendMessage(user);
+            } catch (Exception e) {
+                LOGGER.error("Error occurred while tacking", e);
+            }
         }
     }
 
@@ -56,43 +58,47 @@ public class TrackingServiceImpl implements TrackingService {
 
     @Override
     public void trackSignUp(UserInfo user) {
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("username", user.getUsername());
-            JSONObject signUp = messageBuilder.event(user.getUsername(), "Sign Up", properties);
+        if (user!=null){
+            try {
+                JSONObject properties = new JSONObject();
+                properties.put("username", user.getUsername());
+                JSONObject signUp = messageBuilder.event(user.getUsername(), "Sign Up", properties);
 
-            ClientDelivery delivery = new ClientDelivery();
-            delivery.addMessage(signUp);
+                ClientDelivery delivery = new ClientDelivery();
+                delivery.addMessage(signUp);
 
-            JSONObject userJSONObject = mapToUserJSONObject(user);
-            userJSONObject.put("$created", new Date());
+                JSONObject userJSONObject = mapToUserJSONObject(user);
+                userJSONObject.put("$created", new Date());
 
-            MixpanelAPI mixpanel = new MixpanelAPI();
-            mixpanel.deliver(delivery);
-            mixpanel.sendMessage(userJSONObject);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while tacking", e);
-        }
+                MixpanelAPI mixpanel = new MixpanelAPI();
+                mixpanel.deliver(delivery);
+                mixpanel.sendMessage(userJSONObject);
+            } catch (Exception e) {
+                LOGGER.error("Error occurred while tacking", e);
+            }
+        }    
     }
 
     @Override
     public void trackLogin(UserInfo user) {
-        try {
-            JSONObject properties = new JSONObject();
-            properties.put("username", user.getUsername());
-            JSONObject signUp = messageBuilder.event(user.getUsername(), "Login", properties);
+        if (user!=null){
+            try {
+                JSONObject properties = new JSONObject();
+                properties.put("username", user.getUsername());
+                JSONObject signUp = messageBuilder.event(user.getUsername(), "Login", properties);
 
-            ClientDelivery delivery = new ClientDelivery();
-            delivery.addMessage(signUp);
+                ClientDelivery delivery = new ClientDelivery();
+                delivery.addMessage(signUp);
 
-            JSONObject userJSONObject = mapToUserJSONObject(user);
-            userJSONObject.put("$last_login", new Date());
+                JSONObject userJSONObject = mapToUserJSONObject(user);
+                userJSONObject.put("$last_login", new Date());
 
-            MixpanelAPI mixpanel = new MixpanelAPI();
-            mixpanel.deliver(delivery);
-            mixpanel.sendMessage(userJSONObject);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while tacking", e);
+                MixpanelAPI mixpanel = new MixpanelAPI();
+                mixpanel.deliver(delivery);
+                mixpanel.sendMessage(userJSONObject);
+            } catch (Exception e) {
+                LOGGER.error("Error occurred while tacking", e);
+            }
         }
     }
 
