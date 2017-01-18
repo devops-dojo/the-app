@@ -11,7 +11,7 @@ ExecStart=/home/hubot/ninjabot/start.sh
 Type=simple
 WorkingDirectory=/home/hubot/ninjabot
 User=hubot
-Restart=on-abort
+Restart=always
 RestartSec=10
 
 [Install]
