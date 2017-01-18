@@ -110,7 +110,9 @@ public class TrackingServiceImpl implements TrackingService {
             mixpanel.deliver(delivery);
             mixpanel.sendMessage(mapToUserJSONObject(user));
         } catch (Exception e) {
-            LOGGER.error("Error occurred while tacking", e);
+            LOGGER.error("Error occurred while tacking ", e);
+            LOGGER.error("user.getUsername(): ", user.getUsername());
+            LOGGER.error("properties: ", properties.toString());
         }
     }
 
