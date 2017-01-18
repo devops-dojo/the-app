@@ -17,7 +17,7 @@
                     <prop key="mongo.host">localhost</prop>
                     <prop key="mongo.port">27017</prop>
                     <prop key="redis.cart.microservice.url">http://shop.microservice.io/api/cart</prop>
-                    <prop key="mix.panel.token">92fd25e4ab5d1371f36d650e67be9f84</prop>
+                    <prop key="mix.panel.token">75c10fc2a417040139cc4c9a590b370e</prop>
                 </props>
             </property>
         </bean>
