@@ -99,7 +99,7 @@ public class TrackingServiceImpl implements TrackingService {
     @Override
     public void trackProductView(List<ProductInfo> products, UserInfo user) {        
         JSONObject properties = new JSONObject();
-        if (products!=null and user!=null){
+        if (products!=null && user!=null){
             try {
                 properties.put("products", products.stream().map(productInfo -> productInfo.getName()).collect(Collectors.toList()));
                 JSONObject view = messageBuilder.event(user.getUsername(), "View", properties);
