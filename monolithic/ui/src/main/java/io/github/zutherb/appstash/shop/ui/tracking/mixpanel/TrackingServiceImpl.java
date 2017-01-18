@@ -97,22 +97,24 @@ public class TrackingServiceImpl implements TrackingService {
     }
 
     @Override
-    public void trackProductView(List<ProductInfo> products, UserInfo user) {
+    public void trackProductView(List<ProductInfo> products, UserInfo user) {        
         JSONObject properties = new JSONObject();
-        try {
-            properties.put("products", products.stream().map(productInfo -> productInfo.getName()).collect(Collectors.toList()));
-            JSONObject view = messageBuilder.event(user.getUsername(), "View", properties);
+        if (products!=null and user!=null){
+            try {
+                properties.put("products", products.stream().map(productInfo -> productInfo.getName()).collect(Collectors.toList()));
+                JSONObject view = messageBuilder.event(user.getUsername(), "View", properties);
 
-            ClientDelivery delivery = new ClientDelivery();
-            delivery.addMessage(view);
+                ClientDelivery delivery = new ClientDelivery();
+                delivery.addMessage(view);
 
-            MixpanelAPI mixpanel = new MixpanelAPI();
-            mixpanel.deliver(delivery);
-            mixpanel.sendMessage(mapToUserJSONObject(user));
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while tacking ", e);
-            LOGGER.error("user.getUsername(): ", user.getUsername());
-            LOGGER.error("properties: ", properties.toString());
+                MixpanelAPI mixpanel = new MixpanelAPI();
+                mixpanel.deliver(delivery);
+                mixpanel.sendMessage(mapToUserJSONObject(user));
+            } catch (Exception e) {
+                LOGGER.error("Error occurred while tacking ", e);
+                LOGGER.error("user.getUsername(): ", user.getUsername());
+                LOGGER.error("properties: ", properties.toString());
+            }
         }
     }
 
