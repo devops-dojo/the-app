@@ -3,7 +3,7 @@ package io.github.zutherb.appstash.shop.ui.tracking.mixpanel;
 import com.mixpanel.mixpanelapi.ClientDelivery;
 import com.mixpanel.mixpanelapi.MessageBuilder;
 import com.mixpanel.mixpanelapi.MixpanelAPI;
-import io.github.zutherb.appstash.common.util.Config.
+import io.github.zutherb.appstash.common.util.Config;
 import io.github.zutherb.appstash.shop.service.order.model.OrderInfo;
 import io.github.zutherb.appstash.shop.service.product.model.ProductInfo;
 import io.github.zutherb.appstash.shop.service.user.model.UserInfo;
