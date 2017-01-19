@@ -3,6 +3,7 @@ package io.github.zutherb.appstash.shop.ui.tracking.mixpanel;
 import com.mixpanel.mixpanelapi.ClientDelivery;
 import com.mixpanel.mixpanelapi.MessageBuilder;
 import com.mixpanel.mixpanelapi.MixpanelAPI;
+import io.github.zutherb.appstash.common.util.Config;
 import io.github.zutherb.appstash.shop.service.order.model.OrderInfo;
 import io.github.zutherb.appstash.shop.service.product.model.ProductInfo;
 import io.github.zutherb.appstash.shop.service.user.model.UserInfo;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Component
 public class TrackingServiceImpl implements TrackingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrackingServiceImpl.class);
+    private static final boolean doTracking = (Config.getProperty("DO_TRACKING")!=null && Config.getProperty("DO_TRACKING").equalsIgnoreCase("TRUE"));
 
     private MessageBuilder messageBuilder;
 
@@ -32,7 +34,8 @@ public class TrackingServiceImpl implements TrackingService {
 
     @Override
     public void trackPurchase(OrderInfo order) {
-        if (order!=null && order.getUser()!=null){
+        
+        if (doTracking && order!=null && order.getUser()!=null){
             try {
                 ClientDelivery delivery = mapToPurchaseDelivery(order);
 
@@ -58,7 +61,7 @@ public class TrackingServiceImpl implements TrackingService {
 
     @Override
     public void trackSignUp(UserInfo user) {
-        if (user!=null){
+        if (doTracking && user!=null){
             try {
                 JSONObject properties = new JSONObject();
                 properties.put("username", user.getUsername());
@@ -81,7 +84,7 @@ public class TrackingServiceImpl implements TrackingService {
 
     @Override
     public void trackLogin(UserInfo user) {
-        if (user!=null){
+        if (doTracking && user!=null){
             try {
                 JSONObject properties = new JSONObject();
                 properties.put("username", user.getUsername());
@@ -105,7 +108,7 @@ public class TrackingServiceImpl implements TrackingService {
     @Override
     public void trackProductView(List<ProductInfo> products, UserInfo user) {        
         JSONObject properties = new JSONObject();
-        if (products!=null && user!=null){
+        if (doTracking && products!=null && user!=null){
             try {
                 properties.put("products", products.stream().map(productInfo -> productInfo.getName()).collect(Collectors.toList()));
                 JSONObject view = messageBuilder.event(user.getUsername(), "View", properties);
