@@ -1,6 +1,6 @@
 package io.github.zutherb.appstash.shop.ui.panel.cart;
 
-
+import io.github.zutherb.appstash.common.util.Config;
 import io.github.zutherb.appstash.shop.service.cart.api.Cart;
 import io.github.zutherb.appstash.shop.service.cart.model.CartItemInfo;
 import io.github.zutherb.appstash.shop.ui.event.cart.CartChangeEvent;
@@ -36,6 +36,7 @@ public class CartPanel extends AbstractShopBasePanel {
 
     public CartPanel(String id) {
         super(id);
+        add(discountTr());
         add(discountSum());
         add(totalSum());
         add(checkoutLink());
@@ -44,7 +45,18 @@ public class CartPanel extends AbstractShopBasePanel {
         setOutputMarkupId(true);
 
         add(new HighLightBehavior());
+
+        //If there are no promotions hide the TR
+        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
+            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
+            discountTr().setVisible(false);
+        }
+        
     }
+    
+    private Component discountTr(){
+        return new  Fragment ("contentArea", "discountTr", this);
+    }    
 
     private Label discountSum() {
         return new Label("discount", new PriceModel(new PropertyModel<>(cart, "discountSum")));
