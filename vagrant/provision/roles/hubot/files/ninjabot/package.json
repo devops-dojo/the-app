@@ -12,7 +12,7 @@
     "hubot-redis-brain": "0.0.3",
     "hubot-rules": "^0.1.1",
     "hubot-scripts": "^2.17.2",
-    "hubot-shipit": "^0.2.0",
+    "hubot-business-cat": "^1.5.3",
     "hubot-slack": "^4.2.2"
   },
   "engines": {
