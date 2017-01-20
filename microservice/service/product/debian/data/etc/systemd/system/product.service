@@ -12,7 +12,7 @@ Type=simple
 WorkingDirectory=/usr/share/shop/product/bin/
 User=root
 Restart=always
-RestartSec=10
+RestartSec=60
 
 [Install]
 WantedBy=multi-user.target
