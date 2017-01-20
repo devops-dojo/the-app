@@ -12,7 +12,7 @@ EnvironmentFile=/etc/default/navigation
 Type=simple
 WorkingDirectory=/usr/share/shop/navigation/bin/
 User=root
-Restart=on-abort
+Restart=always
 RestartSec=10
 
 [Install]

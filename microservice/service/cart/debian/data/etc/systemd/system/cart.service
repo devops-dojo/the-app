@@ -12,7 +12,7 @@ EnvironmentFile=/etc/default/cart
 Type=simple
 WorkingDirectory=/usr/share/shop/cart/bin/
 User=root
-Restart=on-abort
+Restart=always
 RestartSec=10
 
 [Install]
