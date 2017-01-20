@@ -11,8 +11,8 @@ ExecStart=/bin/sh -c '/usr/share/shop/product/bin/product -Dconfig.file=/etc/pro
 Type=simple
 WorkingDirectory=/usr/share/shop/product/bin/
 User=root
-Restart=on-abort
-RestartSec=10
+Restart=always
+RestartSec=60
 
 [Install]
 WantedBy=multi-user.target

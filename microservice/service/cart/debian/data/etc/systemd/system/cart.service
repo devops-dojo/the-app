@@ -12,8 +12,8 @@ EnvironmentFile=/etc/default/cart
 Type=simple
 WorkingDirectory=/usr/share/shop/cart/bin/
 User=root
-Restart=on-abort
-RestartSec=10
+Restart=always
+RestartSec=60
 
 [Install]
 WantedBy=multi-user.target
