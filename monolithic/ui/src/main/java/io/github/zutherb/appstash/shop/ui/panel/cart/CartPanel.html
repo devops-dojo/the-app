@@ -29,13 +29,16 @@
             </tr>
             </tbody>
             <tfoot>
+            <wicket:fragment wicket:id="discountTr">
             <tr>
+	              <!-- Fragment markup goes here -->                
                 <td><div id="discountLabel">You save</div></td>
                 <td style="text-align: right;">
                     <wicket:container wicket:id="discount">1.00</wicket:container>
                 </td>
                 <td></td>
             </tr>                
+            </wicket:fragment>
             <tr>
                 <td>Subtotal</td>
                 <td style="text-align: right;">
