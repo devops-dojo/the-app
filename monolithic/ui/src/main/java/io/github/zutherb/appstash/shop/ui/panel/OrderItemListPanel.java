@@ -1,5 +1,6 @@
 package io.github.zutherb.appstash.shop.ui.panel;
 
+import io.github.zutherb.appstash.common.util.Config;
 import io.github.zutherb.appstash.shop.service.order.model.OrderInfo;
 import io.github.zutherb.appstash.shop.service.order.model.OrderItemInfo;
 import io.github.zutherb.appstash.shop.ui.model.PriceModel;
@@ -22,10 +23,21 @@ public class OrderItemListPanel extends Panel {
     public OrderItemListPanel(String id, IModel<OrderInfo> orderInfoModel) {
         super(id, orderInfoModel);
         add(orderItemList());
+        add(discountTr());
         add(discountSum());
         add(totalSum());
+    
+        //If there are no promotions hide the TR
+        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
+            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
+            discountTr().setVisible(false);
+        }
     }
-
+    
+    private Component discountTr(){
+        return new  Fragment ("contentArea", "discountTr", this);
+    }
+    
     private Component discountSum() {
         return new Label("discountSum", new PriceModel(new PropertyModel<>(getDefaultModel(), "discountSum")));
     }    
