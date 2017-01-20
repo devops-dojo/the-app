@@ -7,7 +7,7 @@ START=yes
 NAME=logstash
 
 # location of java
-JAVA=/usr/local/jdk1.8.0_20/bin/java
+JAVA=/usr/local/jdk1.8.0_25/bin/java
 
 # arguments to pass to java
 LS_JAVA_OPTS="-Xmx256m -Djava.io.tmpdir=/var/lib/logstash/"

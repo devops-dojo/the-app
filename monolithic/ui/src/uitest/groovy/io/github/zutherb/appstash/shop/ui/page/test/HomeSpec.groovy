@@ -12,6 +12,7 @@ class HomeSpec extends GebReportingSpec {
     def "Navigate to Home Page - check articles"() {
         when:
         to HomePage
+        assert theDiv.text() == "You save"
 
         and:
         homeLink.click()

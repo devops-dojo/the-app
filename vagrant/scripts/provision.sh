@@ -1,8 +1,21 @@
 #!/bin/bash -x
 
+# Refresh local copy if requested
+if [ $1 = "-local" ]; then
+  if [ ! -d "~/the-app" ]; then
+    git clone https://github.com/devops-dojo/the-app.git ~/the-app
+  fi
+
+  cd ~/the-app
+  git pull
+  sudo rsync -aHAXvh --update vagrant/provision /
+  shift
+fi
+
 # This directory is synced by vagrant
 cd /provision
 ls -alrt
+
 # Are we behind web proxy?
 if grep -Fxq "with_proxy: true" vars/default.yml; then
    proxy_host=`awk '/http_proxy_host/ {printf "%s",$2;exit}' vars/default.yml`

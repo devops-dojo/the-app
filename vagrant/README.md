@@ -96,8 +96,6 @@ Procedure to install on existing machines:
 
 ```
 git clone https://github.com/devops-dojo/the-app.git
-sudo cp -pR the-app/vagrant/provision/* /provision
-
 cd the-app/vagrant/scripts
 ```
 * By default, boxes are meant to be configured behind a web proxy. Tweak with_proxy and/or web proxy host/port
@@ -115,6 +113,13 @@ sh ./provision.sh --limit=app-server-node-3 micro_appserver.yml
 sh ./provision.sh --limit=app-server-node-4 micro_appserver.yml
 sh ./provision.sh --limit=ci-node buildserver.yml
 ```
+
+NOTE: to refresh the install with the latest on github, run `provision.sh` with `--refresh` argument, like so:
+
+```
+sh ./provision.sh --refresh --limit=ci-node buildserver.yml
+```
+
 * Once everything is done (:coffee:), wait for the [Jenkins jobs](http://ci-node:8080) to complete
 * All nodes are accessible following [this table](#nodes)
 * Deploy the application as per [this](#deploy-application-on-servers)

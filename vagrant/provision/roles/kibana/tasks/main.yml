@@ -43,3 +43,6 @@
     enabled: yes
     daemon_reload: yes
     name: kibana
+
+- name: install default dashboard
+  copy: src=default.json dest=/var/www/html/app/dashboards/default.json group=www owner=vagrant
