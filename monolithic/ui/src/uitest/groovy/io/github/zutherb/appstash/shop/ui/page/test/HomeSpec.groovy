@@ -12,7 +12,8 @@ class HomeSpec extends GebReportingSpec {
     def "Navigate to Home Page - check articles"() {
         when:
         to HomePage
-        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT")))>0{
+        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
+            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
           assert theDiv.text() == "You save"
         }
         
