@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot update me - Update hubot with latest from Github
+#   hubot update host [monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4] - reprovision with latest from Github
 #
 
 module.exports = (robot) ->
@@ -22,35 +23,77 @@ module.exports = (robot) ->
     switch host
       when 'monitoring'
         server='monitoring-node'
-        command='sh ./provision.sh --limit=#{server} monitoringserver.yml'
+        command='sh ./provision.sh --limit=monitoring-node monitoringserver.yml'
       when 'cinode'
         server='ci-node'
-        command='sh ./provision.sh --limit=#{server} buildserver.yml'
+        command='sh ./provision.sh --limit=ci-node buildserver.yml'
       when 'cirepo'
         server='ci-repo'
-        command='sh ./provision.sh --limit=#{server}reposerver.yml'
+        command='sh ./provision.sh --limit=ci-repo reposerver.yml'
       when 'db'
         server='mongodb-node'
-        command='sh ./provision.sh --limit=#{server} databaseserver.yml'
+        command='sh ./provision.sh --limit=mongodb-node databaseserver.yml'
       when 'appserver1'
         server='app-server-node-1'
-        command='sh ./provision.sh --limit=#{server} monolitic_appserver.yml'
+        command='sh ./provision.sh --limit=app-server-node-1 monolitic_appserver.yml'
       when 'appserver2'
         server='app-server-node-2'
-        command='sh ./provision.sh --limit=#{server} monolitic_appserver.yml'
+        command='sh ./provision.sh --limit=app-server-node-2 monolitic_appserver.yml'
       when 'appserver3'
         server='app-server-node-3'
-        command='sh ./provision.sh --limit=#{server} micro_appserver.yml'
+        command='sh ./provision.sh --limit=app-server-node-3 micro_appserver.yml'
       when 'appserver4'
         server='app-server-node-4'
-        command='sh ./provision.sh --limit=#{server} micro_appserver.yml'
+        command='sh ./provision.sh --limit=app-server-node-4 micro_appserver.yml'
 
-    msg.send "Reprovisioning host with the latest on Github..."
+    msg.send "Reprovisioning host #{server} with the latest on Github..."
 
-    @exec = require('child_process').exec
-    @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git pull && cd vagrant/scripts && #{command}'", (error, stdout, stderr) ->
-      if stdout? && stdout != ''
-        msg.send ":tada: Update done!"
-        setTimeout () ->
-          process.exit(0)
-        , 5 * 1000
+    spawn = require('child_process').spawn
+    ssh = spawn "ssh", ["-o", "StrictHostKeyChecking=no", "vagrant@#{server}", "cd the-app/vagrant/scripts && #{command}"]
+    ssh.stdout.on "data", (data) ->
+       respond msg, "#{server}", data.toString()
+    ssh.stderr.on "data", (data) ->
+       respond msg, "#{server}", data.toString()
+    ssh.on "exit", (code) ->
+      if code is 0
+        respond msg, "#{server}", ":tada: command successful!"
+
+# Limit size of output (would like to buffer it too!)
+respond = (msg, server, str, wrap = '```') ->
+  len = 3000
+  _size = Math.ceil(str.length / len)
+  _ret = new Array(_size)
+  _offset = undefined
+  _i = 0
+  while _i < _size
+    _offset = _i * len
+    _ret[_i] = str.substring(_offset, _offset + len)
+    _i++
+  msg.send({
+    attachments: [{
+      pretext: "`#{server}`",
+      thumb_url: "http://docs.ansible.com/images/logo.png",
+      text: "#{wrap}#{_ret[0]}#{wrap}",
+      mrkdwn_in: ["text", "pretext"]
+    }],
+    username: process.env.HUBOT_SLACK_BOTNAME,
+    as_user: true,
+  });
+  unless _ret.length == 1
+    x = 1
+    setInterval (->
+      msg.send({
+        attachments: [{
+          pretext: "`#{server}`",
+          thumb_url: "http://docs.ansible.com/images/logo.png",
+          text: "#{wrap}#{_ret[x]}#{wrap}",
+          mrkdwn_in: ["text", "pretext"]
+        }],
+        username: process.env.HUBOT_SLACK_BOTNAME,
+        as_user: true,
+      });
+      if _ret.length == x+1
+        clearInterval this
+      else
+        x++
+    ), 5000
