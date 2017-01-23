@@ -7,7 +7,9 @@ if [ $1 = "-local" ]; then
   fi
 
   cd ~/the-app
-  git pull
+  # Force reset local GIT repo to match Github
+  git fetch --all
+  git reset --hard origin/master
   sudo rsync -aHAXvh --update vagrant/provision /
   shift
 fi
