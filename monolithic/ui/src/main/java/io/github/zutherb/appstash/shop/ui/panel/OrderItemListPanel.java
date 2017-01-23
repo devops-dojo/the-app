@@ -5,11 +5,11 @@ import io.github.zutherb.appstash.shop.service.order.model.OrderInfo;
 import io.github.zutherb.appstash.shop.service.order.model.OrderItemInfo;
 import io.github.zutherb.appstash.shop.ui.model.PriceModel;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -25,22 +25,23 @@ public class OrderItemListPanel extends Panel {
         super(id, orderInfoModel);
         add(orderItemList());
         add(discountTr());
-        add(discountSum());
         add(totalSum());
-    
-        //If there are no promotions hide the TR
-        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
-            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
-            discountTr().setVisible(false);
-        }
     }
     
     private Component discountTr(){
-        return new  Fragment ("contentArea", "discountTr", this);
+        WebMarkupContainer webMarkupContainer = new WebMarkupContainer ("discountTr");
+        discountTr.add(discountSum());
+        //If there are no promotions hide the TR
+        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
+            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
+            webMarkupContainer().setVisible(false);
+        }
+        
+        return webMarkupContainer;
     }
     
     private Component discountSum() {
-        return new Label("discountSum", new PriceModel(new PropertyModel<>(getDefaultModel(), "discountSum")));
+        return ;
     }    
     
     private Component totalSum() {
