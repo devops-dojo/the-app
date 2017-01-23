@@ -30,7 +30,7 @@ public class OrderItemListPanel extends Panel {
     
     private Component discountTr(){
         WebMarkupContainer webMarkupContainer = new WebMarkupContainer ("discountTr");
-        discountTr.add(discountSum());
+        webMarkupContainer.add(discountSum());
         //If there are no promotions hide the TR
         if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
             Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
