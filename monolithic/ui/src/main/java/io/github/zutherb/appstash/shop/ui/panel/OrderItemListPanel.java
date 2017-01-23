@@ -41,7 +41,8 @@ public class OrderItemListPanel extends Panel {
     }
     
     private Component discountSum() {
-        return new Label("discount", new PriceModel(new PropertyModel<>(getDefaultModel(), "discountSum")));
+        return new Label("discountSum", new PriceModel(new PropertyModel<>(getDefaultModel(), "discountSum")));
+        
     }    
     
     private Component totalSum() {
