@@ -34,7 +34,7 @@ public class OrderItemListPanel extends Panel {
         //If there are no promotions hide the TR
         if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
             Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
-            webMarkupContainer().setVisible(false);
+            webMarkupContainer.setVisible(false);
         }
         
         return webMarkupContainer;
