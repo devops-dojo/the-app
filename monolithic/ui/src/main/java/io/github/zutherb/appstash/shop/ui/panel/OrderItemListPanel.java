@@ -32,8 +32,8 @@ public class OrderItemListPanel extends Panel {
         WebMarkupContainer webMarkupContainer = new WebMarkupContainer ("discountTr");
         webMarkupContainer.add(discountSum());
         //If there are no promotions hide the TR
-        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
-            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
+        if (Config.getProperty("GLOBAL_DISCOUNT")==null ||
+            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))==0){
             webMarkupContainer.setVisible(false);
         }
         
