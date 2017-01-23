@@ -14,7 +14,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -38,7 +37,6 @@ public class CartPanel extends AbstractShopBasePanel {
     public CartPanel(String id) {
         super(id);
         add(discountTr());
-        add(discountSum());
         add(totalSum());
         add(checkoutLink());
         add(cartView());
@@ -46,18 +44,19 @@ public class CartPanel extends AbstractShopBasePanel {
         setOutputMarkupId(true);
 
         add(new HighLightBehavior());
-
-        //If there are no promotions hide the TR
-        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
-            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
-            discountTr().setVisible(false);
-        }
-        
     }
     
     private Component discountTr(){
-        return new  Fragment ("contentArea", "discountTr", this);
-    }    
+        WebMarkupContainer webMarkupContainer = new WebMarkupContainer ("discountTr");
+        webMarkupContainer.add(discountSum());
+        //If there are no promotions hide the TR
+        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
+            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
+            webMarkupContainer().setVisible(false);
+        }
+        
+        return webMarkupContainer;
+    }
 
     private Label discountSum() {
         return new Label("discount", new PriceModel(new PropertyModel<>(cart, "discountSum")));
