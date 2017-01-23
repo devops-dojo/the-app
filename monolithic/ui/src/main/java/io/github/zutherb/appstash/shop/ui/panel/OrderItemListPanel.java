@@ -1,9 +1,11 @@
 package io.github.zutherb.appstash.shop.ui.panel;
 
+import io.github.zutherb.appstash.common.util.Config;
 import io.github.zutherb.appstash.shop.service.order.model.OrderInfo;
 import io.github.zutherb.appstash.shop.service.order.model.OrderItemInfo;
 import io.github.zutherb.appstash.shop.ui.model.PriceModel;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -22,12 +24,25 @@ public class OrderItemListPanel extends Panel {
     public OrderItemListPanel(String id, IModel<OrderInfo> orderInfoModel) {
         super(id, orderInfoModel);
         add(orderItemList());
-        add(discountSum());
+        add(discountTr());
         add(totalSum());
     }
-
+    
+    private Component discountTr(){
+        WebMarkupContainer webMarkupContainer = new WebMarkupContainer ("discountTr");
+        webMarkupContainer.add(discountSum());
+        //If there are no promotions hide the TR
+        if (Config.getProperty("GLOBAL_DISCOUNT")==null ||
+            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))==0){
+            webMarkupContainer.setVisible(false);
+        }
+        
+        return webMarkupContainer;
+    }
+    
     private Component discountSum() {
         return new Label("discountSum", new PriceModel(new PropertyModel<>(getDefaultModel(), "discountSum")));
+        
     }    
     
     private Component totalSum() {
