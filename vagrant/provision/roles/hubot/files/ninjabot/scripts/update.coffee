@@ -48,7 +48,7 @@ module.exports = (robot) ->
     msg.send "Reprovisioning host with the latest on Github..."
 
     @exec = require('child_process').exec
-    @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git pull && cd vagrant/scripts && #{command}'", (error, stdout, stderr) ->
+    @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git fetch --all && git reset --hard origin/master && cd vagrant/scripts && #{command}'", (error, stdout, stderr) ->
       if stdout? && stdout != ''
         msg.send ":tada: Update done!"
         setTimeout () ->
