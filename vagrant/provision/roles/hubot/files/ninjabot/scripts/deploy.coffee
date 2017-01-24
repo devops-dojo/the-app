@@ -12,7 +12,7 @@ module.exports = (robot) ->
 
     switch environment
       when 'test'
-        msg.send "Deploying latest to **test environment**. See [this link](#{JENKINS_URL}/view/Test%20Deployment/) for status"
+        msg.send "Deploying latest to :arrow_forward:TEST:arrow_backward: environment. Check status at #{JENKINS_URL}/view/Test%20Deployment/"
         robot.http("#{JENKINS_URL}/job/shop-monolitic-test-deployment/build")
           .post(null) (err, res, body) ->
             if err
@@ -24,7 +24,7 @@ module.exports = (robot) ->
               res.send "Encountered an error #{err}"
               return
       when 'pro'
-        msg.send "Deploying latest to **production environment**. See [this link](#{JENKINS_URL}/view/Production%20Deployment/) for status"
+        msg.send "Deploying latest to :arrow_forward:PRODUCTION:arrow_backward: environment. Check status at #{JENKINS_URL}/view/Production%20Deployment/"
         robot.http("#{JENKINS_URL}/job/shop-monolitic-production-deployment/build")
           .post(null) (err, res, body) ->
             if err
