@@ -3,16 +3,15 @@ package io.github.zutherb.appstash.shop.service.cart
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.context.ApplicationContext
-import io.github.zutherb.appstash.common.util.Config
+
 
 /**
  * @author zutherb
  */
 class Boot implements CommandLineRunner {
-
+    public boolean string springBoot = false;
     static void main(String[] args) {
-        if (Config.getProperty("SPRING_BOOT")!=null && 
-            Config.getProperty("SPRING_BOOT").equalsIgnoreCase("TRUE")){
+        if (springBoot){
             SpringApplication.run(ApplicationConfiguration.class, args)
         }
     }
