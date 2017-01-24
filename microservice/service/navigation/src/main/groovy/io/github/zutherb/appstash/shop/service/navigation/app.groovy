@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication
 class Boot implements CommandLineRunner {
     public boolean springBoot = false
     static void main(String[] args) {
-        if (springBoot){        
+        if (this.springBoot==true){        
             SpringApplication.run(ApplicationConfiguration.class, args)
         }
     }
