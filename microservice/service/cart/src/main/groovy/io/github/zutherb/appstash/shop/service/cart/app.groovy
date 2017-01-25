@@ -11,10 +11,7 @@ import org.springframework.context.ApplicationContext
 class Boot implements CommandLineRunner {
     
     static void main(String[] args) {
-        boolean doSpringBoot = false
-        if (doSpringBoot == true){
-            SpringApplication.run(ApplicationConfiguration.class, args)
-        }
+        SpringApplication.run(ApplicationConfiguration.class, args)
     }
 
     @Override
