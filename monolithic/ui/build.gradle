@@ -46,6 +46,13 @@ sourceSets {
     }
 }
 
+test {
+    testLogging {
+        showStandardStreams = true
+        events "started", "skipped", "failed", "passed"
+    }
+}
+
 configurations {
     uitestCompile.extendsFrom testCompile
     uitestRuntime.extendsFrom testRuntime
