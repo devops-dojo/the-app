@@ -9,14 +9,10 @@ import io.github.zutherb.appstash.common.util.Config
 class HomeSpec extends GebReportingSpec {
 
 
-    def "Navigate to Home Page - check articles"() {
+    def "Navigate to Home Page"() {
         when:
         to HomePage
-        if (Config.getProperty("GLOBAL_DISCOUNT")!=null && 
-            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))>0){
-          assert theDiv.text() == "You save"
-        }
-        
+
         and:
         homeLink.click()
 
