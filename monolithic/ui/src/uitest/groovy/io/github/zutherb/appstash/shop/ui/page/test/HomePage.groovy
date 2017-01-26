@@ -4,7 +4,7 @@ import geb.Page
 
 class HomePage extends Page {
     static url = "http://test.monolith.io:8080/shop/"
-    static at = { waitFor {title == "Shop" } }
+    static at = { waitFor { title == "Shop" } }
 
     static content = {
         results(wait: true) { $("li a.tabletLink") }

@@ -4,7 +4,7 @@ import geb.Page
 
 class CheckoutPage extends Page {
     static url = "http://test.monolith.io:8080/shop/checkout"
-    static at = { title == "Shop" }
+    static at = { waitFor { title == "Shop" } }
     static content = {
         results(wait: true) { $("div.container") }
         result { i -> results[i] }
