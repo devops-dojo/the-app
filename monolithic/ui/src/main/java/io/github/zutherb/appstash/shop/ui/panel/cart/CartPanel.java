@@ -36,6 +36,7 @@ public class CartPanel extends AbstractShopBasePanel {
 
     public CartPanel(String id) {
         super(id);
+        add(discountHeader());
         add(discountTr());
         add(totalSum());
         add(checkoutLink());
@@ -45,7 +46,19 @@ public class CartPanel extends AbstractShopBasePanel {
 
         add(new HighLightBehavior());
     }
-    
+
+    private Component discountHeader(){
+        WebMarkupContainer webMarkupContainer = new WebMarkupContainer ("discountHeader");
+        //If there are no promotions hide the title
+        if (Config.getProperty("GLOBAL_DISCOUNT")==null ||
+            Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))==0){
+            webMarkupContainer.setVisible(false);
+        } else {
+          webMarkupContainer.add(new Label("discountPercent", Config.getProperty("GLOBAL_DISCOUNT")));
+        }
+        return webMarkupContainer;
+    }
+
     private Component discountTr(){
         WebMarkupContainer webMarkupContainer = new WebMarkupContainer ("discountTr");
         webMarkupContainer.add(discountSum());
@@ -54,14 +67,14 @@ public class CartPanel extends AbstractShopBasePanel {
             Double.parseDouble(Config.getProperty("GLOBAL_DISCOUNT"))==0){
             webMarkupContainer.setVisible(false);
         }
-        
+
         return webMarkupContainer;
     }
 
     private Label discountSum() {
-        return new Label("discount", new PriceModel(new PropertyModel<>(cart, "discountSum")));
+      return new Label("discount", new PriceModel(new PropertyModel<>(cart, "discountSum")));
     }
-        
+
     private Label totalSum() {
         return new Label("price", new PriceModel(new PropertyModel<>(cart, "totalSum")));
     }
@@ -114,4 +127,3 @@ public class CartPanel extends AbstractShopBasePanel {
         }
     }
 }
-
