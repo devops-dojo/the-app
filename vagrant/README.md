@@ -202,6 +202,8 @@ sudo npm install -g azure-cli
     portal.azure.com > More services > Subscriptions > Visual Studio Enterprise > Access Control (IAM) > Add > Select a Role >  Contributor
     Add users > THE_APP_YOU_CREATED_IN_PREVIOUS_STEP > select > ok
 
+  Alternatively, you can connect once using your regular subscription with the azure login command, then interact with the client to retrieve all IDs and create the "application" as illustrated in [this session log](doc/azure-CLI-create-SP-sample.txt).
+
 - Create Azure cloud credentials .env file with the information from previous step
 
   You need a `.env`  file which includes your Azure details in `~/the-app/vagrant`.
