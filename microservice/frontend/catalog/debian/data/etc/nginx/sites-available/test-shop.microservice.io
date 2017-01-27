@@ -1,15 +1,15 @@
 
-upstream _Site_A {
+upstream _Test_Site_A {
   server test-shop.microservice.io:81;
 }
 
-upstream _Site_B {
+upstream _Test_Site_B {
   server test-shop.microservice.io:82;
 }
 
 split_clients "${time_local}AAA" $variant {
-  50%   _Site_A;
-  50%   _Site_B;
+  50%   _Test_Site_A;
+  50%   _Test_Site_B;
 }
 
 server {
