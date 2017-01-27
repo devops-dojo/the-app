@@ -3,5 +3,6 @@
   "hubot-redis-brain",
   "hubot-rules",
   "hubot-business-cat",
-  "hubot-pubsub"
+  "hubot-pubsub",
+  "hubot-auth"
 ]
