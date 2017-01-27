@@ -7,6 +7,10 @@
 
 module.exports = (robot) ->
   robot.respond /update me/i, (msg) ->
+    unless robot.auth.hasRole(msg.envelope.user, "ops")
+      msg.send ":grin: Access denied. You must have 'ops' role to use this command"
+      return
+
     msg.send "Updating myself. Thanks for your patience..."
 
     @exec = require('child_process').exec
@@ -18,6 +22,9 @@ module.exports = (robot) ->
         , 5 * 1000
 
   robot.respond /update host (monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4|)/i, (msg) ->
+    unless robot.auth.hasRole(msg.envelope.user, "admin")
+      msg.send ":grin: Access denied. You must have 'admin' role to use this command"
+      return
     host = msg.match[1]
     switch host
       when 'monitoring'

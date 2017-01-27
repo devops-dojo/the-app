@@ -24,9 +24,9 @@ module.exports = (robot) ->
               res.send "Encountered an error #{err}"
               return
       when 'pro'
-        if (environment === "pro")
+        if environment is "pro"
           unless robot.auth.hasRole(msg.envelope.user, "ops")
-            msg.send "Access denied. You must have 'ops' role to use this command in production"
+            msg.send ":grin: Access denied. You must have 'ops' role to use this command in production"
             return
         msg.send "Deploying latest to :arrow_forward:PRODUCTION:arrow_backward: environment. Check status at #{JENKINS_URL}/view/Production%20Deployment/"
         robot.http("#{JENKINS_URL}/job/shop-monolitic-production-deployment/build")
