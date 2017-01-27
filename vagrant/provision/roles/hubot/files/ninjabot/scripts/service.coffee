@@ -23,9 +23,9 @@ module.exports = (robot) ->
           micro_host='app-server-node-3'
           mono_host ='app-server-node-1'
 
-      if (environment === "pro" && (command === "stop" || command === "restart"))
+      if (environment is "pro" && (command is "stop" || command is "restart"))
         unless robot.auth.hasRole(msg.envelope.user, "ops")
-          msg.send "Access denied. You must have 'ops' role to use this command in production"
+          msg.send ":grin: Access denied. You must have 'ops' role to use this command in production"
           return
 
       switch service
