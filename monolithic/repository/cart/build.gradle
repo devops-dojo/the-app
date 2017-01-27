@@ -22,7 +22,7 @@ sourceSets {
 
 test {
     testLogging {
-        showStandardStreams = true
+        showStandardStreams = false
         events "started", "skipped", "failed", "passed"
     }
 }
