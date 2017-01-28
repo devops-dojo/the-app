@@ -7,5 +7,5 @@
     "CART_SERVICE_POST_URL": "/api/cart/add",
     "CART_SERVICE_DELETE_URL": "/api/cart/removeItemFromCart",
     "CHECKOUT_BASE_URL": "http://shop.monolith.io:8080/shop/checkout",
-    "GLOBAL_DISCOUNT": 0
+    "GLOBAL_DISCOUNT": 25
 }
