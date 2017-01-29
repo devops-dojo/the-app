@@ -66,14 +66,6 @@ task prepareDeb {
         from "${buildDir}/install/"
         into "${buildDir}/debian-data/usr/share/shop/"
     }
-    copy {
-        from "${buildDir}/install/"
-        into "${buildDir}/debian-data/usr/share/shop_A/"
-    }
-    copy {
-        from "${buildDir}/install/"
-        into "${buildDir}/debian-data/usr/share/shop_B/"
-    }
 }
 
 debian {

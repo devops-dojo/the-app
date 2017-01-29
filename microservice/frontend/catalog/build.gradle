@@ -55,6 +55,8 @@ task bower(type: Exec){
 }
 
 task prepareDeb (type: VersionTxtTask) {
+    def htmlFolderA = "${buildDir}/debian-data/usr/share/shop_A/frontend/catalog/html"
+    def htmlFolderB = "${buildDir}/debian-data/usr/share/shop_B/frontend/catalog/html"
     def htmlFolder = "${buildDir}/debian-data/usr/share/shop/frontend/catalog/html"
     def cmd = "git rev-parse HEAD"
     def proc = cmd.execute()
@@ -78,6 +80,14 @@ task prepareDeb (type: VersionTxtTask) {
     copy {
         from "${projectDir}/dist/"
         into htmlFolder
+    }
+    copy {
+        from "${projectDir}/dist/"
+        into htmlFolderA
+    }
+    copy {
+        from "${projectDir}/dist/"
+        into htmlFolderB
     }
 }
 
