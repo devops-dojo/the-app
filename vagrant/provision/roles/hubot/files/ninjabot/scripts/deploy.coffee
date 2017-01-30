@@ -25,7 +25,8 @@ module.exports = (robot) ->
               return
       when 'pro'
         if environment is "pro"
-          unless robot.auth.hasRole(msg.envelope.user, "ops")
+          user = robot.brain.userForId(msg.envelope.user.id, null)
+          unless robot.auth.hasRole(user, "ops")
             msg.send ":grin: Access denied. You must have 'ops' role to use this command in production"
             return
         msg.send "Deploying latest to :arrow_forward:PRODUCTION:arrow_backward: environment. Check status at #{JENKINS_URL}/view/Production%20Deployment/"
