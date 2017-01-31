@@ -1,6 +1,6 @@
 {
   "name": "eshop-catalog",
-  "version": "0.0.1",
+  "version": "0.02",
   "devDependencies": {
     "chalk": "^0.5.1",
     "grunt": "~0.4.5",
