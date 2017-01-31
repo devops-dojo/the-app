@@ -11,7 +11,7 @@ ln -sf /etc/nginx/sites-available/test-shop.microservice.io /etc/nginx/sites-ena
 ln -sf /etc/nginx/sites-available/test-shop.microservice.io.1 /etc/nginx/sites-enabled/test-shop.microservice.io.1
 ln -sf /etc/nginx/sites-available/test-shop.microservice.io.2 /etc/nginx/sites-enabled/test-shop.microservice.io.2
 
-find /usr/share/shop/frontend/catalog_B/html -name *_B* -exec 'mv -v {} $(echo {} | sed "s/_B//g")' \;
+find /usr/share/shop/frontend/catalog_B/html -name "*_B*" -exec bash -c 'mv -v "{}" $(echo "{}" | sed "s/_B//g")' \;
 
 nginx -t
 
