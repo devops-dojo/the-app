@@ -2,6 +2,7 @@
 set -e
 
 chown -R www-data:www-data /usr/share/shop/frontend/catalog/html
+chown -R www-data:www-data /usr/share/shop/frontend/catalog_B/html
 chmod 755 /usr/share/shop/frontend/catalog/
 ln -sf /etc/nginx/sites-available/shop.microservice.io /etc/nginx/sites-enabled/shop.microservice.io
 ln -sf /etc/nginx/sites-available/shop.microservice.io.1 /etc/nginx/sites-enabled/shop.microservice.io.1
@@ -9,6 +10,8 @@ ln -sf /etc/nginx/sites-available/shop.microservice.io.2 /etc/nginx/sites-enable
 ln -sf /etc/nginx/sites-available/test-shop.microservice.io /etc/nginx/sites-enabled/test-shop.microservice.io
 ln -sf /etc/nginx/sites-available/test-shop.microservice.io.1 /etc/nginx/sites-enabled/test-shop.microservice.io.1
 ln -sf /etc/nginx/sites-available/test-shop.microservice.io.2 /etc/nginx/sites-enabled/test-shop.microservice.io.2
+
+find /usr/share/shop/frontend/catalog_B/html -name *_B* -exec 'mv -v {} $(echo {} | sed "s/_B//g")' \;
 
 nginx -t
 
