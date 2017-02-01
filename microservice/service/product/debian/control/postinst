@@ -7,5 +7,5 @@ rm -f /etc/init.d/product
 
 systemctl daemon-reload
 systemctl enable product.service
-
+systemctl daemon-reload
 service product restart

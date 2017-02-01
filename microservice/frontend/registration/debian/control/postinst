@@ -4,5 +4,5 @@ set -e
 ln -sf /etc/nginx/sites-available/registration.microservice.io /etc/nginx/sites-enabled/registration.microservice.io
 
 nginx -t
-
+systemctl daemon-reload
 service nginx restart
