@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot update me - Update hubot with latest from Github
+#   hubot update host <monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4>
 #
 
 module.exports = (robot) ->
@@ -31,35 +32,34 @@ module.exports = (robot) ->
     switch host
       when 'monitoring'
         server='monitoring-node'
-        command='sh ./provision.sh --limit=#{server} monitoringserver.yml'
+        command="sh ./provision.sh -local --limit=#{server} monitoringserver.yml"
       when 'cinode'
         server='ci-node'
-        command='sh ./provision.sh --limit=#{server} buildserver.yml'
+        command="sh ./provision.sh -local --limit=#{server} buildserver.yml"
       when 'cirepo'
         server='ci-repo'
-        command='sh ./provision.sh --limit=#{server}reposerver.yml'
+        command="sh ./provision.sh -local --limit=#{server}reposerver.yml"
       when 'db'
         server='mongodb-node'
-        command='sh ./provision.sh --limit=#{server} databaseserver.yml'
+        command="sh ./provision.sh -local --limit=#{server} databaseserver.yml"
       when 'appserver1'
         server='app-server-node-1'
-        command='sh ./provision.sh --limit=#{server} monolitic_appserver.yml'
+        command="sh ./provision.sh -local --limit=#{server} monolitic_appserver.yml"
       when 'appserver2'
         server='app-server-node-2'
-        command='sh ./provision.sh --limit=#{server} monolitic_appserver.yml'
+        command="sh ./provision.sh -local --limit=#{server} monolitic_appserver.yml"
       when 'appserver3'
         server='app-server-node-3'
-        command='sh ./provision.sh --limit=#{server} micro_appserver.yml'
+        command="sh ./provision.sh -local --limit=#{server} micro_appserver.yml"
       when 'appserver4'
         server='app-server-node-4'
-        command='sh ./provision.sh --limit=#{server} micro_appserver.yml'
+        command="sh ./provision.sh -local --limit=#{server} micro_appserver.yml"
 
     msg.send "Reprovisioning host with the latest on Github..."
 
     @exec = require('child_process').exec
-    @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git fetch --all && git reset --hard origin/master && cd vagrant/scripts && #{command}'", (error, stdout, stderr) ->
-      if stdout? && stdout != ''
-        msg.send ":tada: Update done!"
-        setTimeout () ->
-          process.exit(0)
-        , 5 * 1000
+    @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git fetch --all && git reset --hard origin/master && cd vagrant/scripts && #{command} | tee -a /tmp/reprovision.log'", (error, stdout, stderr) ->
+      if ! error
+        msg.send ":tada: Update done! For details have a look in /tmp/reprovision.log for server #{server}"
+      else
+        msg.send ":thunder_cloud_and_rain: Damned, it failed!!! \nLook \n#{stderr}\nFor details have a look on #{server} in /tmp/reprovision.log"

@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -xe
 
 # Refresh local copy if requested
 if [ $1 = "-local" ]; then
