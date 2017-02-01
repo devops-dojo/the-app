@@ -58,8 +58,8 @@ module.exports = (robot) ->
     msg.send "Reprovisioning host with the latest on Github..."
 
     @exec = require('child_process').exec
-    @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git fetch --all && git reset --hard origin/master && cd vagrant/scripts && #{command}'", (error, stdout, stderr) ->
+    @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git fetch --all && git reset --hard origin/master && cd vagrant/scripts && #{command} | tee -a /tmp/reprovision.log'", (error, stdout, stderr) ->
       if ! error
-        msg.send ":tada: Update done!"
+        msg.send ":tada: Update done! For details have a look in /tmp/reprovision.log for server #{server}"
       else
-        msg.send ":thunder_cloud_and_rain: Damned, it failed!!! \nLook \n#{stderr}\nFor details have a look on #{server}"
+        msg.send ":thunder_cloud_and_rain: Damned, it failed!!! \nLook \n#{stderr}\nFor details have a look on #{server} in /tmp/reprovision.log"
