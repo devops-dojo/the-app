@@ -25,6 +25,8 @@ server {
     location / {
       proxy_set_header Host $host;
       proxy_pass http://${variant};
+      add_header Cache-Control no-cache;
+      expires off;
     }
 
     include proxy/shop-routes.conf;
