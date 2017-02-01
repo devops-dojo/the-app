@@ -4,5 +4,5 @@ set -e
 ln -sf /etc/nginx/sites-available/checkout.microservice.io /etc/nginx/sites-enabled/checkout.microservice.io
 
 nginx -t
-
+systemctl daemon-reload
 service nginx restart
