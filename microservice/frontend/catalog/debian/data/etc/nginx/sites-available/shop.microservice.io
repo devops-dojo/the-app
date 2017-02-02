@@ -8,8 +8,8 @@ upstream _Site_B {
 }
 
 split_clients "${time_local}AAA" $variant {
-  50%   _Site_A;
-  50%   _Site_B;
+  80%   _Site_A;
+  20%   _Site_B;
 }
 
 server {
