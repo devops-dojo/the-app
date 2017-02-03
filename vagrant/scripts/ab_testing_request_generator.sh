@@ -30,12 +30,12 @@ function is_version()
 
 let iCount=0
 echo "Shooting 80 requests"
-while [ $iCount -lt 80 ]
+while [ $iCount -lt 500 ]
 do
   data="$(curl -s http://${SERVER}.microservice.io/partials/cart.html)"
   is_version "$data"
   let iCount++
-  sleep 0.5
+  sleep 0.1
 done
 echo "
 done"
