@@ -1,9 +1,14 @@
 ---
+- user:
+  name: dojo
+  comment: "Dojo jumpstation account"
+
 - name: install xfce
   apt: pkg={{item}} state=present force=yes
   with_items:
     - xfce4
     - firefox
+    - chromium-browser
     - vnc4server
     - imagemagick
     - imagemagick-doc
