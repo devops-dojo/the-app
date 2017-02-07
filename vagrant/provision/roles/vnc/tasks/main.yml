@@ -1,7 +1,8 @@
 ---
-- user:
-  name: dojo
-  comment: "Dojo jumpstation account"
+- name: Add dojo user account
+  user:
+    name: dojo
+    comment: "Dojo jumpstation account"
 
 - name: install xfce
   apt: pkg={{item}} state=present force=yes
@@ -15,16 +16,16 @@
 
 - name: install vnc configuration
   sudo: yes
-  sudo_user: jenkins
-  copy: src=.Xauthority dest=/var/lib/jenkins/.Xauthority force=yes mode=700 owner=jenkins
+  sudo_user: dojo
+  copy: src=.Xauthority dest=/home/dojo/.Xauthority force=yes mode=700 owner=dojo
 
 - sudo: yes
-  sudo_user: jenkins
-  command: mkdir /var/lib/jenkins/.vnc/
+  sudo_user: dojo
+  command: mkdir /home/dojo/.vnc/
   ignore_errors: yes
 
 - name: install vnc configuration
-  copy: src={{item}} dest=/var/lib/jenkins/.vnc/{{item}} force=yes mode=700 owner=jenkins
+  copy: src={{item}} dest=/home/dojo/.vnc/{{item}} force=yes mode=700 owner=dojo
   with_items:
       - passwd
       - xstartup
