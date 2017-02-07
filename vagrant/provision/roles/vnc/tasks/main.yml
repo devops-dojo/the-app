@@ -1,10 +1,13 @@
 ---
 - name: Add dojo user account
   user:
-    name: dojo
+    name: "{{item}}"
     comment: "Dojo jumpstation account"
+  with_items:
+    - dojo1
+    - dojo2
 
-- name: install xfce
+- name: install vnc and applications environment
   apt: pkg={{item}} state=present force=yes
   with_items:
     - xfce4
@@ -17,22 +20,59 @@
 
 - name: install vnc configuration
   sudo: yes
-  sudo_user: dojo
-  copy: src=.Xauthority dest=/home/dojo/.Xauthority force=yes mode=700 owner=dojo
+  sudo_user: "{{item}}"
+  copy: src=.Xauthority dest=/home/{{item}}/.Xauthority force=yes mode=700 owner={{item}}
+  with_items:
+    - dojo1
+    - dojo2
 
 - sudo: yes
-  sudo_user: dojo
-  command: mkdir /home/dojo/.vnc/
-  ignore_errors: yes
+  sudo_user: "{{item}}"
+  file:
+    path: "/home/{{item}}/.vnc"
+    state: directory
+    owner: "{{item}}"
+    mode: 0755
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: set vnc password
+  sudo: yes
+  sudo_user: "{{item}}"
+  command: "bash -c 'echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd'"
+  args:
+    creates: /home/{{item}}/.vnc/passwd
+    chdir: /home/{{item}}/.vnc/
+  with_items:
+    - dojo1
+    - dojo2
 
 - name: install vnc configuration
-  copy: src={{item}} dest=/home/dojo/.vnc/{{item}} force=yes mode=700 owner=dojo
+  copy: src=xstartup dest=/home/{{item}}/.vnc/xstartup force=yes mode=700 owner={{item}}
   with_items:
-      - passwd
-      - xstartup
+    - dojo1
+    - dojo2
 
 - name: install vnc init script
-  copy: src=vncserver dest=/etc/init.d/vncserver mode=0755 owner=root
+  template:
+    src: vncserver@.service
+    dest: /etc/systemd/system/vncserver-{{item}}@.service
+    mode: 0644
+    owner: root
+  notify:
+    - restart vnc
+  with_items:
+    - dojo1
+    - dojo2
 
-- name: register vncserver as service
-  raw: sudo update-rc.d vncserver defaults
+- name: Start VNC
+  systemd:
+    state: started
+    enabled: yes
+    name: vncserver-{{item.user}}@{{item.display}}
+  with_items:
+    - user: dojo1
+      display: 1
+    - user: dojo2
+      display: 2
