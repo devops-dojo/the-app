@@ -10,9 +10,10 @@
     - xfce4
     - firefox
     - chromium-browser
-    - vnc4server
-    - imagemagick
-    - imagemagick-doc
+    - xfce4-goodies
+    - tightvncserver
+    - xfonts-base
+    - chromium-browser
 
 - name: install vnc configuration
   sudo: yes
