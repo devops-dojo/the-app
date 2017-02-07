@@ -42,3 +42,5 @@
 
 - sudo: yes
   copy: src=slack_nagios.sh dest=/usr/local/bin/slack_nagios.sh force=yes mode=0755
+
+- raw: sudo a2dissite 000-default

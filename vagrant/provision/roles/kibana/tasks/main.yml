@@ -6,19 +6,43 @@
       - curl
 
 - name: download kibana
-  get_url: url=http://download.elasticsearch.org/kibana/kibana/kibana-{{kibana_version}}.tar.gz dest=/tmp/kibana.tar.gz mode=0755 owner=vagrant
-
-- group: name=www state=present
-- user: name=vagrant shell=/bin/bash groups=www append=yes
-- file: path=/var/www/ owner=vagrant group=www mode=4755 recurse=yes
+  get_url: url=http://artifacts.elastic.co/downloads/kibana/kibana-{{kibana_version}}-linux-x86_64.tar.gz dest=/tmp/kibana.tar.gz mode=0755 owner=vagrant
 
 - name: unarchive kibana
   sudo : yes
   sudo_user: vagrant
   raw: tar -xf /tmp/kibana.tar.gz --directory=/tmp/
 
-- raw: cp -r /tmp/kibana-{{kibana_version}}/* /var/www/html/
-  notify: restart httpd
+- name: create /usr/share/kibana
+  file: path=/usr/share/kibana state=directory owner=root
+
+- raw: cp -r /tmp/kibana-{{kibana_version}}-linux-x86_64/* /usr/share/kibana/
+
+- lineinfile:
+    dest="/usr/share/kibana/config/kibana.yml"
+    regexp="server.host"
+    line="server.host{{':'}} \"monitoring.microservice.io\""
+
+- lineinfile:
+    dest="/usr/share/kibana/config/kibana.yml"
+    regexp="server.port"
+    line="server.port{{':'}} 80"
+- lineinfile:
+    dest="/usr/share/kibana/config/kibana.yml"
+    regexp="logging.dest"
+    line="logging.dest{{':'}} /var/log/kibana.log"
+
+- name: install kibana service
+  copy: src=kibana.service dest=/etc/systemd/system/kibana.service force=true owner=root
+
+#- raw: sudo a2dissite 000-default
+#- raw: sudo service apache2 reload
+
+- systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: kibana
 
 - name: install default dashboard
   copy: src=default.json dest=/var/www/html/app/dashboards/default.json group=www owner=vagrant

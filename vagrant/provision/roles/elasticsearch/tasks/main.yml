@@ -1,20 +1,26 @@
 ---
-- name: install elasticsearch key file
-  apt_key: url=http://packages.elasticsearch.org/GPG-KEY-elasticsearch state=present
+- name: install curl and unzip
+  apt: pkg={{item}} state=present force=yes
+  with_items:
+      - unzip
+      - curl
 
-- name: add elasticsearch repository into sources list.
-  apt_repository: repo='deb http://packages.elasticsearch.org/elasticsearch/{{elasticsearch_version}}/debian stable main' state=present
+- name: download Elastic Search
+  get_url: url=http://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{elasticsearch_version}}.deb dest=/tmp/elasticsearch.deb mode=0755 owner=vagrant
 
-- name: update cache
-  apt: update_cache=yes force=yes
+- raw: sudo dpkg --force-confnew -i /tmp/elasticsearch.deb
 
-- name: install elasticsearch
-  apt: pkg=elasticsearch state=present force=yes
+- systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: elasticsearch
 
-- raw: sudo update-rc.d elasticsearch defaults
-- raw: sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch
-- raw: sudo chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
-
+#- raw: sudo chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
+- name: Tweak JVM memory for elasticsearch
+  lineinfile: dest=/etc/elasticsearch/jvm.options regexp="^-Xms" line="-Xms1g"
+- name: Tweak JVM memory for elasticsearch
+  lineinfile: dest=/etc/elasticsearch/jvm.options regexp="^-Xmx" line="-Xmx1g"
 - name: insert/update elasticsearch configuration block
   blockinfile:
     dest: /etc/elasticsearch/elasticsearch.yml
