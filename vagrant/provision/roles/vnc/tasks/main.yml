@@ -7,6 +7,52 @@
     - dojo1
     - dojo2
 
+- name: "Create jumpstation ssh key to all other servers"
+  command: ssh-keygen -t rsa -b 2048 -f .ssh/id_rsa -q -N ""
+  args:
+    creates: .ssh/id_rsa
+
+- name: Getting private key
+  command: cat .ssh/id_rsa
+  register: id_rsa
+
+- name: create local dojo users .ssh directory
+  sudo: true
+  sudo_user: "{{ item }}"
+  file:
+    path: /home/{{item}}/.ssh
+    mode: 0755
+    state: directory
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Put private key on all dojo users
+  sudo: yes
+  sudo_user: "{{ item }}"
+  lineinfile:
+    dest: /home/{{item}}/.ssh/id_rsa
+    line: "{{ id_rsa.stdout }}"
+    owner: "{{item}}"
+    mode: 0600
+    create: yes
+    state: present
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Getting public key
+  command: cat .ssh/id_rsa.pub
+  register: id_rsa_pub
+
+- name: "Add pub key to authorized_keys"
+  authorized_key:
+    user: "hos"
+    state: present
+    key: "{{ id_rsa_pub.stdout }}"
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames: all
+
 - name: install vnc and applications environment
   apt: pkg={{item}} state=present force=yes
   with_items:
@@ -40,7 +86,7 @@
 - name: set vnc password
   sudo: yes
   sudo_user: "{{item}}"
-  command: "bash -c 'echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd'"
+  shell: echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd
   args:
     creates: /home/{{item}}/.vnc/passwd
     chdir: /home/{{item}}/.vnc/
@@ -76,3 +122,5 @@
       display: 1
     - user: dojo2
       display: 2
+
+
