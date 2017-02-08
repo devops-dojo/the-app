@@ -64,6 +64,22 @@
     - xfonts-base
     - chromium-browser
 
+- name: install user profile for Chrome Firefox and Xfce
+  sudo: yes
+  sudo_user: "{{item}}"
+  unarchive: src=dojo.profile.tgz dest=/home/{{item}} owner={{item}}
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: copy desktop background
+  sudo: yes
+  sudo_user: "{{item}}"
+  copy: src=dojo.jpg dest=/home/{{item}}/Pictures/background/dojo.jpg force=yes mode=700 owner={{item}}
+  with_items:
+    - dojo1
+    - dojo2
+
 - name: install vnc configuration
   sudo: yes
   sudo_user: "{{item}}"
@@ -122,5 +138,3 @@
       display: 1
     - user: dojo2
       display: 2
-
-
