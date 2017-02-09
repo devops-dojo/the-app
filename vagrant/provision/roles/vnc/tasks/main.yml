@@ -1,31 +1,150 @@
 ---
-- name: install xfce
+- name: Add dojo user account
+  user:
+    name: "{{item}}"
+    comment: "Dojo jumpstation account"
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: "Create jumpstation ssh key to all other servers"
+  command: ssh-keygen -t rsa -b 2048 -f .ssh/id_rsa -q -N ""
+  args:
+    creates: .ssh/id_rsa
+
+- name: Getting private key
+  command: cat .ssh/id_rsa
+  register: id_rsa
+
+- name: create local dojo users .ssh directory
+  sudo: true
+  sudo_user: "{{ item }}"
+  file:
+    path: /home/{{item}}/.ssh
+    mode: 0755
+    state: directory
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Put private key on all dojo users
+  sudo: yes
+  sudo_user: "{{ item }}"
+  copy:
+    dest: /home/{{item}}/.ssh/id_rsa
+    content: "{{ id_rsa.stdout }}"
+    owner: "{{item}}"
+    mode: 0600
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Getting public key
+  command: cat .ssh/id_rsa.pub
+  register: id_rsa_pub
+
+- name: "Add pub key to authorized_keys"
+  authorized_key:
+    user: "hos"
+    state: present
+    key: "{{ id_rsa_pub.stdout }}"
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames: all
+
+- name: install vnc and applications environment
   apt: pkg={{item}} state=present force=yes
   with_items:
     - xfce4
     - firefox
-    - vnc4server
-    - imagemagick
-    - imagemagick-doc
+    - chromium-browser
+    - xfce4-goodies
+    - tightvncserver
+    - xfonts-base
+    - chromium-browser
 
-- name: install vnc configuration
+- name: install user profile for Chrome Firefox and Xfce
   sudo: yes
-  sudo_user: jenkins
-  copy: src=.Xauthority dest=/var/lib/jenkins/.Xauthority force=yes mode=700 owner=jenkins
+  sudo_user: "{{item}}"
+  unarchive: src=dojo.profile.tgz dest=/home/{{item}} owner={{item}}
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: create desktop background directory
+  sudo: yes
+  sudo_user: "{{item}}"
+  file:
+    dest: /home/{{item}}/Pictures/background
+    state: directory
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: copy desktop background
+  sudo: yes
+  sudo_user: "{{item}}"
+  copy: src=dojo.jpg dest=/home/{{item}}/Pictures/background/dojo.jpg force=yes mode=700 owner={{item}}
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Configure xfce with background image.
+  template:
+    src: xfce4-desktop.xml
+    dest: /home/{{item}}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+  sudo: yes
+  sudo_user: "{{item}}"
+  with_items:
+    - dojo1
+    - dojo2
 
 - sudo: yes
-  sudo_user: jenkins
-  command: mkdir /var/lib/jenkins/.vnc/
-  ignore_errors: yes
+  sudo_user: "{{item}}"
+  file:
+    path: "/home/{{item}}/.vnc"
+    state: directory
+    owner: "{{item}}"
+    mode: 0755
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: set vnc password
+  sudo: yes
+  sudo_user: "{{item}}"
+  shell: "echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd"
+  args:
+    creates: /home/{{item}}/.vnc/passwd
+    chdir: /home/{{item}}/.vnc/
+  with_items:
+    - dojo1
+    - dojo2
 
 - name: install vnc configuration
-  copy: src={{item}} dest=/var/lib/jenkins/.vnc/{{item}} force=yes mode=700 owner=jenkins
+  copy: src=xstartup dest=/home/{{item}}/.vnc/xstartup force=yes mode=700 owner={{item}}
   with_items:
-      - passwd
-      - xstartup
+    - dojo1
+    - dojo2
 
 - name: install vnc init script
-  copy: src=vncserver dest=/etc/init.d/vncserver mode=0755 owner=root
+  template:
+    src: vncserver@.service
+    dest: /etc/systemd/system/vncserver-{{item}}@.service
+    mode: 0644
+    owner: root
+  notify:
+    - restart vnc
+  with_items:
+    - dojo1
+    - dojo2
 
-- name: register vncserver as service
-  raw: sudo update-rc.d vncserver defaults
+- name: Start VNC
+  systemd:
+    state: started
+    enabled: yes
+    name: vncserver-{{item.user}}@{{item.display}}
+  with_items:
+    - user: dojo1
+      display: 1
+    - user: dojo2
+      display: 2
