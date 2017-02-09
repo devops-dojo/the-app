@@ -30,13 +30,11 @@
 - name: Put private key on all dojo users
   sudo: yes
   sudo_user: "{{ item }}"
-  lineinfile:
+  copy:
     dest: /home/{{item}}/.ssh/id_rsa
-    line: "{{ id_rsa.stdout }}"
+    content: "{{ id_rsa.stdout }}"
     owner: "{{item}}"
     mode: 0600
-    create: yes
-    state: present
   with_items:
     - dojo1
     - dojo2
@@ -68,6 +66,16 @@
   sudo: yes
   sudo_user: "{{item}}"
   unarchive: src=dojo.profile.tgz dest=/home/{{item}} owner={{item}}
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: create desktop background directory
+  sudo: yes
+  sudo_user: "{{item}}"
+  file:
+    dest: /home/{{item}}/Pictures/background
+    state: directory
   with_items:
     - dojo1
     - dojo2
