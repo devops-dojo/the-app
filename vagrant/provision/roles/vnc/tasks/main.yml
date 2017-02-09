@@ -3,6 +3,7 @@
   user:
     name: "{{item}}"
     comment: "Dojo jumpstation account"
+    shell: /bin/bash
   with_items:
     - dojo1
     - dojo2
