@@ -88,14 +88,6 @@
     - dojo1
     - dojo2
 
-- name: install vnc configuration
-  sudo: yes
-  sudo_user: "{{item}}"
-  copy: src=.Xauthority dest=/home/{{item}}/.Xauthority force=yes mode=700 owner={{item}}
-  with_items:
-    - dojo1
-    - dojo2
-
 - sudo: yes
   sudo_user: "{{item}}"
   file:
