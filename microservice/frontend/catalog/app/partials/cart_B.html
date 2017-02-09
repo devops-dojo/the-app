@@ -1,0 +1,47 @@
+<h2>Shopping Cart</h2>
+
+<div class="well">
+    <div class="alert alert-info">
+      <strong>Info!</strong> Pay with Paypal and get free shipping!
+    </div>
+    <table class="table table-striped" ng-controller="CartController">
+        <thead>
+            <tr ng-show="vm.globalDiscount>0">
+                <td colspan="3"><h1>All store {{vm.globalDiscount}}% off</h1></td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th style="text-align: right;">Price</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="cartItem in vm.cartItems track by cartItem.uuid">
+                <td>{{cartItem.product.name}}</td>
+                <td style="text-align: right;">{{cartItem.product.price | currency}}</td>
+                <td style="text-align: right;">
+                    <shop-remove-from-cart uuid="cartItem.uuid" />
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr ng-show="vm.getDiscountSum()>0">
+                <td>You save</td>
+                <td style="text-align: right;" colspan="2">
+                    {{vm.getDiscountSum() | currency}}
+                </td>
+            </tr>
+            <tr>
+                <td>Subtotal</td>
+                <td style="text-align: right;" colspan="2">
+                    {{vm.getTotalSum() | currency}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <a ng-href="{{vm.cartBaseURL}}?cart={{vm.cartId}}" class="btn btn-primary">Proceed to Checkout</a>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

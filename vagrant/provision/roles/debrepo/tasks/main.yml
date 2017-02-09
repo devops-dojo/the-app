@@ -42,9 +42,15 @@
 - copy: src=default dest=/etc/nginx/sites-enabled/default force=yes mode=0644
   notify: restart nginx
 
+- name: Check if ci-repo key exists.
+  stat:
+    path: /var/packages/ci-repo.gpg.key
+  register: st
+
 - sudo: yes
   sudo_user: root
   raw: gpg --armor --output /var/packages/ci-repo.gpg.key --export 18858766
+  when: st.exists is defined and st.exists or st.exists is not defined
 
 - sudo: yes
   sudo_user: root

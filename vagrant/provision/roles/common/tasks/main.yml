@@ -8,7 +8,7 @@
     line="LC_ALL=\"en_US.UTF-8\""
 - authorized_key: # Needed when provisioning outside Vagrant (plain Ansible)
     user: vagrant
-    key: "{{ lookup('file', '/provision/roles/jenkins/files/id_rsa.pub') }}"
+    key: "{{ lookup('file', playbook_dir + '/roles/jenkins/files/id_rsa.pub') }}"
 - name: Add http_proxy for internal hosts
   lineinfile: dest=/etc/environment regexp="^http_proxy" line="http_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}"
   when: with_proxy

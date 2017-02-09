@@ -24,7 +24,8 @@ module.exports = (robot) ->
           mono_host ='app-server-node-1'
 
       if (environment is "pro" && (command is "stop" || command is "restart"))
-        unless robot.auth.hasRole(msg.envelope.user, "ops")
+        user = robot.brain.userForId(msg.envelope.user.id, null)
+        unless robot.auth.hasRole(user, "ops")
           msg.send ":grin: Access denied. You must have 'ops' role to use this command in production"
           return
 
