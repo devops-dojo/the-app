@@ -1,11 +1,11 @@
 <h2>Shopping Cart</h2>
 
 <div class="well">
+    <div class="alert alert-success" ng-show="vm.globalDiscount>0">
+       <strong><span id="discountHeader">Save!</span></strong> <span id="discountPercent">{{vm.globalDiscount}}</span>% off your cart today!
+    </div>
     <table class="table table-striped" ng-controller="CartController">
-        <thead>    
-            <tr ng-show="vm.globalDiscount>0">
-                <td colspan="3"><h1>All store {{vm.globalDiscount}}% off</h1></td>
-            </tr>
+        <thead>
             <tr>
                 <th>Name</th>
                 <th style="text-align: right;">Price</th>
@@ -33,7 +33,7 @@
                 <td style="text-align: right;" colspan="2">
                     {{vm.getTotalSum() | currency}}
                 </td>
-            </tr>          
+            </tr>
             <tr>
                 <td colspan="3">
                     <a ng-href="{{vm.cartBaseURL}}?cart={{vm.cartId}}" class="btn btn-primary">Proceed to Checkout</a>
