@@ -88,6 +88,16 @@
     - dojo1
     - dojo2
 
+- name: Configure xfce with background image.
+  template:
+    src: xfce4-desktop.xml
+    dest: /home/{{item}}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+  sudo: yes
+  sudo_user: "{{item}}"
+  with_items:
+    - dojo1
+    - dojo2
+
 - sudo: yes
   sudo_user: "{{item}}"
   file:
