@@ -110,7 +110,7 @@
 - name: set vnc password
   sudo: yes
   sudo_user: "{{item}}"
-  shell: echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd
+  shell: "echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd"
   args:
     creates: /home/{{item}}/.vnc/passwd
     chdir: /home/{{item}}/.vnc/
