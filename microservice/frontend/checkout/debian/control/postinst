@@ -1,7 +1,11 @@
 #!/bin/sh
 set -e
 
-ln -sf /etc/nginx/sites-available/checkout.microservice.io /etc/nginx/sites-enabled/checkout.microservice.io
+rm -f /etc/nginx/sites-enabled/checkout.microservice.io
+if test "$1" = configure
+then
+   ln -sf /etc/nginx/sites-available/checkout.microservice.io /etc/nginx/sites-enabled/checkout.microservice.io
+fi
 
 nginx -t
 systemctl daemon-reload
