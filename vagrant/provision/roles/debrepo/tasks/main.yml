@@ -50,7 +50,7 @@
 - sudo: yes
   sudo_user: root
   raw: gpg --armor --output /var/packages/ci-repo.gpg.key --export 18858766
-  when: st.exists is defined and st.exists or st.exists is not defined
+  when: (st.stat.exists is defined and st.stat.exists == false) or st.stat.exists is not defined
 
 - sudo: yes
   sudo_user: root
