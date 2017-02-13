@@ -15,6 +15,7 @@
     - logstash
     - microservice-appserver
     - docker
+    - app-haproxy
 
   environment:
     "{{ (with_proxy) | ternary( proxy_env, {}) }}"   # use proxy_env only when with_proxy is true
