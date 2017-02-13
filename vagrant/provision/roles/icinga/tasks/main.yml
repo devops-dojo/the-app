@@ -42,3 +42,6 @@
 
 - sudo: yes
   copy: src=slack_nagios.sh dest=/usr/local/bin/slack_nagios.sh force=yes mode=0755
+
+- sudo: yes
+  template: src=blink_nagios.sh.j2 dest=/usr/local/bin/blink1_nagios.sh force=yes mode=0755

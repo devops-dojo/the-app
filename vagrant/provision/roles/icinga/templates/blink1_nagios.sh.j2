@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# This script is used by Nagios to post alerts to Hubot
+# Then Hubot can decide to notify Slack channels
+#
+# All variables that start with ICINGA_ are provided by Nagios as
+# environment variables when an notification is generated.
+# A list of the env variables is available here:
+#   http://nagios.sourceforge.net/docs/3_0/macrolist.html
+#
+
+#Modify these variables for your environment
+MY_ICINGA_HOSTNAME="monitoring.microservice.io"
+BLINK1_HOOK="http://{{ raspi_blink1_server_ip }}:{{ raspi_blink1_server_port }}/blink1/fadeToRGB"
+
+#Set the message icon based on Nagios service state
+if [ "$ICINGA_SERVICESTATE" = "CRITICAL" ]
+then
+    ICON=":exclamation:"
+    COLOR="%23D5573B"
+elif [ "$ICINGA_SERVICESTATE" = "WARNING" ]
+then
+    ICON=":warning:"
+    COLOR="%23FFB20F"
+elif [ "$ICINGA_SERVICESTATE" = "OK" ]
+then
+    ICON=":white_check_mark:"
+    COLOR="%2378BC61"
+elif [ "$ICINGA_SERVICESTATE" = "UNKNOWN" ]
+then
+    ICON=":question:"
+    COLOR="%232E86AB"
+else
+    ICON=":white_medium_square:"
+    COLOR="%232E86AB"
+fi
+
+#Send message to Blink1 mini server on Rapberry Pi
+curl ${BLINK1_HOOK}?rgb=${COLOR}&time=1.0                                              

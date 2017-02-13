@@ -19,3 +19,10 @@ no_proxy: localhost,127.0.0.1,.hpecorp.net,ci-repo,monitoring-node,app-server-no
 proxy_env:
   http_proxy: "http://{{http_proxy_host}}:{{http_proxy_port}}"
   no_proxy: "{{no_proxy}}"
+
+# locate paspberryPi with Blink1 code
+# Fill in the located IP here and reprovision icinga
+# use this command  on the monitoringserver (elasticsearch) 
+#         sh ./provision.sh --limit=monitoring-node monitoringserver.yml
+raspi_blink1_server_ip: 16.22.89.101
+raspi_blink1_server_port: 8080
