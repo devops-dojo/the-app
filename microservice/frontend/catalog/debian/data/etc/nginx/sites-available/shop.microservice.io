@@ -13,7 +13,17 @@ split_clients "${time_local}AAA" $variant {
 }
 
 server {
-    listen   80; ## listen for ipv4; this line is default and implied
+    listen 80;
+
+    server_name shop.microservice.io;
+
+    location / {
+      proxy_pass http://shop.microservice.io:8080/;
+    }
+}
+
+server {
+    listen   8081; ## listen for ipv4; this line is default and implied
     #listen   [::]:80 default ipv6only=on; ## listen for ipv6
 
     root /usr/share/shop/frontend/catalog/html;
