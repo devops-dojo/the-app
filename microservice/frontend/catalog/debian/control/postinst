@@ -4,14 +4,30 @@ set -e
 chown -R www-data:www-data /usr/share/shop/frontend/catalog/html
 chown -R www-data:www-data /usr/share/shop/frontend/catalog_b/html
 chmod 755 /usr/share/shop/frontend/catalog/
-ln -sf /etc/nginx/sites-available/shop.microservice.io /etc/nginx/sites-enabled/shop.microservice.io
-ln -sf /etc/nginx/sites-available/shop.microservice.io.1 /etc/nginx/sites-enabled/shop.microservice.io.1
-ln -sf /etc/nginx/sites-available/shop.microservice.io.2 /etc/nginx/sites-enabled/shop.microservice.io.2
-ln -sf /etc/nginx/sites-available/test-shop.microservice.io /etc/nginx/sites-enabled/test-shop.microservice.io
-ln -sf /etc/nginx/sites-available/test-shop.microservice.io.1 /etc/nginx/sites-enabled/test-shop.microservice.io.1
-ln -sf /etc/nginx/sites-available/test-shop.microservice.io.2 /etc/nginx/sites-enabled/test-shop.microservice.io.2
-
-find /usr/share/shop/frontend/catalog_b/html -name "*_B*" -type f -exec bash -c 'mv -v "{}" $(echo "{}" | sed "s/_B//g")' \;
+echo "cleanup services..."
+rm -f /etc/nginx/sites-enabled/*shop.microservice.io*
+if test "$1" = configure
+then
+  if test -f /etc/server_role && test "`cat /etc/server_role`" = production
+  then
+     echo "Setting production service"
+     ln -sf /etc/nginx/sites-available/shop.microservice.io /etc/nginx/sites-enabled/shop.microservice.io
+     ln -sf /etc/nginx/sites-available/shop.microservice.io.1 /etc/nginx/sites-enabled/shop.microservice.io.1
+     ln -sf /etc/nginx/sites-available/shop.microservice.io.2 /etc/nginx/sites-enabled/shop.microservice.io.2
+  else
+     echo "Setting test service"
+     ln -sf /etc/nginx/sites-available/test-shop.microservice.io /etc/nginx/sites-enabled/test-shop.microservice.io
+     ln -sf /etc/nginx/sites-available/test-shop.microservice.io.1 /etc/nginx/sites-enabled/test-shop.microservice.io.1
+     ln -sf /etc/nginx/sites-available/test-shop.microservice.io.2 /etc/nginx/sites-enabled/test-shop.microservice.io.2
+  fi
+fi
+if test `find /usr/share/shop/frontend/catalog_b/html -name "*_B*" -type f | wc -l` -ne 0
+then
+   echo "Activating AB-testing rate."
+   find /usr/share/shop/frontend/catalog_b/html -name "*_B*" -type f -exec bash -c 'mv -v "{}" $(echo "{}" | sed "s/_B//g")' \;
+   sed -i 's/[0-9]*[0-9]\(%.*_Site_A\)/80\1/g' /etc/nginx/sites-available/*microservice.io
+   sed -i 's/[0-9]*[0-9]\(%.*_Site_B\)/20\1/g' /etc/nginx/sites-available/*microservice.io
+fi
 
 nginx -t
 systemctl daemon-reload
