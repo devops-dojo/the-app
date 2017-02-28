@@ -173,12 +173,14 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView[2]/jobNames/comparator"/>
         <string>shop-microservice-cart-service-build</string>
+        <string>shop-microservice-catalog-ui-build</string>
         <string>shop-microservice-checkout-ui-build</string>
         <string>shop-microservice-dataloader-build</string>
         <string>shop-microservice-navigation-service-build</string>
         <string>shop-microservice-product-service-build</string>
-        <string>shop-microservice-production-deployment</string>
         <string>shop-microservice-registration-ui-build</string>
+        <string>shop-microservice-test-deployment</string>
+        <string>shop-microservice-production-deployment</string>
       </jobNames>
       <jobFilters/>
       <columns>
