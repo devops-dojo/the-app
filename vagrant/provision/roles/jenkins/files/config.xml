@@ -274,9 +274,13 @@
         <default>
           <comparator class="hudson.util.CaseInsensitiveComparator"/>
         </default>
-        <int>1</int>
+        <!-- BEGIN ANSIBLE MANAGED BLOCK -->
+        <int>2</int>
         <string>BRANCH_TO_BUILD</string>
         <string>refs/tags/v1.0</string>
+        <string>GIT_REPOSITORY</string>
+        <string>https://github.com/devops-dojo/the-app.git</string>
+        <!-- END ANSIBLE MANAGED BLOCK -->
       </tree-map>
     </envVars>
   </hudson.slaves.EnvironmentVariablesNodeProperty>
