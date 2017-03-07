@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 
 # Refresh local copy if requested
-if [ $1 = "-local" ]; then
+if [ $1 = "--local" ]; then
   if [ ! -d "~/the-app" ]; then
     git clone https://github.com/devops-dojo/the-app.git ~/the-app
   fi
@@ -14,7 +14,7 @@ if [ $1 = "-local" ]; then
   shift
 fi
 
-# This directory is synced by vagrant
+# This directory is synced by vagrant or copied with above code
 cd /provision
 ls -alrt
 

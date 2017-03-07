@@ -32,28 +32,28 @@ module.exports = (robot) ->
     switch host
       when 'monitoring'
         server='monitoring-node'
-        command="sh ./provision.sh -local --limit=#{server} monitoringserver.yml"
+        command="sh ./provision.sh --local --limit=#{server} monitoringserver.yml"
       when 'cinode'
         server='ci-node'
-        command="sh ./provision.sh -local --limit=#{server} buildserver.yml"
+        command="sh ./provision.sh --local --limit=#{server} buildserver.yml"
       when 'cirepo'
         server='ci-repo'
-        command="sh ./provision.sh -local --limit=#{server}reposerver.yml"
+        command="sh ./provision.sh --local --limit=#{server}reposerver.yml"
       when 'db'
         server='mongodb-node'
-        command="sh ./provision.sh -local --limit=#{server} databaseserver.yml"
+        command="sh ./provision.sh --local --limit=#{server} databaseserver.yml"
       when 'appserver1'
         server='app-server-node-1'
-        command="sh ./provision.sh -local --limit=#{server} monolitic_appserver.yml"
+        command="sh ./provision.sh --local --limit=#{server} monolitic_appserver.yml"
       when 'appserver2'
         server='app-server-node-2'
-        command="sh ./provision.sh -local --limit=#{server} monolitic_appserver.yml"
+        command="sh ./provision.sh --local --limit=#{server} monolitic_appserver.yml"
       when 'appserver3'
         server='app-server-node-3'
-        command="sh ./provision.sh -local --limit=#{server} micro_appserver.yml"
+        command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
       when 'appserver4'
         server='app-server-node-4'
-        command="sh ./provision.sh -local --limit=#{server} micro_appserver.yml"
+        command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
 
     msg.send "Reprovisioning host with the latest on Github..."
 
