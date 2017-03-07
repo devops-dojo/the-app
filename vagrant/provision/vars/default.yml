@@ -1,12 +1,17 @@
 ---
+# Tool versions
 logstash_version : 1.4
 elasticsearch_version : 1.1
 kibana_version : 3.1.2
 
-
 oracle_java_download_url : http://download.oracle.com/otn-pub/java/jdk/8u25-b17/jdk-8u25-linux-x64.tar.gz
 oracle_java_zip_file : /tmp/jdk-8u25-linux-x64.tar.gz
 oracle_java_folder : jdk1.8.0_25
+
+# Branch / tag used when checking out the-app code and/or provisioning
+github_branch: "refs/tags/v1.0"
+# Github location of the project
+github_url: "https://github.com/devops-dojo/the-app.git"
 
 nodejs_npm_registry : http://registry.npmjs.org/
 
@@ -22,7 +27,7 @@ proxy_env:
 
 # locate paspberryPi with Blink1 code
 # Fill in the located IP here and reprovision icinga
-# use this command  on the monitoringserver (elasticsearch) 
+# use this command  on the monitoringserver (elasticsearch)
 #         sh ./provision.sh --limit=monitoring-node monitoringserver.yml
 raspi_blink1_server_ip: 16.22.89.101
 raspi_blink1_server_port: 8080

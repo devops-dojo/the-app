@@ -231,6 +231,16 @@
   raw: 'sh /provision/roles/jenkins/files/restoreAllJobs.sh'
   ignore_errors: yes
 
+- name: Tune branch to use for builds - global Jenkins property
+  sudo: yes
+  sudo_user: jenkins
+  blockinfile:
+    dest: /var/lib/jenkins/config.xml
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    insertafter: "<string>BRANCH_TO_BUILD</string>"
+    content: |
+      <string>{{github_branch}}</string>
+
 - file: path=/var/lib/jenkins/.ssh/ mode=0755 owner=jenkins group=jenkins state=directory
 - file: path=/var/lib/jenkins/.ssh/known_hosts mode=0755 owner=jenkins group=jenkins state=touch
 - copy: src=id_rsa.pub dest=/var/lib/jenkins/.ssh/id_rsa.pub mode=600 group=jenkins owner=jenkins

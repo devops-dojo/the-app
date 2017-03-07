@@ -266,5 +266,19 @@
   <slaveAgentPort>0</slaveAgentPort>
   <label></label>
   <nodeProperties/>
-  <globalNodeProperties/>
+  <globalNodeProperties>
+  <hudson.slaves.EnvironmentVariablesNodeProperty>
+    <envVars serialization="custom">
+      <unserializable-parents/>
+      <tree-map>
+        <default>
+          <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        </default>
+        <int>1</int>
+        <string>BRANCH_TO_BUILD</string>
+        <string>refs/tags/v1.0</string>
+      </tree-map>
+    </envVars>
+  </hudson.slaves.EnvironmentVariablesNodeProperty>
+</globalNodeProperties>
 </hudson>
