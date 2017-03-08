@@ -5,8 +5,8 @@
 
 jenkins_repo_key_url: "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
 jenkins_repo_url: "deb http://pkg.jenkins-ci.org/debian binary/"
-jenkins_pkg_url: "http://pkg.jenkins-ci.org/debian/binary"
-jenkins_version: "1.644" # Force install of 1.644
+jenkins_pkg_url: "http://ftp-nyc.osuosl.org/pub/jenkins/debian-stable"
+jenkins_version: "1.651.3" # Force install of 1.651.3 stable
 jenkins_connection_delay: 5
 jenkins_connection_retries: 60
 jenkins_home: /var/lib/jenkins

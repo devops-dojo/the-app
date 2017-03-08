@@ -19,7 +19,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>master</name>
+        <name>${BRANCH_TO_BUILD}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -46,4 +46,3 @@
   <publishers/>
   <buildWrappers/>
 </project>
-

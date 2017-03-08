@@ -114,10 +114,10 @@ sh ./provision.sh --limit=app-server-node-4 micro_appserver.yml
 sh ./provision.sh --limit=ci-node buildserver.yml
 ```
 
-NOTE: to refresh the install with the latest on github, run `provision.sh` with `--refresh` argument, like so:
+NOTE: to refresh the install with the latest on github, run `provision.sh` with `--local` argument, like so:
 
 ```
-sh ./provision.sh --refresh --limit=ci-node buildserver.yml
+sh ./provision.sh --local --limit=ci-node buildserver.yml
 ```
 
 * Once everything is done (:coffee:), wait for the [Jenkins jobs](http://ci-node:8080) to complete

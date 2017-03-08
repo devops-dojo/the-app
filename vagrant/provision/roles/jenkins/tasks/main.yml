@@ -217,11 +217,13 @@
 
 - file: dest=/var/lib/jenkins/repo-cache/appstash mode=755 owner=jenkins group=jenkins state=directory
 
-- sudo: yes
+- name: get GIT repository
+  sudo: yes
   sudo_user: jenkins
-  git: repo=https://github.com/devops-dojo/the-app.git dest=/var/lib/jenkins/repo-cache/appstash bare=yes
+  git: repo={{github_url}} dest=/var/lib/jenkins/repo-cache/appstash bare=yes
 
-- sudo: yes
+- name: Setup cron job to update GIT repository automatically
+  sudo: yes
   sudo_user: jenkins
   cron: name="Update AppStash Git Repository" minute="*/60" job="cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
 
@@ -230,6 +232,19 @@
   sudo_user: jenkins
   raw: 'sh /provision/roles/jenkins/files/restoreAllJobs.sh'
   ignore_errors: yes
+
+- name: Tune GIT repository and branch per global variable
+  sudo: yes
+  sudo_user: jenkins
+  blockinfile:
+    dest: /var/lib/jenkins/config.xml
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    block: |
+      <int>2</int>
+      <string>GIT_REPOSITORY</string>
+      <string>{{github_url}}</string>
+      <string>BRANCH_TO_BUILD</string>
+      <string>{{github_branch}}</string>
 
 - file: path=/var/lib/jenkins/.ssh/ mode=0755 owner=jenkins group=jenkins state=directory
 - file: path=/var/lib/jenkins/.ssh/known_hosts mode=0755 owner=jenkins group=jenkins state=touch
@@ -241,6 +256,7 @@
   sudo_user: jenkins
   command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{item}}'
   with_items:
+    - shop-monolitic-build
     - shop-monolitic-build
     - shop-microservice-product-service-build
     - shop-microservice-cart-service-build

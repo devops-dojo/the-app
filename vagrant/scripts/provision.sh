@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 
-# Refresh local copy if requested
-if [ $1 = "-local" ]; then
+# Local provisioning mode (host is Ansible controller)
+if [ $1 = "--local" ]; then
   if [ ! -d "~/the-app" ]; then
     git clone https://github.com/devops-dojo/the-app.git ~/the-app
   fi
@@ -10,11 +10,14 @@ if [ $1 = "-local" ]; then
   # Force reset local GIT repo to match Github
   git fetch --all
   git reset --hard origin/master
+  # Stick to branch in vars/default.yml
+  github_branch=`awk '/github_branch/ {printf "%s",$2;exit}' vagrant/provision/vars/default.yml`
+  git checkout ${github_branch}
   sudo rsync -aHAXvh --update vagrant/provision /
   shift
 fi
 
-# This directory is synced by vagrant
+# This directory is synced by vagrant or copied with above code
 cd /provision
 ls -alrt
 
