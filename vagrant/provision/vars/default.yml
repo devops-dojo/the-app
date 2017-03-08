@@ -13,6 +13,9 @@ github_branch: "refs/tags/v1.0"
 # Github location of the project
 github_url: "https://github.com/devops-dojo/the-app.git"
 
+# Hubot adapter: slack or flowdock
+hubot_adapter: flowdock
+
 nodejs_npm_registry : http://registry.npmjs.org/
 
 # Comment this section when pipeline does NOT run behind web proxy

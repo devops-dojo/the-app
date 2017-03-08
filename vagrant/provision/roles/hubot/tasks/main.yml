@@ -21,6 +21,19 @@
       export https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
   when: with_proxy
 
+- name: Setup Hubot adapter
+  lineinfile:
+    dest: /home/hubot/ninjabot/.env.template
+    regexp: '^export HUBOT_ADAPTER='
+    line: 'export HUBOT_ADAPTER={{hubot_adapter}}'
+
+- name: Use rich text in pubsub when slack adapter
+  lineinfile:
+    dest: /home/hubot/ninjabot/.env.template
+    regexp: '^export HUBOT_PUBSUB_DATA_AS_JSON='
+    line: 'export HUBOT_PUBSUB_DATA_AS_JSON=true'
+  when: hubot_adapter == "slack"
+
 - name: Configure npm registry for Hubot user if proxy set
   shell: npm config set registry {{ nodejs_npm_registry }}
   become: true
