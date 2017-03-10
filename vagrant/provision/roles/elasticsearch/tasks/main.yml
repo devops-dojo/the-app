@@ -22,4 +22,10 @@
       http.cors.enabled: true
       http.cors.allow-origin: http://monitoring.microservice.io
 
+- name: Setup unique elasticsearch cluster name
+  lineinfile:
+    dest: /etc/elasticsearch/elasticsearch.yml
+    regexp: '#cluster.name:\ elasticsearch'
+    line: 'cluster.name: "{{ 100 | random | to_uuid }}"'
+
 - raw: sudo service elasticsearch restart
