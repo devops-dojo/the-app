@@ -30,7 +30,7 @@
 - name: Use rich text in pubsub when slack adapter
   lineinfile:
     dest: /home/hubot/ninjabot/.env.template
-    regexp: '^export HUBOT_PUBSUB_DATA_AS_JSON='
+    regexp: '^#export HUBOT_PUBSUB_DATA_AS_JSON='
     line: 'export HUBOT_PUBSUB_DATA_AS_JSON=true'
   when: hubot_adapter == "slack"
 
@@ -50,6 +50,8 @@
   file: path=/home/hubot/.ssh state=directory owner=hubot
 
 - copy: src=id_rsa dest=/home/hubot/.ssh/id_rsa mode=600 group=hubot owner=hubot
+
+- copy: src=ssh_config dest=/home/hubot/.ssh/config mode=664 group=hubot owner=hubot
 
 - name: install hubot service
   copy: src=hubot.service dest=/etc/systemd/system/hubot.service force=true owner=root
