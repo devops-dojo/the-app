@@ -41,11 +41,11 @@
   notify: restart icinga
 
 - sudo: yes
-  copy: src=slack_nagios.sh dest=/usr/local/bin/slack_nagios.sh force=yes mode=0755
+  copy: src=hubot_nagios.sh dest=/usr/local/bin/hubot_nagios.sh force=yes mode=0755
 
 - name: Setup Hubot adapter
   lineinfile:
-    dest: /usr/local/bin/slack_nagios.sh
+    dest: /usr/local/bin/hubot_nagios.sh
     regexp: '^HUBOT_ADAPTER='
     line: 'HUBOT_ADAPTER={{hubot_adapter}}'
 

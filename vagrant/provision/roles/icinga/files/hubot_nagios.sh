@@ -50,8 +50,6 @@ then
   '}"}' \
   ${HUBOT_HOOK}
 else
-  curl -H "Content-Type: application/json" -X POST -d '{"event":"nagios","data":"' ${ICON} ${ICINGA_SERVICEDISPLAYNAME} \
-  ' is in ${ICINGA_SERVICESTATE} condition. More details <http://monitoring.microservice.io/cgi-bin/icinga/status.cgi?host=${ICINGA_HOSTNAME}>' \
-  '}' \
+  curl -H "Content-Type: application/json" -X POST -d '{"event":"nagios","data":"'"${ICON} ${ICINGA_SERVICEDISPLAYNAME}"' is in '"${ICINGA_SERVICESTATE}"' condition. More details <http://monitoring.microservice.io/cgi-bin/icinga/status.cgi?host='"${ICINGA_HOSTNAME}"'>" }' \
   ${HUBOT_HOOK}
 fi
