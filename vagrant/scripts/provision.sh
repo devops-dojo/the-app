@@ -10,10 +10,17 @@ if [ $1 = "--local" ]; then
   # Force reset local GIT repo to match Github
   git fetch --all
   git reset --hard origin/master
+
+  # Exclude global variables from rsync, but create if it doesn't exist
+  if [ ! -f "/provision/vars/default.yml" ]; then
+    cp vagrant/provision/vars/default.yml /provision/vars/default.yml
+  fi
+
   # Stick to branch in vars/default.yml
-  github_branch=`awk '/github_branch/ {printf "%s",$2;exit}' vagrant/provision/vars/default.yml`
+  github_branch=`awk '/github_branch/ {printf "%s",$2;exit}' /provision/vars/default.yml`
   git checkout ${github_branch}
-  sudo rsync -aHAXvh --update vagrant/provision /
+
+  sudo rsync -aHAXvh --update --exclude 'vagrant/provision/vars/default.yml' vagrant/provision /
   shift
 fi
 
