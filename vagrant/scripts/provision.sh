@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash -x
 
 # Local provisioning mode (host is Ansible controller)
 if [ $1 = "--local" ]; then
