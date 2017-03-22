@@ -9,7 +9,7 @@ oracle_java_zip_file : /tmp/jdk-8u25-linux-x64.tar.gz
 oracle_java_folder : jdk1.8.0_25
 
 # Branch / tag used when checking out the-app code and/or provisioning
-github_branch: "refs/tags/v1.0"
+github_branch: refs/tags/v1.0
 # Github location of the project
 github_url: "https://github.com/devops-dojo/the-app.git"
 
