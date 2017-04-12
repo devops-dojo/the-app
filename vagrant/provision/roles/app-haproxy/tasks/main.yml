@@ -1,4 +1,4 @@
 ---
 - name: Starting haproxy setup
   include: master.yml
-  when: hostname == "app-server-node-4"
+  when: inventory_hostname == "app-server-node-4"

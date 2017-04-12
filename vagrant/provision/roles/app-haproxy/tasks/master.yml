@@ -4,7 +4,7 @@
     dest: /etc/haproxy
 
 - name: Identifying LB nodes
-  shell: 'grep "app-server-node-[45]\( .*\|\)$" /etc/hosts'
+  shell: 'grep "app-server-node-[45]" /etc/hosts'
   register: lb_nodes
 
 - name: set haproxy.cfg
