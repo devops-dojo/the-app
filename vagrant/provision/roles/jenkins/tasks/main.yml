@@ -143,6 +143,22 @@
     - org.jenkins.ci.plugins.xframe_filter.XFrameFilterPageDecorator.xml
   notify: restart jenkins
 
+- name: Tune GIT repository and branch per global variable
+  sudo: yes
+  sudo_user: jenkins
+  blockinfile:
+    dest: /var/lib/jenkins/config.xml
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK JENKINS VAR -->"
+    insertbefore: "</tree-map>"
+    block: |
+      <int>3</int>
+      <string>GIT_REPOSITORY</string>
+      <string>{{github_url}}</string>
+      <string>BRANCH_TO_BUILD</string>
+      <string>{{github_branch}}</string>
+      <string>PROD_SERVERS</string>
+      <string>{{prod_servers}}</string>
+
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
 
@@ -233,21 +249,6 @@
   sudo_user: jenkins
   raw: 'sh /provision/roles/jenkins/files/restoreAllJobs.sh'
   ignore_errors: yes
-
-- name: Tune GIT repository and branch per global variable
-  sudo: yes
-  sudo_user: jenkins
-  blockinfile:
-    dest: /var/lib/jenkins/config.xml
-    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
-    block: |
-      <int>3</int>
-      <string>GIT_REPOSITORY</string>
-      <string>{{github_url}}</string>
-      <string>BRANCH_TO_BUILD</string>
-      <string>{{github_branch}}</string>
-      <string>PROD_SERVERS</string>
-      <string>{{prod_servers}}</string>
 
 - file: path=/var/lib/jenkins/.ssh/ mode=0755 owner=jenkins group=jenkins state=directory
 - file: path=/var/lib/jenkins/.ssh/known_hosts mode=0755 owner=jenkins group=jenkins state=touch
