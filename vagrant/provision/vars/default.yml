@@ -12,6 +12,8 @@ oracle_java_folder : jdk1.8.0_25
 github_branch: refs/tags/v1.0
 # Github location of the project
 github_url: "https://github.com/devops-dojo/the-app.git"
+# List of microservice production servers (for elastic scaling)
+prod_servers: "app-server-node-4 app-server-node-5"
 
 # Hubot adapter: slack or flowdock
 hubot_adapter: flowdock

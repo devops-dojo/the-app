@@ -200,12 +200,13 @@
       - performance
       - jacoco
       - sonar
-      - buildgraph-view
+      - http://mirrors.jenkins-ci.org/plugins/buildgraph-view/1.5.2/buildgraph-view.hpi
       - xvfb
       - ws-cleanup
       - xframe-filter-plugin
       - htmlpublisher
   notify: restart jenkins
+  ignore_errors: True
 
 - name: restart jenkins
   sudo: yes
@@ -240,11 +241,13 @@
     dest: /var/lib/jenkins/config.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
     block: |
-      <int>2</int>
+      <int>3</int>
       <string>GIT_REPOSITORY</string>
       <string>{{github_url}}</string>
       <string>BRANCH_TO_BUILD</string>
       <string>{{github_branch}}</string>
+      <string>PROD_SERVERS</string>
+      <string>{{prod_servers}}</string>
 
 - file: path=/var/lib/jenkins/.ssh/ mode=0755 owner=jenkins group=jenkins state=directory
 - file: path=/var/lib/jenkins/.ssh/known_hosts mode=0755 owner=jenkins group=jenkins state=touch
