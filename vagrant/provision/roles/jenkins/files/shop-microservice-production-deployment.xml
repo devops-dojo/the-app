@@ -32,7 +32,8 @@
       <command/>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>ssh vagrant@app-server-node-4 -o StrictHostKeyChecking=no -v &lt;&lt;EOF
+      <command>for HOST in $PROD_SERVERS; 
+do ssh vagrant@$HOST -o StrictHostKeyChecking=no -v <<EOF
 sudo su
 apt-get update
 ROLE_FLAG_FILE=/etc/server_role
@@ -68,7 +69,9 @@ apt-get -y install shop-checkout-frontend
 apt-get -y install shop-product-service
 apt-get -y install shop-navigation-service
 apt-get -y install shop-cart-service
-EOF</command>
+EOF
+done
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

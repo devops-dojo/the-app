@@ -21,6 +21,7 @@ ff02::2 ip6-allrouters
 10.211.55.104   shop.microservice.io
 10.211.55.104   checkout.microservice.io
 10.211.55.104   registration.microservice.io
+10.211.55.105   app-server-node-5
 10.211.55.200   ci-node
 10.211.55.200   ci.microservice.io
 10.211.55.201   ci-repo
