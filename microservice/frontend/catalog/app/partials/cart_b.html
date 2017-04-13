@@ -1,11 +1,14 @@
 <h2>Shopping Cart</h2>
 
 <div class="well">
-    <div class="alert alert-success" ng-show="vm.globalDiscount>0">
-       <strong><span id="discountHeader">Save!</span></strong> <span id="discountPercent">{{vm.globalDiscount}}</span>% off your cart today!
+    <div class="alert alert-info">
+      <strong>Info!</strong> Pay with Paypal and get free shipping!
     </div>
     <table class="table table-striped" ng-controller="CartController">
         <thead>
+            <tr ng-show="vm.globalDiscount>0">
+                <td colspan="3"><h1>All store {{vm.globalDiscount}}% off</h1></td>
+            </tr>
             <tr>
                 <th>Name</th>
                 <th style="text-align: right;">Price</th>
