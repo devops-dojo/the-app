@@ -1,10 +1,17 @@
 #!/bin/sh
 set -e
 
-rm -f /etc/nginx/sites-enabled/checkout.microservice.io
+rm -f /etc/nginx/sites-enabled/*checkout.microservice.io*
 if test "$1" = configure
 then
-   ln -sf /etc/nginx/sites-available/checkout.microservice.io /etc/nginx/sites-enabled/checkout.microservice.io
+  if test -f /etc/server_role && test "`cat /etc/server_role`" = production
+  then
+    echo "Setting production service"
+    ln -sf /etc/nginx/sites-available/checkout.microservice.io /etc/nginx/sites-enabled/checkout.microservice.io
+  else
+    echo "Setting test service"
+    ln -sf /etc/nginx/sites-available/test-checkout.microservice.io /etc/nginx/sites-enabled/test-checkout.microservice.io
+  fi
 fi
 
 nginx -t
