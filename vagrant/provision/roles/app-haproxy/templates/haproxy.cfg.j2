@@ -60,7 +60,7 @@ defaults
 # main frontend which proxys to the backends
 #---------------------------------------------------------------------
 frontend  main
-    bind *:8080
+    bind *:80
 
     default_backend  app
 
@@ -69,6 +69,13 @@ frontend  main
 #---------------------------------------------------------------------
 backend app
     balance roundrobin
+    option forwardfor
+    http-request set-header X-Forwarded-Port %[dst_port]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+
+    option httpchk GET /status.txt
+    http-check expect string AVAILABLE
+
 {% for node in lb_nodes.stdout_lines %}
     server  app{{ node.split()[1] | replace("app-server-node-", "") }} {{ node.split()[1] }}:8081 check
 {% endfor %}
