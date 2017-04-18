@@ -30,7 +30,7 @@ then
    sed -i 's/[0-9]*[0-9]\(%.*_Site_B\)/20\1/g' /etc/nginx/sites-available/*microservice.io
 fi
 # Install with status "AVAILABLE" for haproxy check by default
-if test -f /usr/share/shop/frontend/catalog/html/status.txt
+if test ! -f /usr/share/shop/frontend/catalog/html/status.txt
 then
   echo "AVAILABLE" > /usr/share/shop/frontend/catalog/html/status.txt
   chown www-data:www-data /usr/share/shop/frontend/catalog/html/status.txt
