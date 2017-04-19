@@ -6,10 +6,10 @@
   apt_repository: repo='deb http://packages.elasticsearch.org/elasticsearch/{{elasticsearch_version}}/debian stable main' state=present
 
 - name: update cache
-  apt: update_cache=yes force=yes
+  apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install elasticsearch
-  apt: pkg=elasticsearch state=present force=yes
+  apt: pkg=elasticsearch state=present force=yes cache_valid_time=3600
 
 - raw: sudo update-rc.d elasticsearch defaults
 - raw: sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch

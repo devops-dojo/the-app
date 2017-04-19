@@ -1,5 +1,5 @@
 - name: Install python-pycurl and python-apt
-  apt: pkg={{ item }} update_cache=yes state=present
+  apt: pkg={{ item }} update_cache=yes state=present cache_valid_time=3600
   with_items:
    - python-pycurl
    - python-apt
@@ -11,7 +11,7 @@
   apt_key: url="http://packages.elasticsearch.org/GPG-KEY-elasticsearch" state=present
 
 - name: Install Logstash from repository
-  apt: pkg={{item}} update_cache=yes state=present allow_unauthenticated=yes
+  apt: pkg={{item}} update_cache=yes state=present allow_unauthenticated=yes cache_valid_time=3600
   with_items:
    - logstash
    - logstash-contrib

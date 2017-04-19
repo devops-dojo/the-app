@@ -6,7 +6,7 @@
     filename: 'docker'
 
 - name: update cache
-  apt: update_cache=yes force=yes
+  apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install docker
   apt: pkg={{item}} state=present force=yes

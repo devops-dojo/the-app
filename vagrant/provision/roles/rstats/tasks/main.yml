@@ -6,10 +6,10 @@
   apt_repository: repo='deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' state=present
 
 - name: update cache
-  apt: update_cache=yes force=yes
+  apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install rstats
-  apt: pkg={{item}} state=present force=yes
+  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
   with_items:
     - r-base
     - r-recommended

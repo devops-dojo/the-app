@@ -1,6 +1,6 @@
 ---
 - name: install python-software-properties
-  apt: pkg=python-software-properties state=present force=yes
+  apt: pkg=python-software-properties state=present force=yes cache_valid_time=3600
 
 - name: install node key file
   apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
@@ -9,10 +9,10 @@
   apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present
 
 - name: update cache
-  apt: update_cache=yes force=yes
+  apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install pre-requisites
-  apt: pkg={{item}} state=present force=yes
+  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
   with_items:
     - docker.io
     - golang
@@ -213,7 +213,7 @@
       - build-pipeline-plugin
       - delivery-pipeline-plugin
       - copyartifact
-      - performance
+      - http://mirrors.jenkins-ci.org/plugins/performance/2.1/performance.hpi
       - jacoco
       - sonar
       - http://mirrors.jenkins-ci.org/plugins/buildgraph-view/1.5.2/buildgraph-view.hpi
