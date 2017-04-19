@@ -1,0 +1,10 @@
+---
+- name: install haproxy
+  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
+  with_items:
+      - haproxy
+
+- name: Starting haproxy setup
+  include: master.yml
+  when: (inventory_hostname == "app-server-node-3") or
+        (inventory_hostname == "app-server-node-4")
