@@ -60,11 +60,7 @@
     <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.25">
       <patterns>
         <hudson.plugins.ws__cleanup.Pattern>
-          <pattern>**/bower_components/</pattern>
-          <type>EXCLUDE</type>
-        </hudson.plugins.ws__cleanup.Pattern>
-        <hudson.plugins.ws__cleanup.Pattern>
-          <pattern>**/node_modules/</pattern>
+          <pattern>**/.git/**</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
         <hudson.plugins.ws__cleanup.Pattern>
@@ -72,7 +68,15 @@
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
         <hudson.plugins.ws__cleanup.Pattern>
-          <pattern>.git/</pattern>
+          <pattern>**/bower_components/**</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>**/node_modules/**</pattern>
+          <type>EXCLUDE</type>
+        </hudson.plugins.ws__cleanup.Pattern>
+        <hudson.plugins.ws__cleanup.Pattern>
+          <pattern>microservice</pattern>
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
