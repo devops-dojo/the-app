@@ -32,6 +32,7 @@ fi
 # Install with status "AVAILABLE" for haproxy check by default
 if test ! -f /usr/share/shop/frontend/catalog/html/status.txt
 then
+  echo "Adding status.txt for load balancing"
   echo "AVAILABLE" > /usr/share/shop/frontend/catalog/html/status.txt
   chown www-data:www-data /usr/share/shop/frontend/catalog/html/status.txt
 fi
