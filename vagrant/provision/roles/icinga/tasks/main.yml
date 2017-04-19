@@ -1,7 +1,7 @@
 ---
 - apt_repository: repo='ppa:formorer/icinga'
-- apt: update_cache=yes
-- apt: pkg={{item}} state=present force=yes
+- apt: update_cache=yes cache_valid_time=3600
+- apt: pkg={{item}} state=present force=yes cache_valid_time=3600
   with_items:
     - icinga
 

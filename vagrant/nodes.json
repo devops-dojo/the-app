@@ -101,6 +101,22 @@
             ]
         },
         {
+            "node": "appserver5",
+            "vm_size": "Standard_D1",
+            "memory": "1500",
+	    "cpus": "1",
+            "hostname": "app-server-node-5",
+            "ip": "10.211.55.105",
+            "ports":[],
+            "playbook": "micro_appserver.yml",
+            "apt_cache": false,
+            "aliases" : [
+                "shop.microservice.io",
+                "checkout.microservice.io",
+                "registration.microservice.io"
+            ]
+        },
+        {
             "node": "buildserver",
             "vm_size": "Standard_D1",
             "memory": "2560",
@@ -114,4 +130,3 @@
         }
     ]
 }
-

@@ -1,11 +1,44 @@
 ---
+- name: Install docker Repository
+  apt_repository:
+    repo: deb [arch=amd64] https://apt.dockerproject.org/repo ubuntu-xenial main
+    state: present
+    filename: 'docker'
+
 - name: update cache
-  apt: update_cache=yes force=yes
+  apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install docker
   apt: pkg={{item}} state=present force=yes
   with_items:
-      - docker.io
+      - docker-engine
       - python-pip
 
-- pip: name=fig
+- name: Prepare systemd to have a proxy file
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    mode: 0755
+  when: with_proxy
+
+- name: Configure docker proxy setting
+  template:
+    src: proxy.conf.j2
+    dest: /etc/systemd/system/docker.service.d/proxy.conf
+  register: proxy_conf
+  when: with_proxy
+
+- name: restart docker with proxy
+  systemd:
+    daemon_reload : true
+    name: docker
+    state: restarted
+  when: proxy_conf.changed
+
+- pip:
+    executable: /usr/bin/pip
+    name: "{{item}}"
+  with_items:
+  - pip
+  - setuptools
+  - docker-py

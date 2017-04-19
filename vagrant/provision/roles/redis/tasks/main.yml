@@ -1,10 +1,9 @@
 ---
 - apt_repository: repo='ppa:chris-lea/redis-server' state=present
 
-- apt: update_cache=yes force=yes
+- apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install redis
-  apt: pkg=redis-server state=present force=yes
+  apt: pkg=redis-server state=present force=yes cache_valid_time=3600
 
 - copy: src=redis.conf dest=/etc/redis/redis.conf force=true owner=root
-

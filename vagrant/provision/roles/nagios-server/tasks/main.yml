@@ -1,5 +1,5 @@
 ---
-- apt: pkg={{item}} state=present force=yes
+- apt: pkg={{item}} state=present force=yes cache_valid_time=3600
   with_items:
     - nagios3
     - nagios-nrpe-plugin
@@ -36,5 +36,3 @@
 - sudo: yes
   copy: src=htpasswd.users dest=/etc/nagios3/htpasswd.users force=yes mode=0644
   notify: restart nagios3
-
-

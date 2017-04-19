@@ -28,7 +28,7 @@
           "pin": true,
           "type": "lucene",
           "enable": true,
-          "query": "host: \"app-server-node-4\""
+          "query": "host: \"app-server-node-4\" OR host: \"app-server-node-5\""
         },
         "3": {
           "id": 3,
@@ -95,12 +95,39 @@
         },
         "10": {
           "id": 10,
-          "color": "#447EBC",
+          "color": "#0A437C",
+          "alias": "PRO Micro 1",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "host: \"app-server-node-4\""
+        },
+        "11": {
+          "id": 11,
+          "color": "#1F78C1",
+          "alias": "PRO Micro 2",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "host: \"app-server-node-5\""
+        },
+        "12": {
+          "id": 12,
+          "color": "#890F02",
           "alias": "",
           "pin": false,
           "type": "lucene",
           "enable": true,
           "query": "*"
+        },
+        "13": {
+          "id": 13,
+          "color": "#890F02",
+          "alias": "PRO Mono 1",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "host: \"app-server-node-2\""
         }
       },
       "ids": [
@@ -114,7 +141,10 @@
         7,
         8,
         9,
-        10
+        13,
+        10,
+        11,
+        12
       ]
     },
     "filter": {
@@ -146,12 +176,22 @@
           "active": true,
           "alias": "",
           "id": 2
+        },
+        "3": {
+          "type": "field",
+          "field": "request",
+          "query": "\"/status.txt\"",
+          "mandate": "mustNot",
+          "active": true,
+          "alias": "",
+          "id": 3
         }
       },
       "ids": [
         0,
         1,
-        2
+        2,
+        3
       ]
     }
   },
@@ -184,7 +224,10 @@
               7,
               8,
               9,
-              10
+              10,
+              11,
+              12,
+              13
             ]
           },
           "field": "_type",
@@ -393,7 +436,7 @@
       "collapsable": true,
       "panels": [
         {
-          "span": 12,
+          "span": 8,
           "editable": true,
           "type": "histogram",
           "loadingEditor": false,
@@ -465,6 +508,31 @@
             "query_as_alias": true
           },
           "title": "A B Testing"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "hits",
+          "loadingEditor": false,
+          "style": {
+            "font-size": "10pt"
+          },
+          "arrangement": "horizontal",
+          "chart": "bar",
+          "counter_pos": "above",
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "spyable": true,
+          "queries": {
+            "mode": "selected",
+            "ids": [
+              10,
+              11,
+              13
+            ]
+          },
+          "title": "Server hits PRO"
         }
       ],
       "notice": false
@@ -526,7 +594,10 @@
               7,
               8,
               9,
-              10
+              10,
+              11,
+              12,
+              13
             ]
           },
           "field_list": true,
@@ -582,7 +653,7 @@
         "field:server_response=\"404\"",
         "field:server_response=\"302\"",
         "field:server_response=\"200\"",
-        "host: \"app-server-node-4\"",
+        "host: \"app-server-node-4\" OR host: \"app-server-node-5\"",
         "host: \"app-server-node-2\""
       ],
       "remember": 10,
@@ -591,7 +662,7 @@
     {
       "type": "filtering",
       "collapse": true,
-      "notice": false,
+      "notice": true,
       "enable": true
     }
   ],

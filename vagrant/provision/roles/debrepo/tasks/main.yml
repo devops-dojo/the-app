@@ -1,6 +1,6 @@
 ---
 - name: install deb repo dependencies
-  apt: pkg={{item}} state=present force=yes
+  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
   with_items:
     - nginx
     - gnupg

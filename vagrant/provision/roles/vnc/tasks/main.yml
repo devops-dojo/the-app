@@ -53,7 +53,7 @@
   with_inventory_hostnames: all
 
 - name: install vnc and applications environment
-  apt: pkg={{item}} state=present force=yes
+  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
   with_items:
     - xfce4
     - firefox

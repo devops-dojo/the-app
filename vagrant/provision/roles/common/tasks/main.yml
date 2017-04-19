@@ -27,7 +27,7 @@
 - name: Add NO_PROXY for internal hosts
   lineinfile: dest=/etc/environment regexp="^NO_PROXY" line="NO_PROXY={{no_proxy}}"
   when: with_proxy
-- apt: pkg={{item}} state=present force=yes update_cache=yes
+- apt: pkg={{item}} state=present force=yes update_cache=yes cache_valid_time=3600
   with_items:
     - vim
     - redis-tools

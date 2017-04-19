@@ -1,12 +1,24 @@
 #!/bin/sh
 set -e
 
-rm -f /etc/nginx/sites-enabled/registration.microservice.io
-if test "$1" = configure
-then
-   ln -sf /etc/nginx/sites-available/registration.microservice.io /etc/nginx/sites-enabled/checkout.microservice.io
-fi
+rm -f /etc/nginx/sites-enabled/*registration.microservice.io*
 
-nginx -t
-systemctl daemon-reload
-service nginx restart
+# Registration microservice is not yet active
+if false
+then
+  if test "$1" = configure
+  then
+    if test -f /etc/server_role && test "`cat /etc/server_role`" = production
+    then
+      echo "Setting production service"
+      ln -sf /etc/nginx/sites-available/registration.microservice.io /etc/nginx/sites-enabled/registration.microservice.io
+    else
+      echo "Setting test service"
+      ln -sf /etc/nginx/sites-available/test-registration.microservice.io /etc/nginx/sites-enabled/test-registration.microservice.io
+    fi
+  fi
+
+  nginx -t
+  systemctl daemon-reload
+  service nginx restart
+fi

@@ -11,7 +11,7 @@ The automated process with Vagrant/Ansible provisions and configures the CD pipe
 |   Dojo|VNet   +----------|DojoLabsVNet |  |
 +---------------+         +--------------+  |
                      |
-                     |                       
+                     |
 +---------------+    |    +--------------+  |  +-------------+
 | DojoInstaller |    |    |elasticsearch |  |  |dbserver     |
 |      VM       |    |    |              |  |  |             |
@@ -191,7 +191,7 @@ sed -i -e 's#with_proxy: true#with_proxy: false#' provision/vars/default.yml
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo npm install -g azure-cli
-```  
+```
 - Get your Azure's application details which is used to provision resources:
   - tenant_id: from help/show diagnostics
   - subscription_id: from subscription screen
@@ -303,7 +303,8 @@ appserver2    | 10.211.55.102 | app-server-node-2  | Probe PRO                  
 appserver2    | 10.211.55.102 | app-server-node-2  | JETM Performance monitor    | http://shop.monolith.io:8080/shop/performance/
 appserver2    | 10.211.55.102 | app-server-node-2  | JMX info                    | http://shop.monolith.io:8080/shop/jmx/
 appserver3    | 10.211.55.103 | app-server-node-3  | Microservice Shop TST       | http://test-shop.microservice.io/
-appserver4    | 10.211.55.104 | app-server-node-4  | Microservice Shop PRO       | http://shop.microservice.io/
+appserver4    | 10.211.55.104 | app-server-node-4  | Microservice Shop PRO (LB)  | http://shop.microservice.io/
+appserver5    | 10.211.55.105 | app-server-node-5  | Microservice Shop PRO       | http://shop.microservice.io/
 elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring.microservice.io/
 elasticsearch | 10.211.55.100 | monitoring-node    | Nagios                      | http://monitoring.microservice.io/nagios3/ (nagiosadmin / admin123)
 elasticsearch | 10.211.55.100 | monitoring-node    | Icinga                      | http://monitoring.microservice.io/icinga/ (icingaadmin / admin123)

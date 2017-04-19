@@ -1,0 +1,25 @@
+---
+- file:
+    state: directory
+    dest: /etc/haproxy
+
+- name: Identifying LB nodes for PRO
+  shell: 'grep "app-server-node-[45]" /etc/hosts'
+  register: lb_nodes
+  when: inventory_hostname == "app-server-node-4"
+
+- name: Identifying LB nodes for TEST
+  shell: 'grep "app-server-node-3" /etc/hosts'
+  register: lb_nodes
+  when: inventory_hostname == "app-server-node-3"
+
+- name: set haproxy.cfg
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  with_items: lb_nodes
+
+- set_fact: "etc_hosts={% macro host_entry(lines) -%}{%- for node in lines %}{{ '\"%s\": \"%s\"\n' | format(node.split()[1], node.split()[0]) }}{%- endfor %}{%- endmacro %}{{ \"{ %s }\" | format(host_entry(lb_nodes.stdout_lines).strip().replace(\"\n\", \", \")) | from_json }}"
+
+- name: restart haproxy
+  service: name=haproxy state=restarted
