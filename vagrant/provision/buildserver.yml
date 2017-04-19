@@ -10,8 +10,8 @@
     - hosts
     - common
     - oracle-java
-    - jenkins
     - hubot
+    - jenkins
 
   environment:
     "{{ (with_proxy) | ternary( proxy_env, {}) }}"   # use proxy_env only when with_proxy is true
