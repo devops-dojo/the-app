@@ -9,21 +9,21 @@ oracle_java_zip_file : /tmp/jdk-8u25-linux-x64.tar.gz
 oracle_java_folder : jdk1.8.0_25
 
 # Branch / tag used when checking out the-app code and/or provisioning
-github_branch: refs/tags/v1.0
+github_branch: refs/tags/v1.1
 # Github location of the project
 github_url: "https://github.com/devops-dojo/the-app.git"
 # List of microservice production servers (for elastic scaling)
 prod_servers: "app-server-node-4 app-server-node-5"
 
 # Hubot adapter: slack or flowdock
-hubot_adapter: flowdock
+hubot_adapter: slack
 
 nodejs_npm_registry : http://registry.npmjs.org/
 
 # Comment this section when pipeline does NOT run behind web proxy
 with_proxy: true
-http_proxy_host: web-proxy.corp.hpecorp.net
-http_proxy_port: 8080
+http_proxy_host: 10.152.127.250
+http_proxy_port: 8181
 no_proxy: localhost,127.0.0.1,.hpecorp.net,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-node,mongodb-node,.microservice.io,.monolith.io,test.monolith.io,shop.monolith.io
 
 proxy_env:
