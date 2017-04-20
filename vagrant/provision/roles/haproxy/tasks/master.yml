@@ -5,13 +5,15 @@
 
 - name: Identifying LB nodes for PRO
   shell: 'grep "app-server-node-[45]" /etc/hosts'
-  register: lb_nodes
+  register: lb_nodes_pro
   when: inventory_hostname == "app-server-node-4"
 
 - name: Identifying LB nodes for TEST
   shell: 'grep "app-server-node-3" /etc/hosts'
-  register: lb_nodes
+  register: lb_nodes_test
   when: inventory_hostname == "app-server-node-3"
+
+- set_fact: "lb_nodes={{ lb_nodes_pro if (inventory_hostname == \"app-server-node-4\") else lb_nodes_test }}"
 
 - name: set haproxy.cfg
   template:
