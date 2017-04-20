@@ -80,7 +80,7 @@
           <type>EXCLUDE</type>
         </hudson.plugins.ws__cleanup.Pattern>
       </patterns>
-      <deleteDirs>true</deleteDirs>
+      <deleteDirs>false</deleteDirs>
       <cleanupParameter/>
       <externalDelete/>
     </hudson.plugins.ws__cleanup.PreBuildCleanup>
