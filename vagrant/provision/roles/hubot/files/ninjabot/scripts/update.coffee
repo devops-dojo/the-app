@@ -38,7 +38,7 @@ module.exports = (robot) ->
         command="sh ./provision.sh --local --limit=#{server} buildserver.yml"
       when 'cirepo'
         server='ci-repo'
-        command="sh ./provision.sh --local --limit=#{server}reposerver.yml"
+        command="sh ./provision.sh --local --limit=#{server} reposerver.yml"
       when 'db'
         server='mongodb-node'
         command="sh ./provision.sh --local --limit=#{server} databaseserver.yml"

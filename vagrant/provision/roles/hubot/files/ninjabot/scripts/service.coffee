@@ -72,7 +72,7 @@ runCommand = (msg, cmd) ->
     if stdout? && stdout != ''
       stdout = stdout.replace /-classpath.*\n/, ""
       status = ""
-      if stdout.match("/Active: failed/")
+      if (stdout.match("/Active: failed/") || stdout.match("/inactive/"))
         status = ":red_circle:"
       else
         status = ":white_check_mark:"
