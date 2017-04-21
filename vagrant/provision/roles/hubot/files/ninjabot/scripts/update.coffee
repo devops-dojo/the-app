@@ -23,7 +23,7 @@ module.exports = (robot) ->
           process.exit(0)
         , 5 * 1000
 
-  robot.respond /update host (monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4|)/i, (msg) ->
+  robot.respond /update host (monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4|appserver5)/i, (msg) ->
     user = robot.brain.userForId(msg.envelope.user.id, null)
     unless robot.auth.hasRole(user, "admin")
       msg.send ":grin: Access denied. You must have 'admin' role to use this command"
@@ -53,6 +53,9 @@ module.exports = (robot) ->
         command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
       when 'appserver4'
         server='app-server-node-4'
+        command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
+      when 'appserver5'
+        server='app-server-node-5'
         command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
 
     msg.send "Reprovisioning host with the latest on Github..."
