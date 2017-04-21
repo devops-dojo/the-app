@@ -18,6 +18,14 @@ if [ $1 = "--local" ]; then
 
   # Stick to branch in vars/default.yml
   github_branch=`awk '/github_branch/ {printf "%s",$2;exit}' /provision/vars/default.yml`
+  
+  # Clean local tags if they changed on Github
+  if [ github_branch != "master" ]; then
+    github_tag=`echo ${github_branch} | awk -F "/" '/tags/ {print $3}'`
+    git tag -d ${github_tag}
+    git fetch origin --tags
+  fi
+  
   git checkout ${github_branch}
 
   sudo rsync -aHAXvh --update --exclude 'vagrant/provision/vars/default.yml' vagrant/provision /
