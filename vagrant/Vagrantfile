@@ -52,6 +52,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           vb.customize ["modifyvm", :id, "--memory", node['memory']]
           vb.customize ["modifyvm", :id, "--name", node['node']]
           vb.customize ["modifyvm", :id, "--cpus", node['cpus']]
+          vb.customize ["modifyvm", :id, "--audio", "none"]
+          vb.customize ["modifyvm", :id, "--usb", "off"]
         end
       #end
 
@@ -85,6 +87,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         config.cache.enable :bower
         config.cache.enable :npm
       end
+
+
+      config.vm.provision "fix-no-tty", type: "shell" do |s|
+        s.privileged = false
+        s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+      end
+
+      config.vm.provision :"shell", :inline => "sudo mount -t vboxsf -o uid=1000,gid=1000 vagrant /vagrant"
+      config.vm.provision :"shell", :inline => "sudo mount -t vboxsf -o uid=1000,gid=1000 provision /provision"
 
       config.vm.provision "shell" do |s|
         ansible_limit    = "--limit=" + node['hostname']

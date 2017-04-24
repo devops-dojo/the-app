@@ -6,6 +6,7 @@ chown -R www-data:www-data /usr/share/shop/frontend/catalog_b/html
 chmod 755 /usr/share/shop/frontend/catalog/
 echo "cleanup services..."
 rm -f /etc/nginx/sites-enabled/*shop.microservice.io*
+rm -f /etc/nginx/sites-enabled/default
 if test "$1" = configure
 then
   if test -f /etc/server_role && test "`cat /etc/server_role`" = production
@@ -27,6 +28,19 @@ then
    find /usr/share/shop/frontend/catalog_b/html -name "*_B*" -type f -exec bash -c 'mv -v "{}" $(echo "{}" | sed "s/_B//g")' \;
    sed -i 's/[0-9]*[0-9]\(%.*_Site_A\)/80\1/g' /etc/nginx/sites-available/*microservice.io
    sed -i 's/[0-9]*[0-9]\(%.*_Site_B\)/20\1/g' /etc/nginx/sites-available/*microservice.io
+fi
+# Install with status "AVAILABLE" for haproxy check by default
+if test ! -f /usr/share/shop/frontend/catalog/html/status.txt
+then
+  echo "Adding status.txt for load balancing - option B"
+  echo "AVAILABLE" > /usr/share/shop/frontend/catalog/html/status.txt
+  chown www-data:www-data /usr/share/shop/frontend/catalog/html/status.txt
+fi
+if test ! -f /usr/share/shop/frontend/catalog_b/html/status.txt
+then
+  echo "Adding status.txt for load balancing"
+  echo "AVAILABLE" > /usr/share/shop/frontend/catalog_b/html/status.txt
+  chown www-data:www-data /usr/share/shop/frontend/catalog_b/html/status.txt
 fi
 
 nginx -t

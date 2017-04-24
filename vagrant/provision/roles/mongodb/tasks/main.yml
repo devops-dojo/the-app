@@ -3,14 +3,13 @@
 
 - apt_repository: repo='deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main' state=present
 
-- apt: update_cache=yes force=yes
+- apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install mongodb
-  apt: pkg=mongodb-org state=present force=yes
+  apt: pkg=mongodb-org state=present force=yes cache_valid_time=3600
 
 - copy: src=mongod.conf dest=/etc/mongod.conf force=true owner=root
 
 - raw: sudo ufw disable
 
 - raw: sudo service mongod restart
-

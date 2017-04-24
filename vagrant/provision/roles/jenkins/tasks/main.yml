@@ -1,6 +1,6 @@
 ---
 - name: install python-software-properties
-  apt: pkg=python-software-properties state=present force=yes
+  apt: pkg=python-software-properties state=present force=yes cache_valid_time=3600
 
 - name: install node key file
   apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
@@ -9,10 +9,10 @@
   apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present
 
 - name: update cache
-  apt: update_cache=yes force=yes
+  apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install pre-requisites
-  apt: pkg={{item}} state=present force=yes
+  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
   with_items:
     - docker.io
     - golang
@@ -143,6 +143,22 @@
     - org.jenkins.ci.plugins.xframe_filter.XFrameFilterPageDecorator.xml
   notify: restart jenkins
 
+- name: Tune GIT repository and branch per global variable
+  sudo: yes
+  sudo_user: jenkins
+  blockinfile:
+    dest: /var/lib/jenkins/config.xml
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK JENKINS VAR -->"
+    insertbefore: "</tree-map>"
+    block: |
+      <int>3</int>
+      <string>GIT_REPOSITORY</string>
+      <string>{{github_url}}</string>
+      <string>BRANCH_TO_BUILD</string>
+      <string>{{github_branch}}</string>
+      <string>PROD_SERVERS</string>
+      <string>{{prod_servers}}</string>
+
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
 
@@ -197,15 +213,16 @@
       - build-pipeline-plugin
       - delivery-pipeline-plugin
       - copyartifact
-      - performance
+      - http://mirrors.jenkins-ci.org/plugins/performance/2.1/performance.hpi
       - jacoco
       - sonar
-      - buildgraph-view
+      - http://mirrors.jenkins-ci.org/plugins/buildgraph-view/1.5.2/buildgraph-view.hpi
       - xvfb
       - ws-cleanup
       - xframe-filter-plugin
       - htmlpublisher
   notify: restart jenkins
+  ignore_errors: True
 
 - name: restart jenkins
   sudo: yes
@@ -217,11 +234,13 @@
 
 - file: dest=/var/lib/jenkins/repo-cache/appstash mode=755 owner=jenkins group=jenkins state=directory
 
-- sudo: yes
+- name: get GIT repository
+  sudo: yes
   sudo_user: jenkins
-  git: repo=https://github.com/devops-dojo/the-app.git dest=/var/lib/jenkins/repo-cache/appstash bare=yes
+  git: repo={{github_url}} dest=/var/lib/jenkins/repo-cache/appstash bare=yes
 
-- sudo: yes
+- name: Setup cron job to update GIT repository automatically
+  sudo: yes
   sudo_user: jenkins
   cron: name="Update AppStash Git Repository" minute="*/60" job="cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
 
@@ -241,6 +260,7 @@
   sudo_user: jenkins
   command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{item}}'
   with_items:
+    - shop-monolitic-build
     - shop-monolitic-build
     - shop-microservice-product-service-build
     - shop-microservice-cart-service-build

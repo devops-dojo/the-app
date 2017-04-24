@@ -1,6 +1,6 @@
 ---
 - name: install deb repo dependencies
-  apt: pkg={{item}} state=present force=yes
+  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
   with_items:
     - nginx
     - gnupg
@@ -39,9 +39,6 @@
 - file: path=/var/packages/debian/conf/override.shop state=touch force=yes
 - copy: src=options dest=/var/packages/debian/conf/options force=yes mode=0644
 
-- copy: src=default dest=/etc/nginx/sites-enabled/default force=yes mode=0644
-  notify: restart nginx
-
 - name: Check if ci-repo key exists.
   stat:
     path: /var/packages/ci-repo.gpg.key
@@ -55,3 +52,6 @@
 - sudo: yes
   sudo_user: root
   raw: reprepro -b /var/packages/debian/ export
+
+- copy: src=default dest=/etc/nginx/sites-enabled/default force=yes mode=0644
+  notify: restart nginx

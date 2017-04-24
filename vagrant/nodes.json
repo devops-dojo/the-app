@@ -4,7 +4,7 @@
         {
             "node": "elasticsearch",
             "vm_size": "Standard_A1",
-            "memory": "2048",
+            "memory": "2200",
 	    "cpus": "2",
             "hostname": "monitoring-node",
             "ip": "10.211.55.100",
@@ -71,7 +71,7 @@
         {
             "node": "appserver3",
             "vm_size": "Standard_D1",
-            "memory": "1500",
+            "memory": "1200",
 	    "cpus": "1",
             "hostname": "app-server-node-3",
             "ip": "10.211.55.103",
@@ -87,7 +87,7 @@
         {
             "node": "appserver4",
             "vm_size": "Standard_D1",
-            "memory": "1500",
+            "memory": "1200",
 	    "cpus": "1",
             "hostname": "app-server-node-4",
             "ip": "10.211.55.104",
@@ -101,9 +101,25 @@
             ]
         },
         {
+            "node": "appserver5",
+            "vm_size": "Standard_D1",
+            "memory": "1200",
+	    "cpus": "1",
+            "hostname": "app-server-node-5",
+            "ip": "10.211.55.105",
+            "ports":[],
+            "playbook": "micro_appserver.yml",
+            "apt_cache": false,
+            "aliases" : [
+                "shop.microservice.io",
+                "checkout.microservice.io",
+                "registration.microservice.io"
+            ]
+        },
+        {
             "node": "buildserver",
             "vm_size": "Standard_D1",
-            "memory": "2560",
+            "memory": "3200",
 	    "cpus": "4",
             "hostname": "ci-node",
             "ip": "10.211.55.200",
@@ -114,4 +130,3 @@
         }
     ]
 }
-

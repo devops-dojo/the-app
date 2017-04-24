@@ -266,5 +266,25 @@
   <slaveAgentPort>0</slaveAgentPort>
   <label></label>
   <nodeProperties/>
-  <globalNodeProperties/>
+  <globalNodeProperties>
+  <hudson.slaves.EnvironmentVariablesNodeProperty>
+    <envVars serialization="custom">
+      <unserializable-parents/>
+      <tree-map>
+        <default>
+          <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        </default>
+<!-- BEGIN ANSIBLE MANAGED BLOCK JENKINS VAR -->
+        <int>3</int>
+        <string>GIT_REPOSITORY</string>
+        <string>https://github.com/devops-dojo/the-app.git</string>
+        <string>BRANCH_TO_BUILD</string>
+        <string>refs/tags/v1.0</string>
+        <string>PROD_SERVERS</string>
+        <string>app-server-node-4 app-server-node-5</string>
+<!-- END ANSIBLE MANAGED BLOCK JENKINS VAR -->
+      </tree-map>
+    </envVars>
+  </hudson.slaves.EnvironmentVariablesNodeProperty>
+</globalNodeProperties>
 </hudson>
