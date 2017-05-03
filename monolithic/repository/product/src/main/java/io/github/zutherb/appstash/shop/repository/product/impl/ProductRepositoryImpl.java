@@ -48,7 +48,7 @@ public class ProductRepositoryImpl extends AbstractRepositoryImpl<Product> imple
     }
 
     @Override
-    public String findAllSortedByClassifier() {
+    public List<Product> findAllSortedByClassifier() {
         Query query = new Query();
         return mongoOperations.find(query, Product.class);
     }
