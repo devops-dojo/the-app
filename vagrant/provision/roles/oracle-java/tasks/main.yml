@@ -7,6 +7,6 @@
 
 - name: install Java 8
   apt: pkg=oracle-java8-installer state=present
-  
+
 - name: source environment file with JAVA_HOME
   shell: . /etc/environment
