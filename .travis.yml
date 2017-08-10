@@ -1,0 +1,6 @@
+language: python
+install: "pip install -r requirements.txt"
+
+before_script:
+script:
+  - find vagrant/provision -name "*.yml" -exec ansible-lint {} +
