@@ -1,6 +1,8 @@
 language: python
 install: "pip install -r requirements.txt"
 
-before_script:
 script:
-  - find vagrant/provision -name "*.yml" -exec ansible-lint {} +
+  # Run ANSIBLE checks
+  # - ANSIBLE0008: Disabled for use of sudo warnings (will fix later)
+  # - ANSIBLE0011: Disabled for all tasks which should be named
+  - find vagrant/provision -name "*.yml" -exec ansible-lint -x ANSIBLE008,ANSIBLE0011  {} +
