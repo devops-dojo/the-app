@@ -31,7 +31,7 @@
   copy: src=disk.cfg dest=/etc/nagios-plugins/config/disk.cfg force=yes mode=0644
 
 - sudo: yes
-  raw: mkdir -p /var/log/nagios/
+  file: path=/var/log/nagios state=directory
 
 - sudo: yes
   copy: src=htpasswd.users dest=/etc/nagios3/htpasswd.users force=yes mode=0644
