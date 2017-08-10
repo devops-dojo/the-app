@@ -19,7 +19,7 @@
 
 - name: remove unused icinga configuration
   sudo: yes
-  raw: rm -f /etc/icinga/objects/{{item}}
+  file: path=/etc/icinga/objects/{{item}} state=absent
   with_items:
     - localhost_icinga.cfg
     - ido2db_check_proc.cfg

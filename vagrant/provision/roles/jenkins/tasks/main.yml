@@ -232,12 +232,12 @@
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
 
-- file: dest=/var/lib/jenkins/repo-cache/appstash mode=755 owner=jenkins group=jenkins state=directory
+- file: dest=/var/lib/jenkins/repo-cache/appstash mode=0755 owner=jenkins group=jenkins state=directory
 
 - name: get GIT repository
   sudo: yes
   sudo_user: jenkins
-  git: repo={{github_url}} dest=/var/lib/jenkins/repo-cache/appstash bare=yes
+  git: repo={{github_url}} dest=/var/lib/jenkins/repo-cache/appstash bare=yes version=master
 
 - name: Setup cron job to update GIT repository automatically
   sudo: yes
@@ -252,8 +252,8 @@
 
 - file: path=/var/lib/jenkins/.ssh/ mode=0755 owner=jenkins group=jenkins state=directory
 - file: path=/var/lib/jenkins/.ssh/known_hosts mode=0755 owner=jenkins group=jenkins state=touch
-- copy: src=id_rsa.pub dest=/var/lib/jenkins/.ssh/id_rsa.pub mode=600 group=jenkins owner=jenkins
-- copy: src=id_rsa dest=/var/lib/jenkins/.ssh/id_rsa mode=600 group=jenkins owner=jenkins
+- copy: src=id_rsa.pub dest=/var/lib/jenkins/.ssh/id_rsa.pub mode=0600 group=jenkins owner=jenkins
+- copy: src=id_rsa dest=/var/lib/jenkins/.ssh/id_rsa mode=0600 group=jenkins owner=jenkins
 
 - name: start jenkins deployment pipeline
   sudo: yes
