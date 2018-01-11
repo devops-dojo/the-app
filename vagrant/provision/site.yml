@@ -1,0 +1,73 @@
+- hosts: all
+  become: yes
+  gather_facts: no
+  roles:
+    - common
+
+- hosts: jumpstations
+  become: yes
+  gather_facts: no
+  roles:
+    - vnc
+
+- hosts: buildservers
+  become: yes
+  gather_facts: no
+
+  # HACK: don't rsync & deal with this nasty '/provision' hardcoded directory
+  pre_tasks:
+    - name: Copy provision directory
+      copy:
+        src: "{{PROVISION_DIRECTORY}}"
+        dest: /
+
+  roles:
+    - ansible-java8-oracle
+    - jenkins
+    - hubot
+
+- hosts: reposervers
+  become: yes
+  gather_facts: no
+  roles:
+    - nginx
+    - debrepo
+
+- hosts: databaseservers
+  become: yes
+  gather_facts: no
+  roles:
+    - mongodb
+    - redis
+
+- hosts: micro_appservers
+  become: yes
+  gather_facts: no
+  roles:
+    - oracle-java
+    - nginx
+    - rstats
+    - logstash
+    - microservice-appserver
+    - docker
+    - haproxy
+
+- hosts: elasticsearchservers
+  become: yes
+  gather_facts: no
+  roles:
+    - oracle-java
+    - elasticsearch
+    - apache
+    - kibana
+    - nagios-server
+    - icinga
+
+- hosts: monolithic_appservers
+  become: yes
+  gather_facts: no
+  roles:
+    - oracle-java
+    - tomcat
+    - logstash
+    - oldschool-appserver
