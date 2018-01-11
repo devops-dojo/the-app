@@ -9,7 +9,7 @@
   roles:
     - hosts
     - common
-    - oracle-java
+    - ansible-java8-oracle
     - jenkins
     - hubot
 
