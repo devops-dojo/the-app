@@ -22,8 +22,8 @@ nodejs_npm_registry : http://registry.npmjs.org/
 
 # Comment this section when pipeline does NOT run behind web proxy
 with_proxy: true
-http_proxy_host: 10.152.127.250
-http_proxy_port: 8181
+http_proxy_host: proxy.houston.hpecorp.net
+http_proxy_port: 8080
 no_proxy: localhost,127.0.0.1,.hpecorp.net,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-node,mongodb-node,.microservice.io,.monolith.io,test.monolith.io,shop.monolith.io
 
 proxy_env:
