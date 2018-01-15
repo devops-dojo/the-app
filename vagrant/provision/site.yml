@@ -44,7 +44,7 @@
   become: yes
   gather_facts: no
   roles:
-    - oracle-java
+    - ansible-java8-oracle
     - nginx
     - rstats
     - logstash
@@ -56,7 +56,7 @@
   become: yes
   gather_facts: no
   roles:
-    - oracle-java
+    - ansible-java8-oracle
     - elasticsearch
     - apache
     - kibana
@@ -67,7 +67,7 @@
   become: yes
   gather_facts: no
   roles:
-    - oracle-java
+    - ansible-java8-oracle
     - tomcat
     - logstash
     - oldschool-appserver
