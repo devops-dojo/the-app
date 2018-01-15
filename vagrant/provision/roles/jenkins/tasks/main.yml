@@ -8,8 +8,10 @@
   with_items: [python-urllib3, python-openssl, python-pyasn1, python-pip]
 
 - name: install node key file
-  become: yes
-  apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present validate_certs=no
+  apt_key: 
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key 
+    state: present 
+    validate_certs: no
 
 - name: add node repository into sources list.
   apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present
