@@ -6,11 +6,9 @@
   apt:
     name: '{{ item }}'
   with_items: [python-urllib3, python-openssl, python-pyasn1, python-pip]
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution_release == 'trusty'
 
 - name: Install apt_key dependencies
   command: pip install ndg-httpsclient
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution_release == 'trusty'
 
 - name: install node key file
   apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
