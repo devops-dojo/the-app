@@ -5,8 +5,10 @@
 - name: install node key file
   apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
 
-- name: add node repository into sources list.
-  apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present
+#- name: add node repository into sources list.
+#  apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present
+
+- raw: curl -sL https://deb.nodesource.com/setup_5.x | bash -
 
 - name: update cache
   apt: update_cache=yes force=yes cache_valid_time=3600
@@ -21,7 +23,7 @@
     - firefox=45.0.2+build1-0ubuntu1
     - git
     - curl
-    - nodejs=0.12.18-1nodesource1~xenial1
+    - nodejs
     - ruby
     - ruby-dev
 
@@ -131,6 +133,22 @@
 # wait 300 seconds for port 8080 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
 
+- name: Remove Jenkins security init scripts after first startup.
+  file:
+    path: "/var/lib/jenkins/init.groovy.d/basic-security.groovy"
+    state: absent
+
+- name: create init groovy directory
+  sudo: yes
+  sudo_user: jenkins
+  file: path="/var/lib/jenkins/init.groovy.d/" state=directory
+
+- name: provision Jenkins admin and anonymous users
+  sudo: yes
+  sudo_user: jenkins
+  copy: src=basic-security.groovy dest=/var/lib/jenkins/init.groovy.d/basic-security owner=jenkins
+  notify: restart jenkins
+
 - name: install config.xml
   sudo: yes
   sudo_user: jenkins
@@ -171,22 +189,6 @@
   sudo: yes
   sudo_user: jenkins
   raw:  sed '1d;$d' /tmp/update-center.js > /tmp/update-center.json
-
-- name: Remove Jenkins security init scripts after first startup.
-  file:
-    path: "/var/lib/jenkins/init.groovy.d/basic-security.groovy"
-    state: absent
-
-- name: create init groovy directory
-  sudo: yes
-  sudo_user: jenkins
-  file: path="/var/lib/jenkins/init.groovy.d/" state=directory
-
-- name: provision Jenkins admin and anonymous users
-  sudo: yes
-  sudo_user: jenkins
-  copy: src=basic-security.groovy dest=/var/lib/jenkins/init.groovy.d/basic-security owner=jenkins
-  notify: restart jenkins
 
 - name: push it to the update URL
   sudo: yes
