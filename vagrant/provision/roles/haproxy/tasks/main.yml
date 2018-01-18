@@ -6,5 +6,5 @@
 
 - name: Starting haproxy setup
   include: master.yml
-  when: (inventory_hostname == "app-server-node-3") or
-        (inventory_hostname == "app-server-node-4")
+  when: (ansible_hostname == "app-server-node-3") or
+        (ansible_hostname == "app-server-node-4")
