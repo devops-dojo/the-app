@@ -1,12 +1,12 @@
 ---
 # Openstack HACK
-- name: Download apt-sources.list
-  get_url:
-    url: https://raw.github.hpe.com/gist/omar-chavez-orozco/af0d18bc366ad49c389f03cb7680023d/raw/4a8f60c51d1252695f718d04b7d60677cc302cb1/ubuntu16.04-apt-sources
-    dest: /etc/apt/sources.list
-    mode: 0644
-    validate_certs: no
-    force: yes
+#- name: Download apt-sources.list
+#  get_url:
+#    url: https://raw.github.hpe.com/gist/omar-chavez-orozco/af0d18bc366ad49c389f03cb7680023d/raw/4a8f60c51d1252695f718d04b7d60677cc302cb1/ubuntu16.04-apt-sources
+#    dest: /etc/apt/sources.list
+#    mode: 0644
+#    validate_certs: no
+#    force: yes
 
 - name: Add dojo user account
   user:
