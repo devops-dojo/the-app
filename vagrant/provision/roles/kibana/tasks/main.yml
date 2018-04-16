@@ -6,19 +6,19 @@
       - curl
 
 - name: download kibana
-  get_url: url=http://download.elasticsearch.org/kibana/kibana/kibana-{{kibana_version}}.tar.gz dest=/tmp/kibana.tar.gz mode=0755 owner=vagrant
+  get_url: url=http://download.elasticsearch.org/kibana/kibana/kibana-{{kibana_version}}.tar.gz dest=/tmp/kibana.tar.gz mode=0755 owner=ubuntu
 
 - group: name=www state=present
-- user: name=vagrant shell=/bin/bash groups=www append=yes
-- file: path=/var/www/ owner=vagrant group=www mode=04755 recurse=yes
+- user: name=ubuntu shell=/bin/bash groups=www append=yes
+- file: path=/var/www/ owner=ubuntu group=www mode=04755 recurse=yes
 
 - name: unarchive kibana
   sudo : yes
-  sudo_user: vagrant
+  sudo_user: ubuntu
   raw: tar -xf /tmp/kibana.tar.gz --directory=/tmp/
 
 - raw: cp -r /tmp/kibana-{{kibana_version}}/* /var/www/html/
   notify: restart httpd
 
 - name: install default dashboard
-  copy: src=default.json dest=/var/www/html/app/dashboards/default.json group=www owner=vagrant
+  copy: src=default.json dest=/var/www/html/app/dashboards/default.json group=www owner=ubuntu

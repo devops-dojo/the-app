@@ -1,6 +1,6 @@
 ---
 - hosts: monolitic_appservers
-  user: vagrant
+  user: ubuntu
   sudo: yes
 
   vars_files:
