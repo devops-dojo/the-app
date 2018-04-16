@@ -67,6 +67,7 @@ dpkg --remove --force-all shop-checkout-frontend
 dpkg --remove --force-all shop-product-service
 dpkg --remove --force-all shop-navigation-service
 dpkg --remove --force-all shop-cart-service
+apt-get -y install dialog apt-utils
 apt-get -y install shop-registration-frontend
 apt-get -y install shop-catalog-frontend
 apt-get -y install shop-checkout-frontend
