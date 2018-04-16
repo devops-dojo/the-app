@@ -2,8 +2,16 @@
 - name: install python-software-properties
   apt: pkg=python-software-properties state=present force=yes cache_valid_time=3600
 
+- name: Install apt_key dependencies
+  apt:
+    name: '{{ item }}'
+  with_items: [python-urllib3, python-openssl, python-pyasn1, python-pip]
+
 - name: install node key file
-  apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
+  apt_key: 
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key 
+    state: present 
+    validate_certs: no
 
 #- name: add node repository into sources list.
 #  apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present

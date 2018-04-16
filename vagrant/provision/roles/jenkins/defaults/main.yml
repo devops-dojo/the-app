@@ -2,7 +2,7 @@
 # Optional method of pinning a specific version of Jenkins and/or overriding the
 # default Jenkins packaging URL.
 # jenkins_pkg_url: "https://www.example.com/"
-
+                         
 jenkins_repo_key_url: "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key"
 jenkins_repo_url: "deb http://pkg.jenkins-ci.org/debian binary/"
 jenkins_pkg_url: "https://pkg.jenkins.io/debian-stable/binary/"
