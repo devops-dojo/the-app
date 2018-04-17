@@ -45,8 +45,8 @@
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>scp -o StrictHostKeyChecking=no -v ${WORKSPACE}/artifacts/monolithic-shop.war vagrant@app-server-node-2:/tmp/shop.war 
-ssh vagrant@app-server-node-2 -o StrictHostKeyChecking=no -v &lt;&lt;EOF
+      <command>scp -o StrictHostKeyChecking=no -v ${WORKSPACE}/artifacts/monolithic-shop.war ubuntu@app-server-node-2:/tmp/shop.war 
+ssh ubuntu@app-server-node-2 -o StrictHostKeyChecking=no -v &lt;&lt;EOF
 sudo service tomcat7 stop
 sudo rm -rf /var/lib/tomcat7/webapps/shop*
 sudo cp /tmp/shop.war /var/lib/tomcat7/webapps/shop.war

@@ -52,6 +52,6 @@ if ! command -v ansible >/dev/null 2>&1; then
   sudo -E apt-get install -y --allow-unauthenticated ansible software-properties-common
 fi
 
-echo "RUNNING ansible-playbook -c local --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant " $@
+echo "RUNNING ansible-playbook -c local --inventory-file=hosts --extra-vars='ansible_ssh_user=ubuntu' --user=ubuntu " $@
 
-ansible-playbook -c local --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant "$@"
+ansible-playbook -c local --inventory-file=hosts --extra-vars='ansible_ssh_user=ubuntu' --user=ubuntu "$@"
