@@ -4,9 +4,9 @@ logstash_version : 1.4
 elasticsearch_version : 1.1
 kibana_version : 3.1.2
 
-oracle_java_download_url : http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz
-oracle_java_zip_file : /tmp/jdk-8u161-linux-x64.tar.gz
-oracle_java_folder : jdk1.8.0_161
+oracle_java_download_url : http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.tar.gz
+oracle_java_zip_file : /tmp/jdk-8u171-linux-x64.tar.gz
+oracle_java_folder : jdk1.8.0_171
 
 # Branch / tag used when checking out the-app code and/or provisioning
 github_branch: master
