@@ -55,7 +55,7 @@
 
 - name: "Add pub key to authorized_keys"
   authorized_key:
-    user: "hos"
+    user: "ubuntu"
     state: present
     key: "{{ id_rsa_pub.stdout }}"
   delegate_to: "{{ item }}"
