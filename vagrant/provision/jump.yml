@@ -1,0 +1,11 @@
+---
+- hosts: jumpstations
+  user: ubuntu
+  sudo: yes
+  gather_facts: no
+
+  vars_files:
+     - vars/default.yml
+
+  roles:
+    - vnc
