@@ -1,6 +1,6 @@
 ---
 - hosts: databaseservers
-  user: vagrant
+  user: ubuntu
   sudo: yes
 
   vars_files:

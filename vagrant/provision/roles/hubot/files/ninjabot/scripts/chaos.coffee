@@ -42,7 +42,7 @@ module.exports = (robot) ->
 
 chaos = (msg) ->
   random = Math.floor(Math.random() * commands.length)
-  runCommand(msg, "ssh -o StrictHostKeyChecking=no vagrant@#{NODE} \"" + commands[random] + "\"")
+  runCommand(msg, "ssh -o StrictHostKeyChecking=no ubuntu@#{NODE} \"" + commands[random] + "\"")
 
 
 randomMinutes = (max,min=0) ->

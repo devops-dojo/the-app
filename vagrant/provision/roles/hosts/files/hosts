@@ -1,31 +1,21 @@
-127.0.0.1       localhost
+127.0.0.1 localhost
 
 # The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
+::1 ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
 
-10.211.55.100   monitoring-node
-10.211.55.100   monitoring.microservice.io
-10.211.55.101   app-server-node-1
-10.211.55.101   test.monolith.io
-10.211.55.102   app-server-node-2
-10.211.55.102   shop.monolith.io
-10.211.55.103   app-server-node-3
-10.211.55.103   test-shop.microservice.io
-10.211.55.103   test-checkout.microservice.io
-10.211.55.103   test-registration.microservice.io
-10.211.55.104   app-server-node-4
-10.211.55.104   shop.microservice.io
-10.211.55.104   checkout.microservice.io
-10.211.55.104   registration.microservice.io
-10.211.55.105   app-server-node-5
-10.211.55.200   ci-node
-10.211.55.200   ci.microservice.io
-10.211.55.201   ci-repo
-10.211.55.201   ci-repo.microservice.io
-10.211.55.202   mongodb-node
-10.211.55.202   mongo.microservice.io
-10.211.55.202   redis.microservice.io
+# Dojo IPs
+10.0.0.219      monitoring-node  monitoring.microservice.io
+10.0.0.220      ci-node  ci.microservice.io
+10.0.0.217      ci-repo  ci-repo.microservice.io
+10.0.0.215      mongodb-node  mongo.microservice.io redis.microservice.io
+10.0.0.216      app-server-node-1  test.monolith.io
+10.0.0.221      app-server-node-2  shop.monolith.io
+10.0.0.222      app-server-node-3  test-shop.microservice.io test-checkout.microservice.io test-registration.microservice.io
+10.0.0.223      app-server-node-4  shop.microservice.io checkout.microservice.io registration.microservice.io
+10.0.1.218      jumpstation
+10.0.0.224      app-server-node-5

@@ -35,14 +35,14 @@ module.exports = (robot) ->
         when 'all'
           msg.send "Running on all services..."
           for service in all_micro_services
-            runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{micro_host} 'sudo service #{service} #{command}'"
-          runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{mono_host} 'sudo service tomcat7 #{command}'"
+            runCommand msg, "ssh -o StrictHostKeyChecking=no ubuntu@#{micro_host} 'sudo service #{service} #{command}'"
+          runCommand msg, "ssh -o StrictHostKeyChecking=no ubuntu@#{mono_host} 'sudo service tomcat7 #{command}'"
         when 'monolith'
           msg.send "Executing #{command} for monolith on #{mono_host}..."
-          runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{mono_host} 'sudo service tomcat7 #{command}'"
+          runCommand msg, "ssh -o StrictHostKeyChecking=no ubuntu@#{mono_host} 'sudo service tomcat7 #{command}'"
         else
           msg.send "Executing #{command} on #{service} on #{micro_host}..."
-          runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{micro_host} 'sudo service #{service} #{command}'"
+          runCommand msg, "ssh -o StrictHostKeyChecking=no ubuntu@#{micro_host} 'sudo service #{service} #{command}'"
 
 respond = (msg, str, prefix, wrap = '```') ->
   len = 3000
