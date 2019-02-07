@@ -4,6 +4,8 @@ nodes_config = (JSON.parse(File.read("nodes.json")))['nodes']
 
 VAGRANTFILE_API_VERSION = "2"
 
+ENV["LC_ALL"] = "en_US.UTF-8"
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ARGV[1] and \
      (ARGV[1].split('=')[0] == "--provider" or ARGV[2])

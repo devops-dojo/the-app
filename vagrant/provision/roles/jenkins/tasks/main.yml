@@ -203,28 +203,113 @@
   sudo_user: jenkins
   get_url: url=http://localhost:8080/jnlpJars/jenkins-cli.jar dest=/tmp/jenkins-cli.jar owner=jenkins
 
-- name: install jenkins plugins
+- name: download jenkins plugins
   sudo: yes
   sudo_user: jenkins
-  raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{item}}
+  get_url:
+    dest: /var/lib/jenkins/plugins/ 
+    url: http://mirrors.jenkins-ci.org/plugins/{{item}}
   with_items:
-      - git
-      - git-client
-      - chucknorris
-      - greenballs
-      - build-pipeline-plugin
-      - delivery-pipeline-plugin
-      - copyartifact
-      - http://mirrors.jenkins-ci.org/plugins/performance/2.1/performance.hpi
-      - jacoco
-      - sonar
-      - http://mirrors.jenkins-ci.org/plugins/buildgraph-view/1.5.2/buildgraph-view.hpi
-      - xvfb
-      - ws-cleanup
-      - xframe-filter-plugin
-      - htmlpublisher
+    - ace-editor/1.1/ace-editor.hpi
+    - ant/1.2/ant.hpi
+    - antisamy-markup-formatter/1.1/antisamy-markup-formatter.hpi
+    - branch-api/2.0.8/branch-api.hpi
+    - build-flow-plugin/0.20/build-flow-plugin.hpi
+    - buildgraph-view/1.5.2/buildgraph-view.hpi
+    - build-pipeline-plugin/1.5.6/build-pipeline-plugin.hpi
+    - chucknorris/1.0/chucknorris.hpi
+    - cloudbees-folder/6.0.3/cloudbees-folder.hpi
+    - conditional-buildstep/1.3.5/conditional-buildstep.hpi
+    - copyartifact/1.38.1/copyartifact.hpi
+    - credentials/2.1.13/credentials.hpi
+    - cvs/2.11/cvs.hpi
+    - delivery-pipeline-plugin/1.0.0/delivery-pipeline-plugin.hpi
+    - display-url-api/0.5/display-url-api.hpi
+    - durable-task/1.13/durable-task.hpi
+    - external-monitor-job/1.4/external-monitor-job.hpi
+    - git/3.2.0/git.hpi
+    - git-client/2.4.1/git-client.hpi
+    - git-server/1.7/git-server.hpi
+    - greenballs/1.15/greenballs.hpi
+    - handlebars/1.1.1/handlebars.hpi
+    - htmlpublisher/1.13/htmlpublisher.hpi
+    - jacoco/2.2.0/jacoco.hpi
+    - javadoc/1.1/javadoc.hpi
+    - jquery/1.11.2-0/jquery.hpi
+    - jquery-detached/1.2.1/jquery-detached.hpi
+    - junit/1.19/junit.hpi
+    - ldap/1.11/ldap.hpi
+    - mailer/1.18/mailer.hpi
+    - mapdb-api/1.0.9.0/mapdb-api.hpi
+    - matrix-auth/1.1/matrix-auth.hpi
+    - matrix-project/1.7.1/matrix-project.hpi
+    - maven-plugin/2.7.1/maven-plugin.hpi
+    - momentjs/1.1.1/momentjs.hpi
+    - pam-auth/1.1/pam-auth.hpi
+    - parameterized-trigger/2.32/parameterized-trigger.hpi
+    - performance/2.0/performance.hpi
+    - pipeline-build-step/2.5/pipeline-build-step.hpi
+    - pipeline-graph-analysis/1.3/pipeline-graph-analysis.hpi
+    - pipeline-input-step/2.5/pipeline-input-step.hpi
+    - pipeline-milestone-step/1.3.1/pipeline-milestone-step.hpi
+    - pipeline-rest-api/2.6/pipeline-rest-api.hpi
+    - pipeline-stage-step/2.2/pipeline-stage-step.hpi
+    - pipeline-stage-view/2.6/pipeline-stage-view.hpi
+    - promoted-builds/2.27/promoted-builds.hpi
+    - resource-disposer/0.3/resource-disposer.hpi
+    - run-condition/1.0/run-condition.hpi
+    - scm-api/2.1.1/scm-api.hpi
+    - script-security/1.27/script-security.hpi
+    - sonar/2.4.4/sonar.hpi
+    - ssh-credentials/1.12/ssh-credentials.hpi
+    - ssh-slaves/1.9/ssh-slaves.hpi
+    - structs/1.6/structs.hpi
+    - subversion/2.7.1/subversion.hpi
+    - token-macro/2.0/token-macro.hpi
+    - translation/1.10/translation.hpi
+    - windows-slaves/1.0/windows-slaves.hpi
+    - workflow-aggregator/2.4/workflow-aggregator.hpi
+    - workflow-api/2.13/workflow-api.hpi
+    - workflow-basic-steps/2.3/workflow-basic-steps.hpi
+    - workflow-cps/2.29/workflow-cps.hpi
+    - workflow-cps-global-lib/2.7/workflow-cps-global-lib.hpi
+    - workflow-durable-task-step/2.10/workflow-durable-task-step.hpi
+    - workflow-job/2.10/workflow-job.hpi
+    - workflow-multibranch/2.14/workflow-multibranch.hpi
+    - workflow-scm-step/2.4/workflow-scm-step.hpi
+    - workflow-step-api/2.9/workflow-step-api.hpi
+    - workflow-support/2.14/workflow-support.hpi
+    - ws-cleanup/0.32/ws-cleanup.hpi
+    - xframe-filter-plugin/1.2/xframe-filter-plugin.hpi
+    - xvfb/1.1.3/xvfb.hpi
   notify: restart jenkins
-  ignore_errors: True
+
+
+
+
+# - name: install jenkins plugins
+#   sudo: yes
+#   sudo_user: jenkins
+#   # optional parameters -Dhttp.proxyHost={{http_proxy_host}} -Dhttp.proxyPort={{http_proxy_port}} -Dhttp.nonProxyHosts="localhost"
+#   raw:  java  -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{item}}
+#   with_items:
+#       - http://mirrors.jenkins-ci.org/plugins/git/3.2.0/git.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/git-client/2.4.1/git-client.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/chucknorris/1.0/chucknorris.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/greenballs/1.15/greenballs.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/build-pipeline-plugin/1.5.6/build-pipeline-plugin.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/delivery-pipeline-plugin/1.0.0/delivery-pipeline-plugin.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/copyartifact/1.38.1/copyartifact.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/performance/2.1/performance.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/jacoco/2.2.0/jacoco.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/sonar/2.4.4/sonar.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/buildgraph-view/1.5.2/buildgraph-view.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/xvfb/1.1.3/xvfb.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/ws-cleanup/0.32/ws-cleanup.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/xframe-filter-plugin/1.2/xframe-filter-plugin.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/htmlpublisher/1.13/htmlpublisher.hpi
+#   notify: restart jenkins
+#   ignore_errors: True
 
 - name: restart jenkins
   sudo: yes
