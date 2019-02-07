@@ -22,7 +22,7 @@
 - name: download psi probe
   become: true
   become_user: tomcat7
-  get_url: url=https://github.com/psi-probe/psi-probe/releases/download/2.3.3/probe-2.3.3.zip dest=/tmp/probe-2.3.3.zip mode=0644
+  get_url: url=https://github.com/psi-probe/psi-probe/releases/download/2.3.3/probe-2.3.3.zip dest=/tmp/probe-2.3.3.zip mode=0644 # noqa 204
 
 - name: install psi probe
   raw: sudo unzip -o -C /tmp/probe-2.3.3.zip -d /var/lib/tomcat7/webapps/
