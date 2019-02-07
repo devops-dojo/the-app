@@ -103,8 +103,8 @@
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
     insertafter: "<proxy>"
     content: |
-      <name>{{http_proxy_host}}</name>
-      <port>{{http_proxy_port}}</port>
+      <name>{{ http_proxy_host }}</name>
+      <port>{{ http_proxy_port }}</port>
   when: with_proxy
 
 - name: create .gradle directory
@@ -122,10 +122,10 @@
     dest: /var/lib/jenkins/.gradle/gradle.properties
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     content: |
-      systemProp.http.proxyHost={{http_proxy_host}}
-      systemProp.http.proxyPort={{http_proxy_port}}
-      systemProp.https.proxyHost={{http_proxy_host}}
-      systemProp.https.proxyPort={{http_proxy_port}}
+      systemProp.http.proxyHost={{ http_proxy_host }}
+      systemProp.http.proxyPort={{ http_proxy_port }}
+      systemProp.https.proxyHost={{ http_proxy_host }}
+      systemProp.https.proxyPort={{ http_proxy_port }}
   when: with_proxy
 
 - raw: sudo service jenkins restart
@@ -290,7 +290,7 @@
 # - name: install jenkins plugins
 #   sudo: yes
 #   sudo_user: jenkins
-#   # optional parameters -Dhttp.proxyHost={{http_proxy_host}} -Dhttp.proxyPort={{http_proxy_port}} -Dhttp.nonProxyHosts="localhost"
+#   # optional parameters -Dhttp.proxyHost={{ http_proxy_host }} -Dhttp.proxyPort={{ http_proxy_port }} -Dhttp.nonProxyHosts="localhost"
 #   raw:  java  -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{item}}
 #   with_items:
 #       - http://mirrors.jenkins-ci.org/plugins/git/3.2.0/git.hpi

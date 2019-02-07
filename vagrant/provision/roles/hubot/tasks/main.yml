@@ -17,8 +17,8 @@
     dest: /home/hubot/ninjabot/.env.template
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     content: |
-      export http_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
-      export https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
+      export http_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}/
+      export https_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}/
   when: with_proxy
 
 - name: Setup Hubot adapter
