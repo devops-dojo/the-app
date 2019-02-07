@@ -10,7 +10,7 @@
 
 - name: Add dojo user account
   user:
-    name: "{{item}}"
+    name: "{{ item }}"
     comment: "Dojo jumpstation account"
     shell: /bin/bash
   with_items:
@@ -30,7 +30,7 @@
   sudo: true
   sudo_user: "{{ item }}"
   file:
-    path: /home/{{item}}/.ssh
+    path: /home/{{ item }}/.ssh
     mode: 0755
     state: directory
   with_items:
@@ -41,9 +41,9 @@
   sudo: yes
   sudo_user: "{{ item }}"
   copy:
-    dest: /home/{{item}}/.ssh/id_rsa
+    dest: /home/{{ item }}/.ssh/id_rsa
     content: "{{ id_rsa.stdout }}"
-    owner: "{{item}}"
+    owner: "{{ item }}"
     mode: 0600
   with_items:
     - dojo1
@@ -62,7 +62,7 @@
   with_inventory_hostnames: all
 
 - name: install vnc and applications environment
-  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
+  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
   with_items:
     - xfce4
     - firefox
@@ -74,17 +74,17 @@
 
 - name: install user profile for Chrome Firefox and Xfce
   sudo: yes
-  sudo_user: "{{item}}"
-  unarchive: src=dojo.profile.tgz dest=/home/{{item}} owner={{item}}
+  sudo_user: "{{ item }}"
+  unarchive: src=dojo.profile.tgz dest=/home/{{ item }} owner={{ item }}
   with_items:
     - dojo1
     - dojo2
 
 - name: create desktop background directory
   sudo: yes
-  sudo_user: "{{item}}"
+  sudo_user: "{{ item }}"
   file:
-    dest: /home/{{item}}/Pictures/background
+    dest: /home/{{ item }}/Pictures/background
     state: directory
   with_items:
     - dojo1
@@ -92,8 +92,8 @@
 
 - name: copy desktop background
   sudo: yes
-  sudo_user: "{{item}}"
-  copy: src=dojo.jpg dest=/home/{{item}}/Pictures/background/dojo.jpg force=yes mode=700 owner={{item}}
+  sudo_user: "{{ item }}"
+  copy: src=dojo.jpg dest=/home/{{ item }}/Pictures/background/dojo.jpg force=yes mode=700 owner={{ item }}
   with_items:
     - dojo1
     - dojo2
@@ -101,19 +101,19 @@
 - name: Configure xfce with background image.
   template:
     src: xfce4-desktop.xml
-    dest: /home/{{item}}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+    dest: /home/{{ item }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
   sudo: yes
-  sudo_user: "{{item}}"
+  sudo_user: "{{ item }}"
   with_items:
     - dojo1
     - dojo2
 
 - sudo: yes
-  sudo_user: "{{item}}"
+  sudo_user: "{{ item }}"
   file:
-    path: "/home/{{item}}/.vnc"
+    path: "/home/{{ item }}/.vnc"
     state: directory
-    owner: "{{item}}"
+    owner: "{{ item }}"
     mode: 0755
   with_items:
     - dojo1
@@ -121,17 +121,17 @@
 
 - name: set vnc password
   sudo: yes
-  sudo_user: "{{item}}"
+  sudo_user: "{{ item }}"
   shell: "echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd"
   args:
-    creates: /home/{{item}}/.vnc/passwd
-    chdir: /home/{{item}}/.vnc/
+    creates: /home/{{ item }}/.vnc/passwd
+    chdir: /home/{{ item }}/.vnc/
   with_items:
     - dojo1
     - dojo2
 
 - name: install vnc configuration
-  copy: src=xstartup dest=/home/{{item}}/.vnc/xstartup force=yes mode=700 owner={{item}}
+  copy: src=xstartup dest=/home/{{ item }}/.vnc/xstartup force=yes mode=700 owner={{ item }}
   with_items:
     - dojo1
     - dojo2
@@ -139,7 +139,7 @@
 - name: install vnc init script
   template:
     src: vncserver@.service
-    dest: /etc/systemd/system/vncserver-{{item}}@.service
+    dest: /etc/systemd/system/vncserver-{{ item }}@.service
     mode: 0644
     owner: root
   notify:

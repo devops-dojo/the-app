@@ -1,11 +1,11 @@
 ---
 # - apt_repository: repo='ppa:formorer/icinga'
 - apt: update_cache=yes cache_valid_time=3600
-- apt: pkg={{item}} state=present force=yes cache_valid_time=3600
+- apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
   with_items:
     - icinga
 
-- file: src=/etc/nagios3/conf.d/{{item}} dest=/etc/icinga/objects/{{item}} state=link
+- file: src=/etc/nagios3/conf.d/{{ item }} dest=/etc/icinga/objects/{{ item }} state=link
   with_items:
       - app-server-node-1.cfg
       - app-server-node-2.cfg
@@ -19,7 +19,7 @@
 
 - name: remove unused icinga configuration
   sudo: yes
-  file: path=/etc/icinga/objects/{{item}} state=absent
+  file: path=/etc/icinga/objects/{{ item }} state=absent
   with_items:
     - localhost_icinga.cfg
     - ido2db_check_proc.cfg
@@ -28,7 +28,7 @@
     - extinfo_icinga.cfg
 
 - sudo: yes
-  copy: src={{item}} dest=/etc/icinga/{{item}} force=yes mode=0644
+  copy: src={{ item }} dest=/etc/icinga/{{ item }} force=yes mode=0644
   with_items:
     - htpasswd.users
     - icinga.cfg

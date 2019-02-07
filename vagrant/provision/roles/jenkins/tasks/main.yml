@@ -14,7 +14,7 @@
   apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install pre-requisites
-  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
+  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
   with_items:
     - docker.io
     - golang
@@ -79,7 +79,7 @@
 
 - sudo: yes
   sudo_user: root
-  npm: name={{item}} global=yes
+  npm: name={{ item }} global=yes
   with_items:
     - grunt-cli
     - bower
@@ -152,7 +152,7 @@
 - name: install config.xml
   sudo: yes
   sudo_user: jenkins
-  copy: src={{item}} dest=/var/lib/jenkins/{{item}} owner=jenkins
+  copy: src={{ item }} dest=/var/lib/jenkins/{{ item }} owner=jenkins
   with_items:
     - config.xml
     - jenkins.mvn.GlobalMavenConfig.xml
@@ -208,7 +208,7 @@
   sudo_user: jenkins
   get_url:
     dest: /var/lib/jenkins/plugins/ 
-    url: http://mirrors.jenkins-ci.org/plugins/{{item}}
+    url: http://mirrors.jenkins-ci.org/plugins/{{ item }}
   with_items:
     - ace-editor/1.1/ace-editor.hpi
     - ant/1.2/ant.hpi
@@ -291,7 +291,7 @@
 #   sudo: yes
 #   sudo_user: jenkins
 #   # optional parameters -Dhttp.proxyHost={{ http_proxy_host }} -Dhttp.proxyPort={{ http_proxy_port }} -Dhttp.nonProxyHosts="localhost"
-#   raw:  java  -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{item}}
+#   raw:  java  -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{ item }}
 #   with_items:
 #       - http://mirrors.jenkins-ci.org/plugins/git/3.2.0/git.hpi
 #       - http://mirrors.jenkins-ci.org/plugins/git-client/2.4.1/git-client.hpi
@@ -345,7 +345,7 @@
 - name: start jenkins deployment pipeline
   sudo: yes
   sudo_user: jenkins
-  command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{item}}'
+  command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{ item }}'
   with_items:
     - shop-monolitic-build
     - shop-monolitic-build

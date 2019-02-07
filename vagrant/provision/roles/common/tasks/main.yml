@@ -22,12 +22,12 @@
   lineinfile: dest=/etc/environment regexp="^HTTPS_PROXY" line="HTTPS_PROXY=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
   when: with_proxy
 - name: Add no_proxy for internal hosts
-  lineinfile: dest=/etc/environment regexp="^no_proxy" line="no_proxy={{no_proxy}}"
+  lineinfile: dest=/etc/environment regexp="^no_proxy" line="no_proxy={{ no_proxy }}"
   when: with_proxy
 - name: Add NO_PROXY for internal hosts
-  lineinfile: dest=/etc/environment regexp="^NO_PROXY" line="NO_PROXY={{no_proxy}}"
+  lineinfile: dest=/etc/environment regexp="^NO_PROXY" line="NO_PROXY={{ no_proxy }}"
   when: with_proxy
-- apt: pkg={{item}} state=present force=yes update_cache=yes cache_valid_time=3600
+- apt: pkg={{ item }} state=present force=yes update_cache=yes cache_valid_time=3600
   with_items:
     - vim
     - redis-tools

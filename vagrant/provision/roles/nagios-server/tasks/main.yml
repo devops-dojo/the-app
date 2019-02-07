@@ -1,12 +1,12 @@
 ---
-- apt: pkg={{item}} state=present force=yes cache_valid_time=3600
+- apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
   with_items:
     - nagios3
     - nagios-nrpe-plugin
     - dc
 
 - sudo: yes
-  copy: src={{item}} dest=/etc/nagios3/conf.d/{{item}} force=yes mode=0644
+  copy: src={{ item }} dest=/etc/nagios3/conf.d/{{ item }} force=yes mode=0644
   with_items:
       - app-server-node-1.cfg
       - app-server-node-2.cfg
