@@ -1,6 +1,6 @@
 ---
 - hosts: micro_appservers
-  user: ubuntu
+  user: vagrant
   sudo: yes
 
   vars_files:

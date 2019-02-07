@@ -1,6 +1,6 @@
 ---
 - hosts: jumpstations
-  user: ubuntu
+  user: vagrant
   sudo: yes
   gather_facts: no
 
