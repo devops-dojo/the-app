@@ -47,7 +47,7 @@
 - become: true
   become:_user: root
   raw: gpg --armor --output /var/packages/ci-repo.gpg.key --export 18858766
-  when: (st.stat.exists is defined and st.stat.exists == false) or st.stat.exists is not defined
+  when: (st.stat.exists is defined and st.stat.exists == False) or st.stat.exists is not defined
 
 - become: true
   become:_user: root

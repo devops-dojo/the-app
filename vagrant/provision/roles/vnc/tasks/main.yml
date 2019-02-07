@@ -27,7 +27,7 @@
   register: id_rsa
 
 - name: create local dojo users .ssh directory
-  sudo: true
+  become: true
   become:_user: "{{ item }}"
   file:
     path: /home/{{ item }}/.ssh
@@ -93,7 +93,11 @@
 - name: copy desktop background
   become: true
   become:_user: "{{ item }}"
+<<<<<<< HEAD
   copy: src=dojo.jpg dest=/home/{{ item }}/Pictures/background/dojo.jpg force=yes mode=700 owner={{ item }}
+=======
+  copy: src=dojo.jpg dest=/home/{{ item }}/Pictures/background/dojo.jpg force=yes mode=0700 owner={{ item }}
+>>>>>>> Corrections for weaknesses in Vagrant code, bugs
   with_items:
     - dojo1
     - dojo2
@@ -131,7 +135,7 @@
     - dojo2
 
 - name: install vnc configuration
-  copy: src=xstartup dest=/home/{{ item }}/.vnc/xstartup force=yes mode=700 owner={{ item }}
+  copy: src=xstartup dest=/home/{{ item }}/.vnc/xstartup force=yes mode=0700 owner={{ item }}
   with_items:
     - dojo1
     - dojo2
@@ -152,7 +156,7 @@
   systemd:
     state: started
     enabled: yes
-    name: vncserver-{{item.user}}@{{item.display}}
+    name: vncserver-{{ item.user }}@{{ item.display }}
   with_items:
     - user: dojo1
       display: 1

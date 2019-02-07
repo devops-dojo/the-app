@@ -25,7 +25,7 @@
   lineinfile:
     dest: /home/hubot/ninjabot/.env.template
     regexp: '^export HUBOT_ADAPTER='
-    line: 'export HUBOT_ADAPTER={{hubot_adapter}}'
+    line: 'export HUBOT_ADAPTER={{ hubot_adapter }}'
 
 - name: Use rich text in pubsub when slack adapter
   lineinfile:

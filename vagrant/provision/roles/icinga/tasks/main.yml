@@ -48,7 +48,7 @@
   lineinfile:
     dest: /usr/local/bin/hubot_nagios.sh
     regexp: '^HUBOT_ADAPTER='
-    line: 'HUBOT_ADAPTER={{hubot_adapter}}'
+    line: 'HUBOT_ADAPTER={{ hubot_adapter }}'
 
 - become: true
   template: src=blink1_nagios.sh.j2 dest=/usr/local/bin/blink1_nagios.sh force=yes mode=0755

@@ -171,11 +171,11 @@
     block: |
       <int>3</int>
       <string>GIT_REPOSITORY</string>
-      <string>{{github_url}}</string>
+      <string>{{ github_url }}</string>
       <string>BRANCH_TO_BUILD</string>
-      <string>{{github_branch}}</string>
+      <string>{{ github_branch }}</string>
       <string>PROD_SERVERS</string>
-      <string>{{prod_servers}}</string>
+      <string>{{ prod_servers }}</string>
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
@@ -207,7 +207,7 @@
   become: true
   become:_user: jenkins
   get_url:
-    dest: /var/lib/jenkins/plugins/ 
+    dest: /var/lib/jenkins/plugins/
     url: http://mirrors.jenkins-ci.org/plugins/{{ item }}
   with_items:
     - ace-editor/1.1/ace-editor.hpi
@@ -324,7 +324,7 @@
 - name: get GIT repository
   become: true
   become:_user: jenkins
-  git: repo={{github_url}} dest=/var/lib/jenkins/repo-cache/appstash bare=yes version=master
+  git: repo={{ github_url }} dest=/var/lib/jenkins/repo-cache/appstash bare=yes version=master
 
 - name: Setup cron job to update GIT repository automatically
   become: true
