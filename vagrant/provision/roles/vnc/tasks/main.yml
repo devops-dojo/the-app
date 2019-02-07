@@ -93,11 +93,7 @@
 - name: copy desktop background
   become: true
   become:_user: "{{ item }}"
-<<<<<<< HEAD
-  copy: src=dojo.jpg dest=/home/{{ item }}/Pictures/background/dojo.jpg force=yes mode=700 owner={{ item }}
-=======
   copy: src=dojo.jpg dest=/home/{{ item }}/Pictures/background/dojo.jpg force=yes mode=0700 owner={{ item }}
->>>>>>> Corrections for weaknesses in Vagrant code, bugs
   with_items:
     - dojo1
     - dojo2
