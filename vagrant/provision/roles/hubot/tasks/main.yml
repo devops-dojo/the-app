@@ -12,7 +12,7 @@
 
 - name: Tweak proxy if needed
   become: true
-  become:_user: hubot
+  become_user: hubot
   blockinfile:
     dest: /home/hubot/ninjabot/.env.template
     marker: "# {mark} ANSIBLE MANAGED BLOCK"

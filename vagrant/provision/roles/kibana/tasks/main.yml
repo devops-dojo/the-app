@@ -14,7 +14,7 @@
 
 - name: unarchive kibana
   become: yes
-  become:_user: vagrant
+  become_user: vagrant
   raw: tar -xf /tmp/kibana.tar.gz --directory=/tmp/
 
 - raw: cp -r /tmp/kibana-{{ kibana_version }}/* /var/www/html/

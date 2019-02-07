@@ -14,12 +14,12 @@
 
 - name: create gnupg directory
   become: true
-  become:_user: root
+  become_user: root
   file: path=/root/.gnupg/ state=directory force=yes
 
 - copy: src={{ item }} dest=/root/.gnupg/{{ item }} force=yes mode=0644
   become: true
-  become:_user: root
+  become_user: root
   with_items:
       - gpg.conf
       - pubring.gpg
@@ -29,7 +29,7 @@
 
 - name: create deb repository
   become: true
-  become:_user: root
+  become_user: root
   file: path=/var/packages/debian/conf state=directory force=yes
 
 - copy: src={{ item }} dest=/var/packages/debian/conf/{{ item }} force=yes mode=0644
@@ -45,12 +45,12 @@
   register: st
 
 - become: true
-  become:_user: root
+  become_user: root
   raw: gpg --armor --output /var/packages/ci-repo.gpg.key --export 18858766
   when: (st.stat.exists is defined and st.stat.exists == False) or st.stat.exists is not defined
 
 - become: true
-  become:_user: root
+  become_user: root
   raw: reprepro -b /var/packages/debian/ export
 
 - copy: src=default dest=/etc/nginx/sites-enabled/default force=yes mode=0644
