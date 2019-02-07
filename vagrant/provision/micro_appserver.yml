@@ -1,7 +1,7 @@
 ---
 - hosts: micro_appservers
   user: vagrant
-  sudo: yes
+  become: true
 
   vars_files:
      - vars/default.yml

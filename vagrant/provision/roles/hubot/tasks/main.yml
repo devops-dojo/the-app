@@ -11,8 +11,8 @@
   copy: src=ninjabot dest=/home/hubot group=hubot owner=hubot
 
 - name: Tweak proxy if needed
-  sudo: yes
-  sudo_user: hubot
+  become: true
+  become:_user: hubot
   blockinfile:
     dest: /home/hubot/ninjabot/.env.template
     marker: "# {mark} ANSIBLE MANAGED BLOCK"

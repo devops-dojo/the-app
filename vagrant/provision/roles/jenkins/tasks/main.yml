@@ -77,8 +77,8 @@
   become_user: jenkins
   when: with_proxy
 
-- sudo: yes
-  sudo_user: root
+- become: true
+  become:_user: root
   npm: name={{ item }} global=yes
   with_items:
     - grunt-cli
@@ -90,14 +90,14 @@
 - raw: sudo gem install compass
 
 - name: install Jenkins proxy config if necessary
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   copy: src=proxy.xml dest=/var/lib/jenkins/proxy.xml owner=jenkins
   when: with_proxy
   notify: restart jenkins
 - name: Tune Jenkins proxy per global variable
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/proxy.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
@@ -111,13 +111,13 @@
   file: path=/var/lib/jenkins/.gradle state=directory owner=jenkins
 
 - name: install gradle.properties with proxy if necessary
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   copy: src=gradle.properties dest=/var/lib/jenkins/.gradle/gradle.properties owner=jenkins
   when: with_proxy
 - name: Tune gradle proxy per global variable
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/.gradle/gradle.properties
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
@@ -139,19 +139,19 @@
     state: absent
 
 - name: create init groovy directory
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   file: path="/var/lib/jenkins/init.groovy.d/" state=directory
 
 - name: provision Jenkins admin and anonymous users
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   copy: src=basic-security.groovy dest=/var/lib/jenkins/init.groovy.d/basic-security owner=jenkins
   notify: restart jenkins
 
 - name: install config.xml
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   copy: src={{ item }} dest=/var/lib/jenkins/{{ item }} owner=jenkins
   with_items:
     - config.xml
@@ -162,8 +162,8 @@
   notify: restart jenkins
 
 - name: Tune GIT repository and branch per global variable
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/config.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK JENKINS VAR -->"
@@ -181,31 +181,31 @@
 - wait_for: port=8080 timeout=300 delay=30
 
 - name: download jenkins update-center.js
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   get_url: url=http://updates.jenkins-ci.org/update-center.json dest=/tmp/update-center.js owner=jenkins
 
 - name: remove first and last line javascript wrapper
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   raw:  sed '1d;$d' /tmp/update-center.js > /tmp/update-center.json
 
 - name: push it to the update URL
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   raw:  'curl -X POST -H "Accept: application/json" -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
 
 - name: download jenkins cli
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   get_url: url=http://localhost:8080/jnlpJars/jenkins-cli.jar dest=/tmp/jenkins-cli.jar owner=jenkins
 
 - name: download jenkins plugins
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   get_url:
     dest: /var/lib/jenkins/plugins/ 
     url: http://mirrors.jenkins-ci.org/plugins/{{ item }}
@@ -288,8 +288,8 @@
 
 
 # - name: install jenkins plugins
-#   sudo: yes
-#   sudo_user: jenkins
+#   become: true
+#   become:_user: jenkins
 #   # optional parameters -Dhttp.proxyHost={{ http_proxy_host }} -Dhttp.proxyPort={{ http_proxy_port }} -Dhttp.nonProxyHosts="localhost"
 #   raw:  java  -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{ item }}
 #   with_items:
@@ -312,8 +312,8 @@
 #   ignore_errors: True
 
 - name: restart jenkins
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ restart
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
@@ -322,18 +322,18 @@
 - file: dest=/var/lib/jenkins/repo-cache/appstash mode=0755 owner=jenkins group=jenkins state=directory
 
 - name: get GIT repository
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   git: repo={{github_url}} dest=/var/lib/jenkins/repo-cache/appstash bare=yes version=master
 
 - name: Setup cron job to update GIT repository automatically
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   cron: name="Update AppStash Git Repository" minute="*/60" job="cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
 
 - name: install jenkins jobs
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   raw: 'sh /provision/roles/jenkins/files/restoreAllJobs.sh'
   ignore_errors: yes
 
@@ -343,8 +343,8 @@
 - copy: src=id_rsa dest=/var/lib/jenkins/.ssh/id_rsa mode=0600 group=jenkins owner=jenkins
 
 - name: start jenkins deployment pipeline
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{ item }}'
   with_items:
     - shop-monolitic-build
@@ -362,4 +362,4 @@
 
 - name: add jenkins to docker group
   raw: gpasswd -a jenkins docker
-  sudo: yes
+  become: true

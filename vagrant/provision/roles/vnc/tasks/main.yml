@@ -28,7 +28,7 @@
 
 - name: create local dojo users .ssh directory
   sudo: true
-  sudo_user: "{{ item }}"
+  become:_user: "{{ item }}"
   file:
     path: /home/{{ item }}/.ssh
     mode: 0755
@@ -38,8 +38,8 @@
     - dojo2
 
 - name: Put private key on all dojo users
-  sudo: yes
-  sudo_user: "{{ item }}"
+  become: true
+  become:_user: "{{ item }}"
   copy:
     dest: /home/{{ item }}/.ssh/id_rsa
     content: "{{ id_rsa.stdout }}"
@@ -73,16 +73,16 @@
     - chromium-browser
 
 - name: install user profile for Chrome Firefox and Xfce
-  sudo: yes
-  sudo_user: "{{ item }}"
+  become: true
+  become:_user: "{{ item }}"
   unarchive: src=dojo.profile.tgz dest=/home/{{ item }} owner={{ item }}
   with_items:
     - dojo1
     - dojo2
 
 - name: create desktop background directory
-  sudo: yes
-  sudo_user: "{{ item }}"
+  become: true
+  become:_user: "{{ item }}"
   file:
     dest: /home/{{ item }}/Pictures/background
     state: directory
@@ -91,8 +91,8 @@
     - dojo2
 
 - name: copy desktop background
-  sudo: yes
-  sudo_user: "{{ item }}"
+  become: true
+  become:_user: "{{ item }}"
   copy: src=dojo.jpg dest=/home/{{ item }}/Pictures/background/dojo.jpg force=yes mode=700 owner={{ item }}
   with_items:
     - dojo1
@@ -102,14 +102,14 @@
   template:
     src: xfce4-desktop.xml
     dest: /home/{{ item }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-  sudo: yes
-  sudo_user: "{{ item }}"
+  become: true
+  become:_user: "{{ item }}"
   with_items:
     - dojo1
     - dojo2
 
-- sudo: yes
-  sudo_user: "{{ item }}"
+- become: true
+  become:_user: "{{ item }}"
   file:
     path: "/home/{{ item }}/.vnc"
     state: directory
@@ -120,8 +120,8 @@
     - dojo2
 
 - name: set vnc password
-  sudo: yes
-  sudo_user: "{{ item }}"
+  become: true
+  become:_user: "{{ item }}"
   shell: "echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd"
   args:
     creates: /home/{{ item }}/.vnc/passwd

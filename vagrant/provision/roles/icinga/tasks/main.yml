@@ -18,7 +18,7 @@
       - checkmem.cfg
 
 - name: remove unused icinga configuration
-  sudo: yes
+  become: true
   file: path=/etc/icinga/objects/{{ item }} state=absent
   with_items:
     - localhost_icinga.cfg
@@ -27,7 +27,8 @@
     - services_icinga.cfg
     - extinfo_icinga.cfg
 
-- sudo: yes
+- name: install new icinga configuration
+  become: true
   copy: src={{ item }} dest=/etc/icinga/{{ item }} force=yes mode=0644
   with_items:
     - htpasswd.users
@@ -36,11 +37,11 @@
     - commands.cfg
   notify: restart icinga
 
-- sudo: yes
+- become: true
   copy: src=contacts_icinga.cfg dest=/etc/icinga/objects/contacts_icinga.cfg force=yes mode=0644
   notify: restart icinga
 
-- sudo: yes
+- become: true
   copy: src=hubot_nagios.sh dest=/usr/local/bin/hubot_nagios.sh force=yes mode=0755
 
 - name: Setup Hubot adapter
@@ -49,5 +50,5 @@
     regexp: '^HUBOT_ADAPTER='
     line: 'HUBOT_ADAPTER={{hubot_adapter}}'
 
-- sudo: yes
+- become: true
   template: src=blink1_nagios.sh.j2 dest=/usr/local/bin/blink1_nagios.sh force=yes mode=0755

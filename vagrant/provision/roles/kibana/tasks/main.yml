@@ -14,7 +14,7 @@
 
 - name: unarchive kibana
   sudo : yes
-  sudo_user: vagrant
+  become:_user: vagrant
   raw: tar -xf /tmp/kibana.tar.gz --directory=/tmp/
 
 - raw: cp -r /tmp/kibana-{{kibana_version}}/* /var/www/html/
