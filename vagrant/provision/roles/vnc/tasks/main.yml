@@ -25,6 +25,7 @@
 - name: Getting private key
   command: cat .ssh/id_rsa
   register: id_rsa
+  changed_when: false
 
 - name: create local dojo users .ssh directory
   become: true
@@ -52,6 +53,7 @@
 - name: Getting public key
   command: cat .ssh/id_rsa.pub
   register: id_rsa_pub
+  changed_when: false
 
 - name: "Add pub key to authorized_keys"
   authorized_key:
@@ -71,6 +73,11 @@
     - tightvncserver
     - xfonts-base
     - chromium-browser
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
 
 - name: install user profile for Chrome Firefox and Xfce
   become: true

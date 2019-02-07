@@ -8,6 +8,10 @@
 
 - name: install shop shop file
   apt_key: url=http://ci-repo/ci-repo.gpg.key state=present
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 
 - name: add shop repository into sources list.
@@ -15,5 +19,9 @@
 
 - name: update cache
   apt: update_cache=yes force=yes cache_valid_time=3600
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - file: path=/var/log/syslog owner=logstash

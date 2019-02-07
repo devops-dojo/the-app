@@ -8,6 +8,10 @@
     - reprepro
     - dpkg-sig
     - dpkg-dev
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - copy: src=rng-tools dest=/etc/default/rng-tools force=yes mode=0644
   notify: restart rng-tools
@@ -47,7 +51,11 @@
 - become: true
   become_user: root
   raw: gpg --armor --output /var/packages/ci-repo.gpg.key --export 18858766
-  when: (st.stat.exists is defined and st.stat.exists == False) or st.stat.exists is not defined
+  when: (st.stat.exists is defined and ( not st.stat.exists )) or st.stat.exists is not defined
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - become: true
   become_user: root

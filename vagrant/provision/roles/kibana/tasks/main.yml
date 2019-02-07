@@ -4,6 +4,10 @@
   with_items:
       - unzip
       - curl
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: download kibana
   get_url: url=http://download.elasticsearch.org/kibana/kibana/kibana-{{ kibana_version }}.tar.gz dest=/tmp/kibana.tar.gz mode=0755 owner=vagrant
