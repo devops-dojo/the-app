@@ -11,6 +11,7 @@
     repo: 'deb http://packages.elasticsearch.org/elasticsearch/{{ elasticsearch_version }}/debian stable main'
     state: present
 
+
 - name: update cache
   apt: update_cache=yes force=yes cache_valid_time=3600
   register: task_result

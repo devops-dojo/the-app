@@ -4,41 +4,51 @@
 
 - name: set default locale
   become: true
+
   lineinfile:
     dest: /etc/default/locale
     regexp: "LC_ALL"
     line: "LC_ALL=\"en_US.UTF-8\""
+
 
 - authorized_key: # Needed when provisioning outside Vagrant (plain Ansible)
     user: vagrant
     key: "{{ lookup('file', playbook_dir + '/roles/jenkins/files/id_rsa.pub') }}"
 
 - name: Add http_proxy for internal hosts
+
   lineinfile:
     dest: /etc/environment
     regexp: "^http_proxy"
     line: "http_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
+
   when: with_proxy
 
 - name: Add HTTP_PROXY for internal hosts
+
   lineinfile:
     dest: /etc/environment
     regexp: "^HTTP_PROXY"
     line: "HTTP_PROXY=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
+
   when: with_proxy
 
 - name: Add https_proxy for internal hosts
+
   lineinfile:
     dest: /etc/environment
     regexp: "^https_proxy"
     line: "https_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
+
   when: with_proxy
 
 - name: Add HTTPS_PROXY for internal hosts
+
   lineinfile:
     dest: /etc/environment
     regexp: "^HTTPS_PROXY"
     line: "HTTPS_PROXY=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
+
   when: with_proxy
 
 - name: Add no_proxy for internal hosts
@@ -46,6 +56,7 @@
     dest: /etc/environment
     regexp: "^no_proxy"
     line: "no_proxy={{ no_proxy }}"
+
   when: with_proxy
 
 - name: Add NO_PROXY for internal hosts
