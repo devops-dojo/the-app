@@ -211,7 +211,10 @@
 - name: download jenkins update-center.js
   become: true
   become_user: jenkins
-  get_url: url=http://updates.jenkins-ci.org/update-center.json dest=/tmp/update-center.js owner=jenkins
+  get_url:
+    url: http://updates.jenkins-ci.org/update-center.json
+    dest: /tmp/update-center.js
+    owner: jenkins
 
 - name: remove first and last line javascript wrapper
   become: true
@@ -221,7 +224,9 @@
 - name: push it to the update URL
   become: true
   become_user: jenkins
-  raw:  'curl -X POST -H "Accept: application/json" -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
+  raw: >-
+     'curl -X POST -H "Accept: application/json"
+     -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
@@ -318,7 +323,10 @@
 # - name: install jenkins plugins
 #   become: true
 #   become_user: jenkins
-#   # optional parameters -Dhttp.proxyHost={{ http_proxy_host }} -Dhttp.proxyPort={{ http_proxy_port }} -Dhttp.nonProxyHosts="localhost"
+#   # optional parameters
+#    -Dhttp.proxyHost={{ http_proxy_host }}
+#    -Dhttp.proxyPort={{ http_proxy_port }}
+#    -Dhttp.nonProxyHosts="localhost"
 #   raw:  java  -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{ item }}
 #   with_items:
 #       - http://mirrors.jenkins-ci.org/plugins/git/3.2.0/git.hpi
@@ -352,12 +360,20 @@
 - name: get GIT repository
   become: true
   become_user: jenkins
-  git: repo={{ github_url }} dest=/var/lib/jenkins/repo-cache/appstash bare=yes version=master
+  git:
+    repo: "{{ github_url }}"
+    dest: /var/lib/jenkins/repo-cache/appstash
+    bare: yes
+    version: master
 
 - name: Setup cron job to update GIT repository automatically
   become: true
   become_user: jenkins
-  cron: name="Update AppStash Git Repository" minute="*/60" job="cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
+  cron:
+    name: "Update AppStash Git Repository"
+    minute: "*/60"
+    job: "cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
+
 
 - name: install jenkins jobs
   become: true

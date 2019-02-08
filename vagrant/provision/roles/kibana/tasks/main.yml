@@ -10,7 +10,11 @@
   delay: 2
 
 - name: download kibana
-  get_url: url=http://download.elasticsearch.org/kibana/kibana/kibana-{{ kibana_version }}.tar.gz dest=/tmp/kibana.tar.gz mode=0755 owner=vagrant
+  get_url:
+    url: http://download.elasticsearch.org/kibana/kibana/kibana-{{ kibana_version }}.tar.gz
+    dest: /tmp/kibana.tar.gz
+    mode: 0755
+    owner: vagrant
 
 - group: name=www state=present
 - user: name=vagrant shell=/bin/bash groups=www append=yes
