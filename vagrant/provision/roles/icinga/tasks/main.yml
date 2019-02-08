@@ -1,9 +1,19 @@
 ---
 # - apt_repository: repo='ppa:formorer/icinga'
 - apt: update_cache=yes cache_valid_time=3600
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
+
+
 - apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
   with_items:
     - icinga
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - file: src=/etc/nagios3/conf.d/{{ item }} dest=/etc/icinga/objects/{{ item }} state=link
   with_items:
@@ -27,7 +37,7 @@
     - services_icinga.cfg
     - extinfo_icinga.cfg
 
-- name: install new icinga configuration
+- name: install new icinga configurationache_valid
   become: true
   copy: src={{ item }} dest=/etc/icinga/{{ item }} force=yes mode=0644
   with_items:

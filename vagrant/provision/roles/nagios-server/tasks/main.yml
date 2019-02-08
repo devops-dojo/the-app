@@ -4,6 +4,10 @@
     - nagios3
     - nagios-nrpe-plugin
     - dc
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - become: true
   copy: src={{ item }} dest=/etc/nagios3/conf.d/{{ item }} force=yes mode=0644
@@ -22,12 +26,23 @@
       - extinfo_nagios2.cfg
       - hostgroups_nagios2.cfg
 
-- get_url: url='http://exchange.nagios.org/components/com_mtree/attachment.php?link_id=3329&cf_id=24' dest=/usr/lib/nagios/plugins/check_mem owner=root mode=0744
+- name: get nagios mem check plugin
+  get_url:
+    url: 'http://exchange.nagios.org/components/com_mtree/attachment.php?link_id: 3329&cf_id: 24'
+    dest: /usr/lib/nagios/plugins/check_mem
+    owner: root
+    mode: 0744
 
-- become: true
-  copy: src=nagios.cfg dest=/etc/nagios3/nagios.cfg force=yes mode=0644
+- name: set nagios config
+  become: true
+  copy:
+    src: nagios.cfg
+    dest: /etc/nagios3/nagios.cfg
+    force: yes
+    mode: 0644
 
-- become: true
+- name: set nagios disk check config
+  become: true
   copy: src=disk.cfg dest=/etc/nagios-plugins/config/disk.cfg force=yes mode=0644
 
 - become: true

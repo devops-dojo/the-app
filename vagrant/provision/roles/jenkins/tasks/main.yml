@@ -1,9 +1,17 @@
 ---
 - name: install python-software-properties
   apt: pkg=python-software-properties state=present force=yes cache_valid_time=3600
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: install node key file
   apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 #- name: add node repository into sources list.
 #  apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present
@@ -12,6 +20,10 @@
 
 - name: update cache
   apt: update_cache=yes force=yes cache_valid_time=3600
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: install pre-requisites
   apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
@@ -26,6 +38,10 @@
     - nodejs
     - ruby
     - ruby-dev
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: Create symlink to nodejs
   file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
@@ -35,6 +51,10 @@
     url: "{{ jenkins_repo_key_url }}"
     state: present
   when: jenkins_version is undefined
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 - name: Add Jenkins apt repository.
   apt_repository:
@@ -65,6 +85,10 @@
     name: jenkins
     state: installed
   when: jenkins_version is undefined
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 
 - name: Configure npm registry for current install user if proxy set
@@ -78,26 +102,30 @@
   when: with_proxy
 
 - become: true
-  become:_user: root
+  become_user: root
   npm: name={{ item }} global=yes
   with_items:
     - grunt-cli
     - bower
     - typescript
     - typings@1.5.0
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
 #gem plugin does'nt work correct
 - raw: sudo gem install compass
 
 - name: install Jenkins proxy config if necessary
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   copy: src=proxy.xml dest=/var/lib/jenkins/proxy.xml owner=jenkins
   when: with_proxy
   notify: restart jenkins
 - name: Tune Jenkins proxy per global variable
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/proxy.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
@@ -112,12 +140,12 @@
 
 - name: install gradle.properties with proxy if necessary
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   copy: src=gradle.properties dest=/var/lib/jenkins/.gradle/gradle.properties owner=jenkins
   when: with_proxy
 - name: Tune gradle proxy per global variable
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/.gradle/gradle.properties
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
@@ -140,18 +168,18 @@
 
 - name: create init groovy directory
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   file: path="/var/lib/jenkins/init.groovy.d/" state=directory
 
 - name: provision Jenkins admin and anonymous users
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   copy: src=basic-security.groovy dest=/var/lib/jenkins/init.groovy.d/basic-security owner=jenkins
   notify: restart jenkins
 
 - name: install config.xml
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   copy: src={{ item }} dest=/var/lib/jenkins/{{ item }} owner=jenkins
   with_items:
     - config.xml
@@ -163,7 +191,7 @@
 
 - name: Tune GIT repository and branch per global variable
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/config.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK JENKINS VAR -->"
@@ -182,30 +210,35 @@
 
 - name: download jenkins update-center.js
   become: true
-  become:_user: jenkins
-  get_url: url=http://updates.jenkins-ci.org/update-center.json dest=/tmp/update-center.js owner=jenkins
+  become_user: jenkins
+  get_url:
+    url: http://updates.jenkins-ci.org/update-center.json
+    dest: /tmp/update-center.js
+    owner: jenkins
 
 - name: remove first and last line javascript wrapper
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   raw:  sed '1d;$d' /tmp/update-center.js > /tmp/update-center.json
 
 - name: push it to the update URL
   become: true
-  become:_user: jenkins
-  raw:  'curl -X POST -H "Accept: application/json" -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
+  become_user: jenkins
+  raw: >-
+     'curl -X POST -H "Accept: application/json"
+     -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
 
 - name: download jenkins cli
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   get_url: url=http://localhost:8080/jnlpJars/jenkins-cli.jar dest=/tmp/jenkins-cli.jar owner=jenkins
 
 - name: download jenkins plugins
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   get_url:
     dest: /var/lib/jenkins/plugins/
     url: http://mirrors.jenkins-ci.org/plugins/{{ item }}
@@ -289,8 +322,11 @@
 
 # - name: install jenkins plugins
 #   become: true
-#   become:_user: jenkins
-#   # optional parameters -Dhttp.proxyHost={{ http_proxy_host }} -Dhttp.proxyPort={{ http_proxy_port }} -Dhttp.nonProxyHosts="localhost"
+#   become_user: jenkins
+#   # optional parameters
+#    -Dhttp.proxyHost={{ http_proxy_host }}
+#    -Dhttp.proxyPort={{ http_proxy_port }}
+#    -Dhttp.nonProxyHosts="localhost"
 #   raw:  java  -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{ item }}
 #   with_items:
 #       - http://mirrors.jenkins-ci.org/plugins/git/3.2.0/git.hpi
@@ -313,7 +349,7 @@
 
 - name: restart jenkins
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ restart
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
@@ -323,17 +359,25 @@
 
 - name: get GIT repository
   become: true
-  become:_user: jenkins
-  git: repo={{ github_url }} dest=/var/lib/jenkins/repo-cache/appstash bare=yes version=master
+  become_user: jenkins
+  git:
+    repo: "{{ github_url }}"
+    dest: /var/lib/jenkins/repo-cache/appstash
+    bare: yes
+    version: master
 
 - name: Setup cron job to update GIT repository automatically
   become: true
-  become:_user: jenkins
-  cron: name="Update AppStash Git Repository" minute="*/60" job="cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
+  become_user: jenkins
+  cron:
+    name: "Update AppStash Git Repository"
+    minute: "*/60"
+    job: "cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
+
 
 - name: install jenkins jobs
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   raw: 'sh /provision/roles/jenkins/files/restoreAllJobs.sh'
   ignore_errors: yes
 
@@ -344,7 +388,7 @@
 
 - name: start jenkins deployment pipeline
   become: true
-  become:_user: jenkins
+  become_user: jenkins
   command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{ item }}'
   with_items:
     - shop-monolitic-build
