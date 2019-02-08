@@ -21,11 +21,11 @@
     dest: /etc/haproxy/haproxy.cfg
   with_items: "{{ lb_nodes }}"
 
-- set_fact: >-
-            "etc_hosts={% macro host_entry(lines) -%}
-            {%- for node in lines %}{{ '\"%s\": \"%s\"\n' |
-            format(node.split()[1], node.split()[0]) }}{%- endfor %}{%- endmacro %}{{ \"{ %s }\" |
-             format(host_entry(lb_nodes.stdout_lines).strip().replace(\"\n\", \", \")) | from_json }}"
+- set_fact: >
+    etc_hosts={% macro host_entry(lines) -%}{%- for node in lines %}{{ '\"%s\": \"%s\"\n' |
+    format(node.split()[1], node.split()[0]) }}{%- endfor %}{%- endmacro %}{{ \"{ %s }\" |
+    format(host_entry(lb_nodes.stdout_lines).strip().replace(\"\n\", \", \")) | from_json }}
+
 
 - name: restart haproxy
   service: name=haproxy state=restarted

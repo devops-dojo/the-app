@@ -28,7 +28,7 @@
 
 - name: get nagios mem check plugin
   get_url:
-    url: 'http://exchange.nagios.org/components/com_mtree/attachment.php?link_id: 3329&cf_id: 24'
+    url: 'http://exchange.nagios.org/components/com_mtree/attachment.php?link_id=3329&cf_id=24'
     dest: /usr/lib/nagios/plugins/check_mem
     owner: root
     mode: 0744

@@ -213,18 +213,18 @@
   become_user: jenkins
   get_url:
     url: http://updates.jenkins-ci.org/update-center.json
-    dest: /tmp/update-center.js
+    dest: /tmp/update-center.json
     owner: jenkins
 
 - name: remove first and last line javascript wrapper
   become: true
   become_user: jenkins
-  raw:  sed '1d;$d' /tmp/update-center.js > /tmp/update-center.json
+  raw:  sed -i '1d;$d' /tmp/update-center.json
 
 - name: push it to the update URL
   become: true
   become_user: jenkins
-  raw: >-
+  raw:
      'curl -X POST -H "Accept: application/json"
      -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
 

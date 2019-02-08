@@ -20,6 +20,7 @@
 # - raw: 'sudo update-alternatives --set "javaws" "/usr/local/{{ oracle_java_folder }}/bin/javaws"'
 
 - name: Install OpenJDK 8
+  become: true
   apt:
     pkg: openjdk-8-jdk
     state: present
