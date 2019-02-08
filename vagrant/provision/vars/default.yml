@@ -22,7 +22,7 @@ hubot_adapter: slack
 nodejs_npm_registry : http://registry.npmjs.org/
 
 # # Comment this section when pipeline does NOT run behind web proxy
-with_proxy: true
+with_proxy: false
 http_proxy_host: web-proxy.emea.hpqcorp.net
 http_proxy_port: 8080
 #building no_proxy from smaller lines to be readable
