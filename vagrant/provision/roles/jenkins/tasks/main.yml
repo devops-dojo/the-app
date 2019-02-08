@@ -14,7 +14,7 @@
   apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install pre-requisites
-  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
+  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
   with_items:
     - docker.io
     - golang
@@ -77,9 +77,9 @@
   become_user: jenkins
   when: with_proxy
 
-- sudo: yes
-  sudo_user: root
-  npm: name={{item}} global=yes
+- become: true
+  become:_user: root
+  npm: name={{ item }} global=yes
   with_items:
     - grunt-cli
     - bower
@@ -90,42 +90,42 @@
 - raw: sudo gem install compass
 
 - name: install Jenkins proxy config if necessary
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   copy: src=proxy.xml dest=/var/lib/jenkins/proxy.xml owner=jenkins
   when: with_proxy
   notify: restart jenkins
 - name: Tune Jenkins proxy per global variable
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/proxy.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
     insertafter: "<proxy>"
     content: |
-      <name>{{http_proxy_host}}</name>
-      <port>{{http_proxy_port}}</port>
+      <name>{{ http_proxy_host }}</name>
+      <port>{{ http_proxy_port }}</port>
   when: with_proxy
 
 - name: create .gradle directory
   file: path=/var/lib/jenkins/.gradle state=directory owner=jenkins
 
 - name: install gradle.properties with proxy if necessary
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   copy: src=gradle.properties dest=/var/lib/jenkins/.gradle/gradle.properties owner=jenkins
   when: with_proxy
 - name: Tune gradle proxy per global variable
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/.gradle/gradle.properties
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     content: |
-      systemProp.http.proxyHost={{http_proxy_host}}
-      systemProp.http.proxyPort={{http_proxy_port}}
-      systemProp.https.proxyHost={{http_proxy_host}}
-      systemProp.https.proxyPort={{http_proxy_port}}
+      systemProp.http.proxyHost={{ http_proxy_host }}
+      systemProp.http.proxyPort={{ http_proxy_port }}
+      systemProp.https.proxyHost={{ http_proxy_host }}
+      systemProp.https.proxyPort={{ http_proxy_port }}
   when: with_proxy
 
 - raw: sudo service jenkins restart
@@ -139,20 +139,20 @@
     state: absent
 
 - name: create init groovy directory
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   file: path="/var/lib/jenkins/init.groovy.d/" state=directory
 
 - name: provision Jenkins admin and anonymous users
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   copy: src=basic-security.groovy dest=/var/lib/jenkins/init.groovy.d/basic-security owner=jenkins
   notify: restart jenkins
 
 - name: install config.xml
-  sudo: yes
-  sudo_user: jenkins
-  copy: src={{item}} dest=/var/lib/jenkins/{{item}} owner=jenkins
+  become: true
+  become:_user: jenkins
+  copy: src={{ item }} dest=/var/lib/jenkins/{{ item }} owner=jenkins
   with_items:
     - config.xml
     - jenkins.mvn.GlobalMavenConfig.xml
@@ -162,8 +162,8 @@
   notify: restart jenkins
 
 - name: Tune GIT repository and branch per global variable
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/config.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK JENKINS VAR -->"
@@ -171,64 +171,149 @@
     block: |
       <int>3</int>
       <string>GIT_REPOSITORY</string>
-      <string>{{github_url}}</string>
+      <string>{{ github_url }}</string>
       <string>BRANCH_TO_BUILD</string>
-      <string>{{github_branch}}</string>
+      <string>{{ github_branch }}</string>
       <string>PROD_SERVERS</string>
-      <string>{{prod_servers}}</string>
+      <string>{{ prod_servers }}</string>
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
 
 - name: download jenkins update-center.js
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   get_url: url=http://updates.jenkins-ci.org/update-center.json dest=/tmp/update-center.js owner=jenkins
 
 - name: remove first and last line javascript wrapper
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   raw:  sed '1d;$d' /tmp/update-center.js > /tmp/update-center.json
 
 - name: push it to the update URL
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   raw:  'curl -X POST -H "Accept: application/json" -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
 - wait_for: port=8080 timeout=300 delay=30
 
 - name: download jenkins cli
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   get_url: url=http://localhost:8080/jnlpJars/jenkins-cli.jar dest=/tmp/jenkins-cli.jar owner=jenkins
 
-- name: install jenkins plugins
-  sudo: yes
-  sudo_user: jenkins
-  raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{item}}
+- name: download jenkins plugins
+  become: true
+  become:_user: jenkins
+  get_url:
+    dest: /var/lib/jenkins/plugins/
+    url: http://mirrors.jenkins-ci.org/plugins/{{ item }}
   with_items:
-      - git
-      - git-client
-      - chucknorris
-      - greenballs
-      - build-pipeline-plugin
-      - delivery-pipeline-plugin
-      - copyartifact
-      - http://mirrors.jenkins-ci.org/plugins/performance/2.1/performance.hpi
-      - jacoco
-      - sonar
-      - http://mirrors.jenkins-ci.org/plugins/buildgraph-view/1.5.2/buildgraph-view.hpi
-      - xvfb
-      - ws-cleanup
-      - xframe-filter-plugin
-      - htmlpublisher
+    - ace-editor/1.1/ace-editor.hpi
+    - ant/1.2/ant.hpi
+    - antisamy-markup-formatter/1.1/antisamy-markup-formatter.hpi
+    - branch-api/2.0.8/branch-api.hpi
+    - build-flow-plugin/0.20/build-flow-plugin.hpi
+    - buildgraph-view/1.5.2/buildgraph-view.hpi
+    - build-pipeline-plugin/1.5.6/build-pipeline-plugin.hpi
+    - chucknorris/1.0/chucknorris.hpi
+    - cloudbees-folder/6.0.3/cloudbees-folder.hpi
+    - conditional-buildstep/1.3.5/conditional-buildstep.hpi
+    - copyartifact/1.38.1/copyartifact.hpi
+    - credentials/2.1.13/credentials.hpi
+    - cvs/2.11/cvs.hpi
+    - delivery-pipeline-plugin/1.0.0/delivery-pipeline-plugin.hpi
+    - display-url-api/0.5/display-url-api.hpi
+    - durable-task/1.13/durable-task.hpi
+    - external-monitor-job/1.4/external-monitor-job.hpi
+    - git/3.2.0/git.hpi
+    - git-client/2.4.1/git-client.hpi
+    - git-server/1.7/git-server.hpi
+    - greenballs/1.15/greenballs.hpi
+    - handlebars/1.1.1/handlebars.hpi
+    - htmlpublisher/1.13/htmlpublisher.hpi
+    - jacoco/2.2.0/jacoco.hpi
+    - javadoc/1.1/javadoc.hpi
+    - jquery/1.11.2-0/jquery.hpi
+    - jquery-detached/1.2.1/jquery-detached.hpi
+    - junit/1.19/junit.hpi
+    - ldap/1.11/ldap.hpi
+    - mailer/1.18/mailer.hpi
+    - mapdb-api/1.0.9.0/mapdb-api.hpi
+    - matrix-auth/1.1/matrix-auth.hpi
+    - matrix-project/1.7.1/matrix-project.hpi
+    - maven-plugin/2.7.1/maven-plugin.hpi
+    - momentjs/1.1.1/momentjs.hpi
+    - pam-auth/1.1/pam-auth.hpi
+    - parameterized-trigger/2.32/parameterized-trigger.hpi
+    - performance/2.0/performance.hpi
+    - pipeline-build-step/2.5/pipeline-build-step.hpi
+    - pipeline-graph-analysis/1.3/pipeline-graph-analysis.hpi
+    - pipeline-input-step/2.5/pipeline-input-step.hpi
+    - pipeline-milestone-step/1.3.1/pipeline-milestone-step.hpi
+    - pipeline-rest-api/2.6/pipeline-rest-api.hpi
+    - pipeline-stage-step/2.2/pipeline-stage-step.hpi
+    - pipeline-stage-view/2.6/pipeline-stage-view.hpi
+    - promoted-builds/2.27/promoted-builds.hpi
+    - resource-disposer/0.3/resource-disposer.hpi
+    - run-condition/1.0/run-condition.hpi
+    - scm-api/2.1.1/scm-api.hpi
+    - script-security/1.27/script-security.hpi
+    - sonar/2.4.4/sonar.hpi
+    - ssh-credentials/1.12/ssh-credentials.hpi
+    - ssh-slaves/1.9/ssh-slaves.hpi
+    - structs/1.6/structs.hpi
+    - subversion/2.7.1/subversion.hpi
+    - token-macro/2.0/token-macro.hpi
+    - translation/1.10/translation.hpi
+    - windows-slaves/1.0/windows-slaves.hpi
+    - workflow-aggregator/2.4/workflow-aggregator.hpi
+    - workflow-api/2.13/workflow-api.hpi
+    - workflow-basic-steps/2.3/workflow-basic-steps.hpi
+    - workflow-cps/2.29/workflow-cps.hpi
+    - workflow-cps-global-lib/2.7/workflow-cps-global-lib.hpi
+    - workflow-durable-task-step/2.10/workflow-durable-task-step.hpi
+    - workflow-job/2.10/workflow-job.hpi
+    - workflow-multibranch/2.14/workflow-multibranch.hpi
+    - workflow-scm-step/2.4/workflow-scm-step.hpi
+    - workflow-step-api/2.9/workflow-step-api.hpi
+    - workflow-support/2.14/workflow-support.hpi
+    - ws-cleanup/0.32/ws-cleanup.hpi
+    - xframe-filter-plugin/1.2/xframe-filter-plugin.hpi
+    - xvfb/1.1.3/xvfb.hpi
   notify: restart jenkins
-  ignore_errors: True
+
+
+
+
+# - name: install jenkins plugins
+#   become: true
+#   become:_user: jenkins
+#   # optional parameters -Dhttp.proxyHost={{ http_proxy_host }} -Dhttp.proxyPort={{ http_proxy_port }} -Dhttp.nonProxyHosts="localhost"
+#   raw:  java  -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ install-plugin {{ item }}
+#   with_items:
+#       - http://mirrors.jenkins-ci.org/plugins/git/3.2.0/git.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/git-client/2.4.1/git-client.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/chucknorris/1.0/chucknorris.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/greenballs/1.15/greenballs.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/build-pipeline-plugin/1.5.6/build-pipeline-plugin.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/delivery-pipeline-plugin/1.0.0/delivery-pipeline-plugin.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/copyartifact/1.38.1/copyartifact.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/performance/2.1/performance.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/jacoco/2.2.0/jacoco.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/sonar/2.4.4/sonar.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/buildgraph-view/1.5.2/buildgraph-view.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/xvfb/1.1.3/xvfb.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/ws-cleanup/0.32/ws-cleanup.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/xframe-filter-plugin/1.2/xframe-filter-plugin.hpi
+#       - http://mirrors.jenkins-ci.org/plugins/htmlpublisher/1.13/htmlpublisher.hpi
+#   notify: restart jenkins
+#   ignore_errors: True
 
 - name: restart jenkins
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ restart
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
@@ -237,18 +322,18 @@
 - file: dest=/var/lib/jenkins/repo-cache/appstash mode=0755 owner=jenkins group=jenkins state=directory
 
 - name: get GIT repository
-  sudo: yes
-  sudo_user: jenkins
-  git: repo={{github_url}} dest=/var/lib/jenkins/repo-cache/appstash bare=yes version=master
+  become: true
+  become:_user: jenkins
+  git: repo={{ github_url }} dest=/var/lib/jenkins/repo-cache/appstash bare=yes version=master
 
 - name: Setup cron job to update GIT repository automatically
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   cron: name="Update AppStash Git Repository" minute="*/60" job="cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"
 
 - name: install jenkins jobs
-  sudo: yes
-  sudo_user: jenkins
+  become: true
+  become:_user: jenkins
   raw: 'sh /provision/roles/jenkins/files/restoreAllJobs.sh'
   ignore_errors: yes
 
@@ -258,9 +343,9 @@
 - copy: src=id_rsa dest=/var/lib/jenkins/.ssh/id_rsa mode=0600 group=jenkins owner=jenkins
 
 - name: start jenkins deployment pipeline
-  sudo: yes
-  sudo_user: jenkins
-  command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{item}}'
+  become: true
+  become:_user: jenkins
+  command: 'java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ build {{ item }}'
   with_items:
     - shop-monolitic-build
     - shop-monolitic-build
@@ -277,4 +362,4 @@
 
 - name: add jenkins to docker group
   raw: gpasswd -a jenkins docker
-  sudo: yes
+  become: true

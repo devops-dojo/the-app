@@ -4,6 +4,8 @@ nodes_config = (JSON.parse(File.read("nodes.json")))['nodes']
 
 VAGRANTFILE_API_VERSION = "2"
 
+ENV["LC_ALL"] = "en_US.UTF-8"
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if ARGV[1] and \
      (ARGV[1].split('=')[0] == "--provider" or ARGV[2])
@@ -25,6 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node_name = node["node"] # name of node
     config.ssh.insert_key = false
     config.ssh.private_key_path = '~/.vagrant.d/insecure_private_key'
+    
 
     # For each node
     config.vm.define node_name do |config|
@@ -40,10 +43,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.network :private_network, ip: node['ip']
 
       config.vm.synced_folder "provision", "/provision"
+      config.vm.box = 'bento/ubuntu-16.04'
 
       if provider=="virtualbox"
         config.vm.box = 'bento/ubuntu-16.04'
-        config.vm.provider :virtualbox do |vb|
+        config.vm.provider :virtualbox do |vb, override|
           vb.customize ["modifyvm", :id, "--memory", node['memory']]
           vb.customize ["modifyvm", :id, "--name", node['node']]
           vb.customize ["modifyvm", :id, "--cpus", node['cpus']]

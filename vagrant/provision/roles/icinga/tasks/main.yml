@@ -1,11 +1,11 @@
 ---
-- apt_repository: repo='ppa:formorer/icinga'
+# - apt_repository: repo='ppa:formorer/icinga'
 - apt: update_cache=yes cache_valid_time=3600
-- apt: pkg={{item}} state=present force=yes cache_valid_time=3600
+- apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
   with_items:
     - icinga
 
-- file: src=/etc/nagios3/conf.d/{{item}} dest=/etc/icinga/objects/{{item}} state=link
+- file: src=/etc/nagios3/conf.d/{{ item }} dest=/etc/icinga/objects/{{ item }} state=link
   with_items:
       - app-server-node-1.cfg
       - app-server-node-2.cfg
@@ -18,8 +18,8 @@
       - checkmem.cfg
 
 - name: remove unused icinga configuration
-  sudo: yes
-  file: path=/etc/icinga/objects/{{item}} state=absent
+  become: true
+  file: path=/etc/icinga/objects/{{ item }} state=absent
   with_items:
     - localhost_icinga.cfg
     - ido2db_check_proc.cfg
@@ -27,8 +27,9 @@
     - services_icinga.cfg
     - extinfo_icinga.cfg
 
-- sudo: yes
-  copy: src={{item}} dest=/etc/icinga/{{item}} force=yes mode=0644
+- name: install new icinga configuration
+  become: true
+  copy: src={{ item }} dest=/etc/icinga/{{ item }} force=yes mode=0644
   with_items:
     - htpasswd.users
     - icinga.cfg
@@ -36,18 +37,18 @@
     - commands.cfg
   notify: restart icinga
 
-- sudo: yes
+- become: true
   copy: src=contacts_icinga.cfg dest=/etc/icinga/objects/contacts_icinga.cfg force=yes mode=0644
   notify: restart icinga
 
-- sudo: yes
+- become: true
   copy: src=hubot_nagios.sh dest=/usr/local/bin/hubot_nagios.sh force=yes mode=0755
 
 - name: Setup Hubot adapter
   lineinfile:
     dest: /usr/local/bin/hubot_nagios.sh
     regexp: '^HUBOT_ADAPTER='
-    line: 'HUBOT_ADAPTER={{hubot_adapter}}'
+    line: 'HUBOT_ADAPTER={{ hubot_adapter }}'
 
-- sudo: yes
+- become: true
   template: src=blink1_nagios.sh.j2 dest=/usr/local/bin/blink1_nagios.sh force=yes mode=0755

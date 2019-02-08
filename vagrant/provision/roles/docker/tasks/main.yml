@@ -9,7 +9,7 @@
   apt: update_cache=yes force=yes cache_valid_time=3600
 
 - name: install docker
-  apt: pkg={{item}} state=present force=yes
+  apt: pkg={{ item }} state=present force=yes
   with_items:
       - docker-engine
       - python-pip
@@ -37,7 +37,7 @@
 
 - pip:
     executable: /usr/bin/pip
-    name: "{{item}}"
+    name: "{{ item }}"
   with_items:
   - pip
   - setuptools

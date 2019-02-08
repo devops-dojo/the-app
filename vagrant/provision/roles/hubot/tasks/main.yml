@@ -11,21 +11,21 @@
   copy: src=ninjabot dest=/home/hubot group=hubot owner=hubot
 
 - name: Tweak proxy if needed
-  sudo: yes
-  sudo_user: hubot
+  become: true
+  become:_user: hubot
   blockinfile:
     dest: /home/hubot/ninjabot/.env.template
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     content: |
-      export http_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
-      export https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
+      export http_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}/
+      export https_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}/
   when: with_proxy
 
 - name: Setup Hubot adapter
   lineinfile:
     dest: /home/hubot/ninjabot/.env.template
     regexp: '^export HUBOT_ADAPTER='
-    line: 'export HUBOT_ADAPTER={{hubot_adapter}}'
+    line: 'export HUBOT_ADAPTER={{ hubot_adapter }}'
 
 - name: Use rich text in pubsub when slack adapter
   lineinfile:

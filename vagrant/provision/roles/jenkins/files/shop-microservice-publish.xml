@@ -105,8 +105,8 @@
       <doNotFingerprintArtifacts>false</doNotFingerprintArtifacts>
     </hudson.plugins.copyartifact.CopyArtifact>
     <hudson.tasks.Shell>
-      <command>scp -o StrictHostKeyChecking=no -v $WORKSPACE/artifacts/* ubuntu@ci-repo:/tmp/
-ssh ubuntu@ci-repo -o StrictHostKeyChecking=no -v &lt;&lt;EOF
+      <command>scp -o StrictHostKeyChecking=no -v $WORKSPACE/artifacts/* vagrant@ci-repo:/tmp/
+ssh vagrant@ci-repo -o StrictHostKeyChecking=no -v &lt;&lt;EOF
 sudo su
 echo *****************************************
 echo *           SIGN ARTIFACTS              *

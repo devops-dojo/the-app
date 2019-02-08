@@ -1,6 +1,6 @@
 ---
 - name: install haproxy
-  apt: pkg={{item}} state=present force=yes cache_valid_time=3600
+  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
   with_items:
       - haproxy
 
