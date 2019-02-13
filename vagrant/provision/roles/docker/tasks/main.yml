@@ -6,14 +6,20 @@
     filename: 'docker'
 
 - name: update cache
-  apt: update_cache=yes force=yes cache_valid_time=3600
+  apt: 
+    update_cache: yes 
+    force: yes 
+    cache_valid_time: 3600
 
 - name: install docker
-  apt: pkg={{ item }} state=present force=yes
-  with_items:
-      - docker-engine
-      - python-pip
-
+  apt: 
+    state: present 
+    force: yes
+    pkg: [
+      docker-engine,
+      python-pip,
+    ]
+      
 - name: Prepare systemd to have a proxy file
   file:
     path: /etc/systemd/system/docker.service.d
@@ -35,7 +41,8 @@
     state: restarted
   when: proxy_conf.changed
 
-- pip:
+- name: install python tools for docker
+  pip:
     executable: /usr/bin/pip
     name: "{{ item }}"
   with_items:
