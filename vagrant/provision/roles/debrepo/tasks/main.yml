@@ -1,19 +1,24 @@
 ---
 - name: install deb repo dependencies
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
-    - nginx
-    - gnupg
-    - rng-tools
-    - reprepro
-    - dpkg-sig
-    - dpkg-dev
+  apt: 
+    state: present 
+    force: yes 
+    cache_valid_time: 3600
+    pkg: [
+      nginx,
+      gnupg,
+      rng-tools,
+      reprepro,
+      dpkg-sig,
+      dpkg-dev,
+    ]
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
-- copy: src=rng-tools dest=/etc/default/rng-tools force=yes mode=0644
+- name: Install and start the True Random Number Generator
+  copy: src=rng-tools dest=/etc/default/rng-tools force=yes mode=0644
   notify: restart rng-tools
 
 - name: create gnupg directory
@@ -21,7 +26,8 @@
   become_user: root
   file: path=/root/.gnupg/ state=directory force=yes
 
-- copy: src={{ item }} dest=/root/.gnupg/{{ item }} force=yes mode=0644
+- name: configure GNUPG keys
+  copy: src={{ item }} dest=/root/.gnupg/{{ item }} force=yes mode=0644
   become: true
   become_user: root
   with_items:
@@ -34,22 +40,26 @@
 - name: create deb repository
   become: true
   become_user: root
-
   file: path=/var/packages/debian/conf state=directory force=yes
 
-- copy: src={{ item }} dest=/var/packages/debian/conf/{{ item }} force=yes mode=0644
+- name: copy debconf distribution definitions
+  copy: src={{ item }} dest=/var/packages/debian/conf/{{ item }} force=yes mode=0644
   with_items:
       - distributions
 
-- file: path=/var/packages/debian/conf/override.shop state=touch force=yes
-- copy: src=options dest=/var/packages/debian/conf/options force=yes mode=0644
+- name: Set the package overrides
+  file: path=/var/packages/debian/conf/override.shop state=touch force=yes
+
+- name: set repo options
+  copy: src=options dest=/var/packages/debian/conf/options force=yes mode=0644
 
 - name: Check if ci-repo key exists.
   stat:
     path: /var/packages/ci-repo.gpg.key
   register: st
 
-- become: true
+- name: sign the repo
+  become: true
   become_user: root
   raw: gpg --armor --output /var/packages/ci-repo.gpg.key --export 18858766
   when: (st.stat.exists is defined and ( not st.stat.exists )) or st.stat.exists is not defined
@@ -58,9 +68,11 @@
   retries: 10
   delay: 2
 
-- become: true
+- name: create the repo
+  become: true
   become_user: root
   raw: reprepro -b /var/packages/debian/ export
 
-- copy: src=default dest=/etc/nginx/sites-enabled/default force=yes mode=0644
+- name: Enable nginx to serve the debrepo
+  copy: src=default dest=/etc/nginx/sites-enabled/default force=yes mode=0644
   notify: restart nginx
