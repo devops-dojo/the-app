@@ -48,27 +48,4 @@ jacocoTestReport {
     }
 }
 
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.3
-            }
-        }
-
-        rule {
-            enabled = false
-            element = 'CLASS'
-            includes = ['org.gradle.*']
-
-            limit {
-                counter = 'LINE'
-                value = 'TOTALCOUNT'
-                maximum = 0.3
-            }
-        }
-    }
-}
-
 check.dependsOn jacocoTestReport
-check.dependsOn jacocoTestCoverageVerification
