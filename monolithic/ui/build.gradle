@@ -177,10 +177,10 @@ jacocoTestReport {
 
 jacocoTestCoverageVerification {
     Map<String, String> env = System.getenv()
-    def coverage = (env.get('COVERAGE') != null ? Float.parseFloat(env.get('COVERAGE')) : 0.3 )
+    def coverage = (env.get('COVERAGE') != null ? Float.parseFloat(env.get('COVERAGE')) : 0.5 )
     // This module testing dev is still WIP, lets validate when
     // coverage check is less than 0.15, otherwise we always have 0 validation
-    coverage = (coverage < 0.15) ? coverage : 0.0
+    coverage = (coverage < 0.25) ? coverage : 0.0
 
     violationRules {
         rule {
