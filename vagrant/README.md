@@ -297,6 +297,7 @@ All hosts are aliased using `/etc/hosts` - hence links like microservice.io and 
 To `ssh` to a box from the provisioning VM, just type `ssh vagrant@10.211.55.200`
 or `vagrant ssh buildserver`.
 
+```table
 Vagrant-Name  | IP            | Hostname           | Application                 | Forward
 --------------|---------------|--------------------|-----------------------------|--------------------------------------------------------------------
 buildserver   | 10.211.55.200 | ci-node            | Jenkins                     | http://ci.microservice.io:8080/
@@ -315,3 +316,4 @@ appserver5    | 10.211.55.105 | app-server-node-5  | Microservice Shop PRO      
 elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring.microservice.io/
 elasticsearch | 10.211.55.100 | monitoring-node    | Nagios                      | http://monitoring.microservice.io/nagios3/ (nagiosadmin / admin123)
 elasticsearch | 10.211.55.100 | monitoring-node    | Icinga                      | http://monitoring.microservice.io/icinga/ (icingaadmin / admin123)
+```

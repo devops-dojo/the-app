@@ -132,7 +132,7 @@
 - name: set vnc password
   become: true
   become_user: "{{ item }}"
-  shell: "echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd"
+  shell: "set -o pipefail | echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd"
   args:
     creates: /home/{{ item }}/.vnc/passwd
     chdir: /home/{{ item }}/.vnc/
