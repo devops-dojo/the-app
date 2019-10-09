@@ -17,15 +17,15 @@ BLINK1_HOOK="http://{{ raspi_blink1_server_ip }}:{{ raspi_blink1_server_port }}/
 if [ "$ICINGA_SERVICESTATE" = "CRITICAL" ]
 then
     ICON=":exclamation:"
-    COLOR="%23D5573B"
+    COLOR="%23FF0000"
 elif [ "$ICINGA_SERVICESTATE" = "WARNING" ]
 then
     ICON=":warning:"
-    COLOR="%23FFB20F"
+    COLOR="%23FFC000"
 elif [ "$ICINGA_SERVICESTATE" = "OK" ]
 then
     ICON=":white_check_mark:"
-    COLOR="%2378BC61"
+    COLOR="%2378BC00"
 elif [ "$ICINGA_SERVICESTATE" = "UNKNOWN" ]
 then
     ICON=":question:"

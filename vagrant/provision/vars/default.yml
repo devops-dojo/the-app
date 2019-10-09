@@ -41,5 +41,5 @@ proxy_env:
 # Fill in the located IP here and reprovision icinga
 # use this command  on the monitoringserver (elasticsearch)
 #         sh ./provision.sh --limit=monitoring-node monitoringserver.yml
-raspi_blink1_server_ip: 16.22.89.101
+raspi_blink1_server_ip: 16.22.90.197
 raspi_blink1_server_port: 8080

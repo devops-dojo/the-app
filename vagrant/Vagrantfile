@@ -26,6 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   nodes_config.each do |node|
+    
     node_name = node["node"] # name of node
     config.ssh.insert_key = false
     config.ssh.private_key_path = '~/.vagrant.d/insecure_private_key'
@@ -57,7 +58,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           vb.customize ["modifyvm", :id, "--audio", "none"]
           vb.customize ["modifyvm", :id, "--usb", "off"]
         end
-      end
+      #end
 
       if provider=="libvirt"
         puts "provider= #{provider}"
