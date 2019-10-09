@@ -4,7 +4,8 @@ logstash_version : 1.4
 elasticsearch_version : 1.1
 kibana_version : 3.1.2
 
-oracle_java_download_url : http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.tar.gz
+oracle_java_download_url : >-
+   http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.tar.gz
 oracle_java_zip_file : /tmp/jdk-8u171-linux-x64.tar.gz
 oracle_java_folder : jdk1.8.0_171
 
@@ -20,15 +21,21 @@ hubot_adapter: slack
 
 nodejs_npm_registry : http://registry.npmjs.org/
 
-# Comment this section when pipeline does NOT run behind web proxy
+# # Comment this section when pipeline does NOT run behind web proxy
 with_proxy: false
-http_proxy_host: proxy.houston.hpecorp.net
+http_proxy_host: web-proxy.emea.hpqcorp.net
 http_proxy_port: 8080
-no_proxy: localhost,127.0.0.1,.hpecorp.net,ci-repo,monitoring-node,app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,ci-node,mongodb-node,.microservice.io,.monolith.io,test.monolith.io,shop.monolith.io
+#building no_proxy from smaller lines to be readable
+no_proxy_std: localhost,127.0.0.1,.hpecorp.net
+no_proxy_nodes: app-server-node-1,app-server-node-2,app-server-node-3,app-server-node-4,app-server-node-5
+no_proxy_pipeline: ci-repo,monitoring-node,ci-node,mongodb-node
+no_proxy_domain: .microservice.io,.monolith.io,test.monolith.io,shop.monolith.io
+
+no_proxy: "{{ no_proxy_std }},{{ no_proxy_nodes }},{{ no_proxy_pipeline }},{{ no_proxy_domain }}"
 
 proxy_env:
-  http_proxy: "http://{{http_proxy_host}}:{{http_proxy_port}}"
-  no_proxy: "{{no_proxy}}"
+  http_proxy: "http://{{ http_proxy_host }}:{{ http_proxy_port }}"
+  no_proxy: "{{ no_proxy }}"
 
 # locate paspberryPi with Blink1 code
 # Fill in the located IP here and reprovision icinga

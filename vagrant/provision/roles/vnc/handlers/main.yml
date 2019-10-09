@@ -3,7 +3,7 @@
   systemd:
     state: restarted
     daemon_reload: yes
-    name: vncserver-{{item.user}}@{{item.display}}
+    name: vncserver-{{ item.user }}@{{ item.display }}
   with_items:
     - user: dojo1
       display: 1

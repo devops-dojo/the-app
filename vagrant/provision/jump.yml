@@ -1,7 +1,7 @@
 ---
 - hosts: jumpstations
-  user: ubuntu
-  sudo: yes
+  user: vagrant
+  become: true
   gather_facts: no
 
   vars_files:

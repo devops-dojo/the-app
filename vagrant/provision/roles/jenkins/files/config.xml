@@ -17,7 +17,7 @@
   <jdks>
     <jdk>
       <name>java 8</name>
-      <home>/usr/local/jdk1.8.0_25/</home>
+      <home>/usr/lib/jvm/java-8-openjdk-amd64/</home>
       <properties/>
     </jdk>
     <jdk>

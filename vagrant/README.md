@@ -2,8 +2,7 @@
 
 The automated process with Vagrant/Ansible provisions and configures the CD pipeline and the application.
 
-
-```
+```cmd
 .     "Dojo"                 "DojoLabs"     |
   Resource Group           Resource Group   |
                                             |  Only Azure
@@ -35,8 +34,7 @@ The automated process with Vagrant/Ansible provisions and configures the CD pipe
 
 ```
 
-
-# Installing
+## Installing
 
 There are 3 options to install the 8 VMs which compose the environment:
 
@@ -44,7 +42,8 @@ There are 3 options to install the 8 VMs which compose the environment:
 2. [On pre-existing servers or VMs](#2-in-existing-servers-or-vms)
 3. [In Azure public or private cloud](#3-on-azure-cloud)
 
-## 1. Locally in Virtualbox
+### 1. Locally in Virtualbox
+
 Provided that you have a big enough PC or MAC (16GB memory), you can install
 everything locally. This has been successfully tested on Windows 7, Windows 10
 and MacOS X laptops/desktops.
@@ -55,30 +54,37 @@ and MacOS X laptops/desktops.
 * Tools on guest machines:
   * Ansible (automatically installed by host)
 
-
 Procedure for local install:
+
 * Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 * Install [Vagrant](https://www.vagrantup.com/downloads.html)
 * Install Vagrant plugins:
-```
+
+```cmd
 vagrant plugin install vagrant-hostsupdater
 ```
+
 * Clone the repository
-```
+
+```cmd
 git clone https://github.com/devops-dojo/the-app.git
 cd the-app/vagrant
 ```
+
 * By default, boxes are meant to be configured behind a web proxy. Tweak with_proxy and/or web proxy host/port
 if needed in `provision/vars/default.yml`
 * Start provisioning (create VM, use Ansible to install applications)
-```
+
+```cmd
 vagrant up --provider=virtualbox --provision
 ```
+
 * Once everything is done (:coffee:), wait for the [Jenkins jobs](http://ci-node:8080) to complete
 * All nodes are accessible following [this table](#nodes)
 * Deploy the application as per [this](#deploy-application-on-servers)
 
-## 2. In existing servers or VMs
+### 2. In existing servers or VMs
+
 You can also install the environment on existing virtual machines. You need 8
 VMs with **Ubuntu 16.04**. Check the
 [`nodes.json`](https://github.com/devops-dojo/the-app/blob/master/vagrant/nodes.json)
@@ -94,16 +100,17 @@ Procedure to install on existing machines:
 
 * Clone the repository
 
-```
+```cmd
 git clone https://github.com/devops-dojo/the-app.git
 cd the-app/vagrant/scripts
 ```
+
 * By default, boxes are meant to be configured behind a web proxy. Tweak with_proxy and/or web proxy host/port
 if needed in `../provision/vars/default.yml`
 
 * Start provisioning: for each host, pick one of the line, depending on the host you need to provision:
 
-```
+```cmd
 sh ./provision.sh --limit=monitoring-node monitoringserver.yml
 sh ./provision.sh --limit=ci-repo reposerver.yml
 sh ./provision.sh --limit=mongodb-node databaseserver.yml
@@ -116,7 +123,7 @@ sh ./provision.sh --limit=ci-node buildserver.yml
 
 NOTE: to refresh the install with the latest on github, run `provision.sh` with `--local` argument, like so:
 
-```
+```cmd
 sh ./provision.sh --local --limit=ci-node buildserver.yml
 ```
 
@@ -124,7 +131,7 @@ sh ./provision.sh --local --limit=ci-node buildserver.yml
 * All nodes are accessible following [this table](#nodes)
 * Deploy the application as per [this](#deploy-application-on-servers)
 
-## 3. On Azure Cloud
+### 3. On Azure Cloud
 
 The DojoInstaller VM is permanent and is used as a controller for the rest
 of the provisioning process.
@@ -132,8 +139,7 @@ of the provisioning process.
 * Tools used on host machine: Vagrant with [Azure provider](https://github.com/ojacques/vagrant-azure)
 * Tools on guest machines: Ansible
 
-
-### Azure's Dojo Installer VM
+#### Azure's Dojo Installer VM
 
 - On Azure, create an **Ubuntu 16.04 VM** (Standard_A1 or Standard_A0), or even smaller
 - Create the VM in location "Central US" (centralus).
@@ -142,10 +148,12 @@ of the provisioning process.
 - Make sure that the VirtualNetwork is called "Dojo-vnet" (or update the
   [params.json](pre-requisites/params.json) file)
 - Create an `install` directory
-```
+
+```cmd
 mkdir install
 cd install
 ```
+
 - Install Vagrant
 ```
 sudo apt-get update
@@ -209,7 +217,7 @@ sudo npm install -g azure-cli
   You need a `.env`  file which includes your Azure details in `~/the-app/vagrant`.
 This file is sourced by several install scripts.
 
-```
+```cmd
 # Include your Azure details
 export AZURE_SUBSCRIPTION_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 export AZURE_TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -289,7 +297,7 @@ All hosts are aliased using `/etc/hosts` - hence links like microservice.io and 
 To `ssh` to a box from the provisioning VM, just type `ssh vagrant@10.211.55.200`
 or `vagrant ssh buildserver`.
 
-
+```table
 Vagrant-Name  | IP            | Hostname           | Application                 | Forward
 --------------|---------------|--------------------|-----------------------------|--------------------------------------------------------------------
 buildserver   | 10.211.55.200 | ci-node            | Jenkins                     | http://ci.microservice.io:8080/
@@ -308,3 +316,4 @@ appserver5    | 10.211.55.105 | app-server-node-5  | Microservice Shop PRO      
 elasticsearch | 10.211.55.100 | monitoring-node    | Kibana                      | http://monitoring.microservice.io/
 elasticsearch | 10.211.55.100 | monitoring-node    | Nagios                      | http://monitoring.microservice.io/nagios3/ (nagiosadmin / admin123)
 elasticsearch | 10.211.55.100 | monitoring-node    | Icinga                      | http://monitoring.microservice.io/icinga/ (icingaadmin / admin123)
+```

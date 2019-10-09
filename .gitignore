@@ -4,4 +4,8 @@
 .idea
 **/.gradle
 **/build/
-**/.vagrant
+.vagrant
+.settings
+.project
+.vscode
+

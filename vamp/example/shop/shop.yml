@@ -79,7 +79,7 @@ clusters:
           port: 18090/http
         environment_variables:
           MONGODB_PORT_27017_TCP_ADDR: $mongodb.host
-          MONGODB_PORT_27017_TCP_PORT: $mongodb.ports.port          
+          MONGODB_PORT_27017_TCP_PORT: $mongodb.ports.port
         dependencies:
           mongodb: mongodb
       scale:
