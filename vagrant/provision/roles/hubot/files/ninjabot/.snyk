@@ -1,0 +1,78 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - hubot > express > connect > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > finalhandler > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > compression > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > serve-index > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > body-parser > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > connect-timeout > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > morgan > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > serve-static > send > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > express-session > debug:
+        patched: '2019-10-10T20:08:07.727Z'
+  'npm:hawk:20160119':
+    - hubot-flowdock > flowdock > request > hawk:
+        patched: '2019-10-10T20:08:07.727Z'
+  'npm:hoek:20180212':
+    - hubot-flowdock > flowdock > request > hawk > hoek:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot-flowdock > flowdock > request > hawk > boom > hoek:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot-flowdock > flowdock > request > hawk > sntp > hoek:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot-flowdock > flowdock > request > hawk > cryptiles > boom > hoek:
+        patched: '2019-10-10T20:08:07.727Z'
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - hubot-slack > @slack/client > https-proxy-agent:
+        patched: '2019-10-10T20:08:07.727Z'
+  'npm:mime:20170907':
+    - hubot > express > connect > serve-static > send > mime:
+        patched: '2019-10-10T20:08:07.727Z'
+  'npm:ms:20170412':
+    - hubot > express > connect > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > connect-timeout > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > morgan > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > serve-index > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > compression > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > body-parser > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > connect-timeout > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > express-session > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > finalhandler > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > serve-static > send > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > serve-static > send > debug > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > serve-favicon > ms:
+        patched: '2019-10-10T20:08:07.727Z'
+  'npm:negotiator:20160616':
+    - hubot > express > connect > compression > accepts > negotiator:
+        patched: '2019-10-10T20:08:07.727Z'
+    - hubot > express > connect > serve-index > accepts > negotiator:
+        patched: '2019-10-10T20:08:07.727Z'
+  'npm:request:20160119':
+    - hubot-flowdock > flowdock > request:
+        patched: '2019-10-10T20:08:07.727Z'
+  'npm:tunnel-agent:20170305':
+    - hubot-flowdock > flowdock > request > tunnel-agent:
+        patched: '2019-10-10T20:08:07.727Z'

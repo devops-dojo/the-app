@@ -5,7 +5,7 @@
   "author": "DevOps Dojo",
   "description": "The DevOps Dojo bot",
   "dependencies": {
-    "hubot": "^2.19.0",
+    "hubot": "^3.1.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-help": "^0.2.0",
     "hubot-pubsub": "^1.0.5",
@@ -15,9 +15,15 @@
     "hubot-business-cat": "^1.5.3",
     "hubot-auth": "^2.0.0",
     "hubot-slack": "^4.2.2",
-    "hubot-flowdock": "^0.7.6"
+    "hubot-flowdock": "^0.7.6",
+    "snyk": "^1.234.0"
   },
   "engines": {
     "node": "0.10.x"
-  }
+  },
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
