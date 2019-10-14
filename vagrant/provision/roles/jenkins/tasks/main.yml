@@ -26,8 +26,13 @@
   delay: 2
 
 - name: install pre-requisites
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+    apt: 
+    pkg: {{ packages }} 
+    state: present 
+    force: yes 
+    cache_valid_time: 3600
+  vars: 
+    packages:
     - docker.io
     - golang
     - python-pip
