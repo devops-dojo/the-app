@@ -59,25 +59,25 @@
   when: with_proxy
 
 - name: install the basic common packages
-  apt:
-    state: present
-    force: yes
-    update_cache: yes
+  apt: 
+    pkg: "{{ packages }}" 
+    state: present 
+    force: yes 
     cache_valid_time: 3600
-    pkg: [
-      vim,
-      redis-tools,
-      mongodb-clients,
-      curl,
-      gzip,
-      tree,
-      htop,
-      nagios-nrpe-server,
-      curl,
-      build-essential,
-      g++,
-      dc,
-    ]
+  vars: 
+    packages:
+    - vim
+    - redis-tools
+    - mongodb-clients
+    - curl
+    - gzip
+    - tree
+    - htop
+    - nagios-nrpe-server
+    - curl
+    - build-essential
+    - g++
+    - dc
   register: task_result
   until: task_result is success
   retries: 10

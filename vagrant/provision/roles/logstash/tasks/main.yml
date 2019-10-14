@@ -1,6 +1,6 @@
 - name: Install python-pycurl and python-apt
   apt: 
-    pkg: {{ packages }}
+    pkg: "{{ packages }}"
     state: present
     force: yes
     cache_valid_time: 3600
@@ -27,7 +27,7 @@
 
 - name: Install Logstash from repository
   apt: 
-    pkg: {{ packages }}
+    pkg: "{{ packages }}"
     state: present
     force: yes
     cache_valid_time: 3600

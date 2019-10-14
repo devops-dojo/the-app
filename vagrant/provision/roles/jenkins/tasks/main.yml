@@ -26,8 +26,8 @@
   delay: 2
 
 - name: install pre-requisites
-    apt: 
-    pkg: {{ packages }} 
+  apt: 
+    pkg: "{{ packages }}" 
     state: present 
     force: yes 
     cache_valid_time: 3600
@@ -82,13 +82,13 @@
 - name: Install our specific version of Jenkins.
   apt:
     deb: "/tmp/jenkins.deb"
-    state: installed
+    state: present
   when: specific_version.stat.exists
 
 - name: Install Jenkins from repository.
   apt:
     name: jenkins
-    state: installed
+    state: present
   when: jenkins_version is undefined
   register: task_result
   until: task_result is success
