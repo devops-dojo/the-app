@@ -1,7 +1,12 @@
 ---
 - name: install deb repo dependencies
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - nginx
     - gnupg
     - rng-tools
@@ -13,7 +18,8 @@
   retries: 10
   delay: 2
 
-- copy: src=rng-tools dest=/etc/default/rng-tools force=yes mode=0644
+- name: set configuration of rng-tools
+  copy: src=rng-tools dest=/etc/default/rng-tools force=yes mode=0644
   notify: restart rng-tools
 
 - name: create gnupg directory
@@ -21,7 +27,8 @@
   become_user: root
   file: path=/root/.gnupg/ state=directory force=yes
 
-- copy: src={{ item }} dest=/root/.gnupg/{{ item }} force=yes mode=0644
+- name: install generic repo keys
+  copy: src={{ item }} dest=/root/.gnupg/{{ item }} force=yes mode=0644
   become: true
   become_user: root
   with_items:
@@ -37,7 +44,8 @@
 
   file: path=/var/packages/debian/conf state=directory force=yes
 
-- copy: src={{ item }} dest=/var/packages/debian/conf/{{ item }} force=yes mode=0644
+- name: populate repo with distributions
+  copy: src={{ item }} dest=/var/packages/debian/conf/{{ item }} force=yes mode=0644
   with_items:
       - distributions
 

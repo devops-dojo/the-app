@@ -59,12 +59,12 @@
   when: with_proxy
 
 - name: install the basic common packages
-  apt: 
-    pkg: "{{ packages }}" 
-    state: present 
-    force: yes 
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
     cache_valid_time: 3600
-  vars: 
+  vars:
     packages:
     - vim
     - redis-tools
@@ -76,6 +76,7 @@
     - nagios-nrpe-server
     - curl
     - build-essential
+    - python-apt
     - g++
     - dc
   register: task_result

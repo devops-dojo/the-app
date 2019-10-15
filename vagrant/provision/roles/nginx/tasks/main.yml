@@ -25,18 +25,18 @@
   until: task_result is success
   retries: 10
   delay: 2
-  apt: 
+  apt:
     update_cache: yes
-    force: yes 
+    force: yes
     cache_valid_time: 3600
 
 - name: install nginx
-  apt: 
-    pkg: "{{ packages }}" 
-    state: present 
-    force: yes 
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
     cache_valid_time: 3600
-  vars: 
+  vars:
     packages:
     - nginx
   register: task_result

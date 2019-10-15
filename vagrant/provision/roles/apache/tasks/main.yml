@@ -1,6 +1,6 @@
 ---
 - name: install apache webserver
-  apt: 
+  apt:
     pkg: "{{ packages }}"
     state: present
     force: yes

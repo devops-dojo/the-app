@@ -1,5 +1,5 @@
 - name: Install python-pycurl and python-apt
-  apt: 
+  apt:
     pkg: "{{ packages }}"
     state: present
     force: yes
@@ -26,7 +26,7 @@
   delay: 2
 
 - name: Install Logstash from repository
-  apt: 
+  apt:
     pkg: "{{ packages }}"
     state: present
     force: yes
@@ -41,13 +41,13 @@
   delay: 2
 
 - name: set logstash service defaults
-    #  sudo update-rc.d logstash defaults
-  service:
-    name: logstash
-    runlevel: default
+  raw:  sudo update-rc.d logstash defaults
+  # service:
+  #   name: logstash
+  #   runlevel: default
 
 
 - name: enable logstash service
-  service: 
+  service:
     name: logstash
     enabled: yes
