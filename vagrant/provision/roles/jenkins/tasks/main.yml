@@ -1,13 +1,19 @@
 ---
 - name: install python-software-properties
-  apt: pkg=python-software-properties state=present force=yes cache_valid_time=3600
+  apt:
+    pkg: python-software-properties
+    state: present
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
 - name: install node key file
-  apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
   register: task_result
   until: task_result is success
   retries: 10
@@ -16,10 +22,14 @@
 #- name: add node repository into sources list.
 #  apt_repository: repo='deb https://deb.nodesource.com/node_0.12 xenial main' state=present
 
-- raw: curl -sL https://deb.nodesource.com/setup_5.x | bash -
+- name: Install NodeJS
+  raw: curl -sL https://deb.nodesource.com/setup_5.x | bash -
 
 - name: update cache
-  apt: update_cache=yes force=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
@@ -49,7 +59,10 @@
   delay: 2
 
 - name: Create symlink to nodejs
-  file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
+  file:
+    src: /usr/bin/nodejs
+    dest: /usr/bin/node
+    state: link
 
 - name: Add Jenkins apt repository key.
   apt_key:
@@ -106,9 +119,12 @@
   become_user: jenkins
   when: with_proxy
 
-- become: true
+- name: install npm packages
+  become: true
   become_user: root
-  npm: name={{ item }} global=yes
+  npm:
+    name: '{{ item }}'
+    global: yes
   with_items:
     - grunt-cli
     - bower
@@ -125,9 +141,13 @@
 - name: install Jenkins proxy config if necessary
   become: true
   become_user: jenkins
-  copy: src=proxy.xml dest=/var/lib/jenkins/proxy.xml owner=jenkins
+  copy:
+    src: proxy.xml
+    dest: /var/lib/jenkins/proxy.xml
+    owner: jenkins
   when: with_proxy
   notify: restart jenkins
+
 - name: Tune Jenkins proxy per global variable
   become: true
   become_user: jenkins
@@ -141,13 +161,20 @@
   when: with_proxy
 
 - name: create .gradle directory
-  file: path=/var/lib/jenkins/.gradle state=directory owner=jenkins
+  file:
+    path: /var/lib/jenkins/.gradle
+    state: directory
+    owner: jenkins
 
 - name: install gradle.properties with proxy if necessary
   become: true
   become_user: jenkins
-  copy: src=gradle.properties dest=/var/lib/jenkins/.gradle/gradle.properties owner=jenkins
+  copy:
+    src: gradle.properties
+    dest: /var/lib/jenkins/.gradle/gradle.properties
+    owner: jenkins
   when: with_proxy
+
 - name: Tune gradle proxy per global variable
   become: true
   become_user: jenkins
@@ -164,7 +191,11 @@
 - raw: sudo service jenkins restart
 
 # wait 300 seconds for port 8080 to become open on the host, don't start checking for 5 seconds
-- wait_for: port=8080 timeout=300 delay=30
+- name: Waitloop for Jenkins restart
+  wait_for:
+    port: 8080
+    timeout: 300
+    delay: 30
 
 - name: Remove Jenkins security init scripts after first startup.
   file:
@@ -174,18 +205,26 @@
 - name: create init groovy directory
   become: true
   become_user: jenkins
-  file: path="/var/lib/jenkins/init.groovy.d/" state=directory
+  file:
+    path: "/var/lib/jenkins/init.groovy.d/"
+    state: directory
 
 - name: provision Jenkins admin and anonymous users
   become: true
   become_user: jenkins
-  copy: src=basic-security.groovy dest=/var/lib/jenkins/init.groovy.d/basic-security owner=jenkins
+  copy:
+    src: basic-security.groovy
+    dest: /var/lib/jenkins/init.groovy.d/basic-security
+    owner: jenkins
   notify: restart jenkins
 
 - name: install config.xml
   become: true
   become_user: jenkins
-  copy: src={{ item }} dest=/var/lib/jenkins/{{ item }} owner=jenkins
+  copy:
+    src: '{{ item }}'
+    dest: /var/lib/jenkins/{{ item }}
+    owner: jenkins
   with_items:
     - config.xml
     - jenkins.mvn.GlobalMavenConfig.xml
@@ -211,7 +250,11 @@
       <string>{{ prod_servers }}</string>
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
-- wait_for: port=8080 timeout=300 delay=30
+- name: Waitloop for Jenkins restart
+  wait_for:
+    port: 8080
+    timeout: 300
+    delay: 30
 
 - name: download jenkins update-center.js
   become: true
@@ -234,12 +277,18 @@
      -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
-- wait_for: port=8080 timeout=300 delay=30
+- name: Waitloop for Jenkins restart
+  wait_for:
+    port: 8080
+    timeout: 300
+    delay: 30
 
 - name: download jenkins cli
   become: true
   become_user: jenkins
-  get_url: url=http://localhost:8080/jnlpJars/jenkins-cli.jar dest=/tmp/jenkins-cli.jar owner=jenkins
+  get_url:
+    url: http://localhost:8080/jnlpJars/jenkins-cli.jar
+    dest: /tmp/jenkins-cli.jar owner=jenkins
 
 - name: download jenkins plugins
   become: true
@@ -358,9 +407,19 @@
   raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ restart
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
-- wait_for: port=8080 timeout=300 delay=30
+- name: Waitloop for Jenkins restart
+  wait_for:
+    port: 8080
+    timeout: 300
+    delay: 30
 
-- file: dest=/var/lib/jenkins/repo-cache/appstash mode=0755 owner=jenkins group=jenkins state=directory
+- name: create appstash directory
+  file:
+    dest: /var/lib/jenkins/repo-cache/appstash
+    mode: 0755
+    owner: jenkins
+    group: jenkins
+    state: directory
 
 - name: get GIT repository
   become: true
@@ -390,10 +449,37 @@
   raw: 'sh /provision/roles/jenkins/files/restoreAllJobs.sh'
   ignore_errors: yes
 
-- file: path=/var/lib/jenkins/.ssh/ mode=0755 owner=jenkins group=jenkins state=directory
-- file: path=/var/lib/jenkins/.ssh/known_hosts mode=0755 owner=jenkins group=jenkins state=touch
-- copy: src=id_rsa.pub dest=/var/lib/jenkins/.ssh/id_rsa.pub mode=0600 group=jenkins owner=jenkins
-- copy: src=id_rsa dest=/var/lib/jenkins/.ssh/id_rsa mode=0600 group=jenkins owner=jenkins
+- name: initialize jenkins ssh directory
+  file:
+    path: /var/lib/jenkins/.ssh/
+    mode: 0755
+    owner: jenkins
+    group: jenkins
+    state: directory
+
+- name: add jenkins ssh known_hosts
+  file:
+    path: /var/lib/jenkins/.ssh/known_hosts
+    mode: 0755
+    owner: jenkins
+    group: jenkins
+    state: touch
+
+- name: set jenkins credentials (pub ssh key)
+  copy:
+    src: id_rsa.pub
+    dest: /var/lib/jenkins/.ssh/id_rsa.pub
+    mode: 0600
+    group: jenkins
+    owner: jenkins
+
+- name: set jenkins credentials (priv ssh key)
+  copy:
+    src: id_rsa
+    dest: /var/lib/jenkins/.ssh/id_rsa
+    mode: 0600
+    group: jenkins
+    owner: jenkins
 
 - name: start jenkins deployment pipeline
   become: true

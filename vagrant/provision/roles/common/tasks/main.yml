@@ -67,6 +67,7 @@
   vars:
     packages:
     - vim
+    - ufw
     - redis-tools
     - mongodb-clients
     - curl
