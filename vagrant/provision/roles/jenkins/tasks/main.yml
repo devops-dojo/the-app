@@ -191,7 +191,7 @@
 - raw: sudo service jenkins restart
 
 # wait 300 seconds for port 8080 to become open on the host, don't start checking for 5 seconds
-- name: Waitloop for Jenkins restart
+- name: Waitloop for Jenkins restart 1
   wait_for:
     port: 8080
     timeout: 300
@@ -250,7 +250,7 @@
       <string>{{ prod_servers }}</string>
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
-- name: Waitloop for Jenkins restart
+- name: Waitloop for Jenkins restart 2
   wait_for:
     port: 8080
     timeout: 300
@@ -277,7 +277,7 @@
      -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
-- name: Waitloop for Jenkins restart
+- name: Waitloop for Jenkins restart 3
   wait_for:
     port: 8080
     timeout: 300
@@ -288,7 +288,8 @@
   become_user: jenkins
   get_url:
     url: http://localhost:8080/jnlpJars/jenkins-cli.jar
-    dest: /tmp/jenkins-cli.jar owner=jenkins
+    dest: /tmp/jenkins-cli.jar
+    owner: jenkins
 
 - name: download jenkins plugins
   become: true
@@ -401,13 +402,13 @@
 #   notify: restart jenkins
 #   ignore_errors: True
 
-- name: restart jenkins
+- name: restart jenkins with cli
   become: true
   become_user: jenkins
   raw:  java -jar /tmp/jenkins-cli.jar -s http://localhost:8080/ restart
 
 # wait 300 seconds for port 8000 to become open on the host, don't start checking for 5 seconds
-- name: Waitloop for Jenkins restart
+- name: Waitloop for Jenkins restart 4
   wait_for:
     port: 8080
     timeout: 300
