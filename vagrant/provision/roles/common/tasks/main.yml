@@ -78,6 +78,7 @@
     - curl
     - build-essential
     - python-apt
+    - apt-transport-https
     - g++
     - dc
   register: task_result
