@@ -1,8 +1,13 @@
 ---
 - name: install haproxy
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
-      - haproxy
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - haproxy
   register: task_result
   until: task_result is success
   retries: 10
