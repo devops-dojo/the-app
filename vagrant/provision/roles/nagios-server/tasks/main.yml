@@ -1,5 +1,10 @@
 ---
-- apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
+- name: APT install of nagios3
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
   with_items:
     - nagios3
     - nagios-nrpe-plugin
@@ -9,8 +14,13 @@
   retries: 10
   delay: 2
 
-- become: true
-  copy: src={{ item }} dest=/etc/nagios3/conf.d/{{ item }} force=yes mode=0644
+- name: install nagios target configurations
+  become: true
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/nagios3/conf.d/{{ item }}"
+    force: yes
+    mode: 0644
   with_items:
       - app-server-node-1.cfg
       - app-server-node-2.cfg
@@ -45,9 +55,17 @@
   become: true
   copy: src=disk.cfg dest=/etc/nagios-plugins/config/disk.cfg force=yes mode=0644
 
-- become: true
-  file: path=/var/log/nagios state=directory
+- name: create nagios plugin directory
+  become: true
+  file:
+    path: /var/log/nagios
+    state: directory
 
-- become: true
-  copy: src=htpasswd.users dest=/etc/nagios3/htpasswd.users force=yes mode=0644
+- name: set nagios security
+  become: true
+  copy:
+    src: htpasswd.users
+    dest: /etc/nagios3/htpasswd.users
+    force: yes
+    mode: 0644
   notify: restart nagios3
