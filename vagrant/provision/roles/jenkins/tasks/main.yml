@@ -136,7 +136,8 @@
   delay: 2
 
 #gem plugin does'nt work correct
-- raw: sudo gem install compass
+- name: gem plugin workaround
+  raw: sudo gem install compass
 
 - name: install Jenkins proxy config if necessary
   become: true

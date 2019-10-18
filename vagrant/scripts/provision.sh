@@ -46,10 +46,11 @@ fi
 
 # Install or update ansible if not there
 if ! command -v ansible >/dev/null 2>&1; then
+  sudo -E apt-get update
+  sudo -E apt-get install -y --allow-unauthenticated software-properties-common python-apt
   sudo -E apt-key add ansible.key.txt
   sudo -E apt-add-repository -y ppa:ansible/ansible
-  sudo -E apt-get update
-  sudo -E apt-get install -y --allow-unauthenticated ansible software-properties-common python-apt
+  sudo -E apt-get install -y --allow-unauthenticated ansible
 fi
 
 echo "RUNNING ansible-playbook -c local --inventory-file=hosts --extra-vars='ansible_ssh_user=vagrant' --user=vagrant " $@
