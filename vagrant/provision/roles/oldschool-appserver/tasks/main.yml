@@ -1,7 +1,22 @@
-- raw: sudo chgrp -R tomcat7 /var/log/tomcat7/
-- raw: sudo chmod -R 755 /var/log/tomcat7
+- name: change ownership and access for tomcat7 log files
+  file:
+    path: /var/log/tomcat7/
+    mode: 0755
+    group: tomcat7
+    recurse: yes
+    state: directory
 
-- copy: src=default dest=/etc/default/logstash force=yes mode=0644
-- copy: src=logstash.conf dest=/etc/logstash/conf.d force=yes mode=0644
+- name: set logstash defaults
+  copy:
+    src: default
+    dest: /etc/default/logstash
+    force: yes
+    mode: 0644
+
+- name: set logstash configuration
+  copy:
+    src: logstash.conf
+    dest: /etc/logstash/conf.d
+    force: yes
+    mode: 0644
   notify: restart logstash
-

@@ -1,7 +1,12 @@
 ---
 - name: install apache webserver
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - apache2
     - apache2-doc
   register: task_result

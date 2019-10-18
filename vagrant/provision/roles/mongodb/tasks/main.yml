@@ -1,23 +1,52 @@
 ---
-- raw: sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+- name: Add an apt key by id from a keyserver
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 7F0CEB10
+    state: present
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
-- apt_repository: repo='deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main' state=present
+- name: add apt repo for mongod
+  apt_repository:
+    repo: 'deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main'
+    state: present
 
-- apt: update_cache=yes force=yes cache_valid_time=3600
+- name: Force APT cache update
+  apt:
+    update_cache: yes
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
 - name: install mongodb
-  apt: pkg=mongodb-org state=present force=yes cache_valid_time=3600
+  apt:
+    pkg: mongodb-org
+    state: present
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
-- copy: src=mongod.conf dest=/etc/mongod.conf force=true owner=root
+- name: copy MongoD default config
+  copy:
+    src: mongod.conf
+    dest: /etc/mongod.conf
+    force: true
+    owner: root
 
-- raw: sudo ufw disable
+- name: Disable Firewall
+  ufw:
+    state: disabled
 
-- raw: sudo service mongod restart
+- name: Reastart mongod service
+  service:
+    name: mongod
+    state: restarted

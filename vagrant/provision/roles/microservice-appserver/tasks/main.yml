@@ -1,13 +1,31 @@
 ---
-- raw: sudo chown -R www-data:www-data /var/log/nginx
-- raw: sudo chmod -R 755 /var/log/nginx/
-- raw: sudo usermod -a -G www-data logstash
+- name: create nginx log directory
+  file:
+    path: /var/log/nginx
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0755
+    recurse: yes
 
-- copy: src=logstash.conf dest=/etc/logstash/conf.d force=yes mode=0644
+- name: add user logstash to the www-data group
+  user:
+    name: logstash
+    groups: www-data
+    append: yes
+
+- name: set logstash configuration
+  copy:
+    src: logstash.conf
+    dest: /etc/logstash/conf.d
+    force: yes
+    mode: 0644
   notify: restart logstash
 
-- name: install shop shop file
-  apt_key: url=http://ci-repo/ci-repo.gpg.key state=present
+- name: install shop repo key file
+  apt_key:
+    url: http://ci-repo/ci-repo.gpg.key
+    state: present
   register: task_result
   until: task_result is success
   retries: 10
@@ -15,13 +33,22 @@
 
 
 - name: add shop repository into sources list.
-  apt_repository: repo='deb http://ci-repo/debian/ shop main' state=present
+  apt_repository:
+    repo: 'deb http://ci-repo/debian/ shop main'
+    state: present
 
 - name: update cache
-  apt: update_cache=yes force=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
-- file: path=/var/log/syslog owner=logstash
+- name: create logfile for logstash
+  file:
+    path: /var/log/syslog
+    owner: logstash
+    state: file

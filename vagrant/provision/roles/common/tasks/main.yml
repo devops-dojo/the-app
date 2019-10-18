@@ -60,24 +60,27 @@
 
 - name: install the basic common packages
   apt:
+    pkg: "{{ packages }}"
     state: present
     force: yes
-    update_cache: yes
     cache_valid_time: 3600
-    pkg: [
-      vim,
-      redis-tools,
-      mongodb-clients,
-      curl,
-      gzip,
-      tree,
-      htop,
-      nagios-nrpe-server,
-      curl,
-      build-essential,
-      g++,
-      dc,
-    ]
+  vars:
+    packages:
+    - vim
+    - ufw
+    - redis-tools
+    - mongodb-clients
+    - curl
+    - gzip
+    - tree
+    - htop
+    - nagios-nrpe-server
+    - curl
+    - build-essential
+    - python-apt
+    - apt-transport-https
+    - g++
+    - dc
   register: task_result
   until: task_result is success
   retries: 10

@@ -1,5 +1,6 @@
 ---
-- file:
+- name: createHAproxy config dir
+  file:
     state: directory
     dest: /etc/haproxy
 
@@ -13,7 +14,8 @@
   register: lb_nodes_test
   when: ansible_hostname == "app-server-node-3"
 
-- set_fact: "lb_nodes={{ lb_nodes_pro if (ansible_hostname == \"app-server-node-4\") else lb_nodes_test }}"
+- name: determine LB nodes
+  set_fact: "lb_nodes={{ lb_nodes_pro if (ansible_hostname == \"app-server-node-4\") else lb_nodes_test }}"
 
 - name: set haproxy.cfg
   template:
@@ -21,11 +23,13 @@
     dest: /etc/haproxy/haproxy.cfg
   with_items: "{{ lb_nodes }}"
 
-- set_fact: >
-    etc_hosts={% macro host_entry(lines) -%}{%- for node in lines %}{{ '\"%s\": \"%s\"\n' |
+- name: determine etc_hosts content
+  set_fact: >
+    etc_hosts="{% macro host_entry(lines) -%}{%- for node in lines %}{{ '\"%s\": \"%s\"\n' |
     format(node.split()[1], node.split()[0]) }}{%- endfor %}{%- endmacro %}{{ \"{ %s }\" |
-    format(host_entry(lb_nodes.stdout_lines).strip().replace(\"\n\", \", \")) | from_json }}
-
+    format(host_entry(lb_nodes.stdout_lines).strip().replace(\"\n\", \", \")) | from_json }}"
 
 - name: restart haproxy
-  service: name=haproxy state=restarted
+  service:
+    name: haproxy
+    state: restarted
