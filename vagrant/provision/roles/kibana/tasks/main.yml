@@ -1,7 +1,12 @@
 ---
 - name: install curl and unzip
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
       - unzip
       - curl
   register: task_result
@@ -16,17 +21,40 @@
     mode: 0755
     owner: vagrant
 
-- group: name=www state=present
-- user: name=vagrant shell=/bin/bash groups=www append=yes
-- file: path=/var/www/ owner=vagrant group=www mode=04755 recurse=yes
+- name: create www group
+  group:
+    name: www
+    state: present
+
+- name: ensure vagrant user exists and is added to www group
+  user:
+    name: vagrant
+    shell: /bin/bash
+    groups: www
+    append: yes
+
+- name: create www directory for kibana
+  file:
+    path: /var/www/
+    owner: vagrant
+    group: www
+    mode: 04755
+    recurse: yes
 
 - name: unarchive kibana
   become: yes
   become_user: vagrant
-  raw: tar -xf /tmp/kibana.tar.gz --directory=/tmp/
+  unarchive:
+    src: /tmp/kibana.tar.gz
+    dest: /tmp/
 
-- raw: cp -r /tmp/kibana-{{ kibana_version }}/* /var/www/html/
+- name: put kibana in place
+  shell: cp -r /tmp/kibana-{{ kibana_version }}/* /var/www/html/
   notify: restart httpd
 
 - name: install default dashboard
-  copy: src=default.json dest=/var/www/html/app/dashboards/default.json group=www owner=vagrant
+  copy:
+    src: default.json
+    dest: /var/www/html/app/dashboards/default.json
+    group: www
+    owner: vagrant

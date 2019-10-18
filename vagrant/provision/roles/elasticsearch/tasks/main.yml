@@ -10,7 +10,7 @@
 
 - name: add elasticsearch repository into sources list.
   apt_repository:
-    repo: 'deb http://packages.elasticsearch.org/elasticsearch/{{ elasticsearch_version }}/debian stable main'
+    repo: "deb http://packages.elasticsearch.org/elasticsearch/{{ elasticsearch_version }}/debian stable main"
     state: present
 
 
@@ -42,7 +42,12 @@
   raw: sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch
 
 - name: ensure directory is owned by elasticsearch
-  raw: sudo chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
+  file:  
+    path: /usr/share/elasticsearch/data
+    owner: elasticsearch
+    group: elasticsearch
+    state: directory
+    recurse: yes
 
 - name: insert/update elasticsearch configuration block
   blockinfile:

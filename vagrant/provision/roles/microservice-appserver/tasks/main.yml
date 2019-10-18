@@ -12,6 +12,7 @@
   user:
     name: logstash
     groups: www-data
+    append: yes
 
 - name: set logstash configuration
   copy:

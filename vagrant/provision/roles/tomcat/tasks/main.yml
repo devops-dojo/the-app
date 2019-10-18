@@ -51,4 +51,5 @@
   unarchive:
     src: /tmp/probe-2.3.3.zip
     dest: /var/lib/tomcat7/webapps/
+    remote_src: yes
   notify: restart tomcat7

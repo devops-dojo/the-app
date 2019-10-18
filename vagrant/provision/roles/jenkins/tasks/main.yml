@@ -188,7 +188,10 @@
       systemProp.https.proxyPort={{ http_proxy_port }}
   when: with_proxy
 
-- raw: sudo service jenkins restart
+- name: Restart jenkins service 1
+  service:
+    name: jenkins
+    state: restarted
 
 # wait 300 seconds for port 8080 to become open on the host, don't start checking for 5 seconds
 - name: Waitloop for Jenkins restart 1
@@ -501,5 +504,8 @@
   ignore_errors: yes
 
 - name: add jenkins to docker group
-  raw: gpasswd -a jenkins docker
   become: true
+  user:
+    name: jenkins
+    groups: docker
+    append: yes

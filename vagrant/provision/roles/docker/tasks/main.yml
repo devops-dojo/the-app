@@ -1,18 +1,26 @@
 ---
 - name: Install docker Repository
   apt_repository:
-    repo: deb [arch=amd64] https://apt.dockerproject.org/repo ubuntu-xenial main
+    repo: 'deb [arch=amd64] https://apt.dockerproject.org/repo ubuntu-xenial main'
     state: present
     filename: 'docker'
 
 - name: update cache
-  apt: update_cache=yes force=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    force: yes
+    cache_valid_time: 3600
 
 - name: install docker
-  apt: pkg={{ item }} state=present force=yes
-  with_items:
-      - docker-engine
-      - python-pip
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - docker-engine
+    - python-pip
 
 - name: Prepare systemd to have a proxy file
   file:
