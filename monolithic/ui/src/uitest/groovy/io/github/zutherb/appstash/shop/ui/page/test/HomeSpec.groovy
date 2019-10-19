@@ -4,15 +4,14 @@ import geb.Page
 import geb.spock.GebReportingSpec
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
-
+import io.github.zutherb.appstash.common.util.Config
 
 class HomeSpec extends GebReportingSpec {
 
 
-    def "Navigate to Home Page - check articles"() {
+    def "Navigate to Home Page"() {
         when:
         to HomePage
-        assert theDiv.text() == "You save"
 
         and:
         homeLink.click()

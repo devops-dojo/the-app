@@ -8,6 +8,11 @@
 
 module.exports = (robot) ->
   robot.respond /update me/i, (msg) ->
+    user = robot.brain.userForId(msg.envelope.user.id, null)
+    unless robot.auth.hasRole(user, "ops")
+      msg.send ":grin: Access denied. You must have 'ops' role to use this command"
+      return
+
     msg.send "Updating myself. Thanks for your patience..."
 
     @exec = require('child_process').exec
@@ -18,82 +23,48 @@ module.exports = (robot) ->
           process.exit(0)
         , 5 * 1000
 
-  robot.respond /update host (monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4|)/i, (msg) ->
+  robot.respond /update host (monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4|appserver5)/i, (msg) ->
+    user = robot.brain.userForId(msg.envelope.user.id, null)
+    unless robot.auth.hasRole(user, "admin")
+      msg.send ":grin: Access denied. You must have 'admin' role to use this command"
+      return
     host = msg.match[1]
     switch host
       when 'monitoring'
         server='monitoring-node'
-        command='sh ./provision.sh --limit=monitoring-node monitoringserver.yml'
+        command="sh ./provision.sh --local --limit=#{server} monitoringserver.yml"
       when 'cinode'
         server='ci-node'
-        command='sh ./provision.sh --limit=ci-node buildserver.yml'
+        command="sh ./provision.sh --local --limit=#{server} buildserver.yml"
       when 'cirepo'
         server='ci-repo'
-        command='sh ./provision.sh --limit=ci-repo reposerver.yml'
+        command="sh ./provision.sh --local --limit=#{server} reposerver.yml"
       when 'db'
         server='mongodb-node'
-        command='sh ./provision.sh --limit=mongodb-node databaseserver.yml'
+        command="sh ./provision.sh --local --limit=#{server} databaseserver.yml"
       when 'appserver1'
         server='app-server-node-1'
-        command='sh ./provision.sh --limit=app-server-node-1 monolitic_appserver.yml'
+        command="sh ./provision.sh --local --limit=#{server} monolitic_appserver.yml"
       when 'appserver2'
         server='app-server-node-2'
-        command='sh ./provision.sh --limit=app-server-node-2 monolitic_appserver.yml'
+        command="sh ./provision.sh --local --limit=#{server} monolitic_appserver.yml"
       when 'appserver3'
         server='app-server-node-3'
-        command='sh ./provision.sh --limit=app-server-node-3 micro_appserver.yml'
+        command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
       when 'appserver4'
         server='app-server-node-4'
-        command='sh ./provision.sh --limit=app-server-node-4 micro_appserver.yml'
+        command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
+      when 'appserver5'
+        server='app-server-node-5'
+        command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
 
     msg.send "Reprovisioning host #{server} with the latest on Github..."
 
-    spawn = require('child_process').spawn
-    ssh = spawn "ssh", ["-o", "StrictHostKeyChecking=no", "vagrant@#{server}", "cd the-app/vagrant/scripts && #{command}"]
-    ssh.stdout.on "data", (data) ->
-       respond msg, "#{server}", data.toString()
-    ssh.stderr.on "data", (data) ->
-       respond msg, "#{server}", data.toString()
-    ssh.on "exit", (code) ->
-      if code is 0
-        respond msg, "#{server}", ":tada: command successful!"
 
-# Limit size of output (would like to buffer it too!)
-respond = (msg, server, str, wrap = '```') ->
-  len = 3000
-  _size = Math.ceil(str.length / len)
-  _ret = new Array(_size)
-  _offset = undefined
-  _i = 0
-  while _i < _size
-    _offset = _i * len
-    _ret[_i] = str.substring(_offset, _offset + len)
-    _i++
-  msg.send({
-    attachments: [{
-      pretext: "`#{server}`",
-      thumb_url: "http://docs.ansible.com/images/logo.png",
-      text: "#{wrap}#{_ret[0]}#{wrap}",
-      mrkdwn_in: ["text", "pretext"]
-    }],
-    username: process.env.HUBOT_SLACK_BOTNAME,
-    as_user: true,
-  });
-  unless _ret.length == 1
-    x = 1
-    setInterval (->
-      msg.send({
-        attachments: [{
-          pretext: "`#{server}`",
-          thumb_url: "http://docs.ansible.com/images/logo.png",
-          text: "#{wrap}#{_ret[x]}#{wrap}",
-          mrkdwn_in: ["text", "pretext"]
-        }],
-        username: process.env.HUBOT_SLACK_BOTNAME,
-        as_user: true,
-      });
-      if _ret.length == x+1
-        clearInterval this
+    @exec = require('child_process').exec
+    @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git fetch --all && git reset --hard origin/master && cd vagrant/scripts && #{command} | tee -a /tmp/reprovision.log'", (error, stdout, stderr) ->
+      if ! error
+        msg.send ":tada: Update done! For details have a look in /tmp/reprovision.log for server #{server}"
       else
-        x++
-    ), 5000
+        msg.send ":thunder_cloud_and_rain: Damned, it failed!!! \nLook \n#{stderr}\nFor details have a look on #{server} in /tmp/reprovision.log"
+

@@ -1,35 +1,73 @@
 ---
 - name: dev locale
-  action: command sudo update-locale LC_ALL=en_US.UTF-8
+  become: true
+  action: command update-locale LC_ALL=en_US.UTF-8
+
 - name: set default locale
-  sudo: yes
-  lineinfile: dest=/etc/default/locale
-    regexp="LC_ALL"
-    line="LC_ALL=\"en_US.UTF-8\""
-- authorized_key: # Needed when provisioning outside Vagrant (plain Ansible)
+  become: true
+  lineinfile:
+    dest: /etc/default/locale
+    regexp: "LC_ALL"
+    line: "LC_ALL=\"en_US.UTF-8\""
+
+
+- name: insert the shared SSH key
+  authorized_key: # Needed when provisioning outside Vagrant (plain Ansible)
     user: vagrant
-    key: "{{ lookup('file', '/provision/roles/jenkins/files/id_rsa.pub') }}"
+    key: "{{ lookup('file', playbook_dir + '/roles/jenkins/files/id_rsa.pub') }}"
+
 - name: Add http_proxy for internal hosts
-  lineinfile: dest=/etc/environment regexp="^http_proxy" line="http_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}"
+  lineinfile:
+    dest: /etc/environment
+    regexp: "^http_proxy"
+    line: "http_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
   when: with_proxy
+
 - name: Add HTTP_PROXY for internal hosts
-  lineinfile: dest=/etc/environment regexp="^HTTP_PROXY" line="HTTP_PROXY=http://{{http_proxy_host}}:{{http_proxy_port}}"
+  lineinfile:
+    dest: /etc/environment
+    regexp: "^HTTP_PROXY"
+    line: "HTTP_PROXY=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
   when: with_proxy
+
 - name: Add https_proxy for internal hosts
-  lineinfile: dest=/etc/environment regexp="^https_proxy" line="https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}"
+  lineinfile:
+    dest: /etc/environment
+    regexp: "^https_proxy"
+    line: "https_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
   when: with_proxy
+
 - name: Add HTTPS_PROXY for internal hosts
-  lineinfile: dest=/etc/environment regexp="^HTTPS_PROXY" line="HTTPS_PROXY=http://{{http_proxy_host}}:{{http_proxy_port}}"
+  lineinfile:
+    dest: /etc/environment
+    regexp: "^HTTPS_PROXY"
+    line: "HTTPS_PROXY=http://{{ http_proxy_host }}:{{ http_proxy_port }}"
   when: with_proxy
+
 - name: Add no_proxy for internal hosts
-  lineinfile: dest=/etc/environment regexp="^no_proxy" line="no_proxy={{no_proxy}}"
+  lineinfile:
+    dest: /etc/environment
+    regexp: "^no_proxy"
+    line: "no_proxy={{ no_proxy }}"
   when: with_proxy
+
 - name: Add NO_PROXY for internal hosts
-  lineinfile: dest=/etc/environment regexp="^NO_PROXY" line="NO_PROXY={{no_proxy}}"
+  lineinfile:
+    dest: /etc/environment
+    regexp: "^NO_PROXY"
+    line: "NO_PROXY={{ no_proxy }}"
   when: with_proxy
-- apt: pkg={{item}} state=present force=yes update_cache=yes
-  with_items:
+
+- name: install the basic common packages
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - vim
+    - ufw
     - redis-tools
     - mongodb-clients
     - curl
@@ -39,5 +77,11 @@
     - nagios-nrpe-server
     - curl
     - build-essential
+    - python-apt
+    - apt-transport-https
     - g++
     - dc
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2

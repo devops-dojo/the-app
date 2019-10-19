@@ -23,11 +23,17 @@ module.exports = (robot) ->
           micro_host='app-server-node-3'
           mono_host ='app-server-node-1'
 
+      if (environment is "pro" && (command is "stop" || command is "restart"))
+        user = robot.brain.userForId(msg.envelope.user.id, null)
+        unless robot.auth.hasRole(user, "ops")
+          msg.send ":grin: Access denied. You must have 'ops' role to use this command in production"
+          return
+
       switch service
         when 'undefined'
           msg.send "Please specify a service amongst all, cart, product, navigation or monolith."
         when 'all'
-          msg.send "Querying all services status..."
+          msg.send "Running on all services..."
           for service in all_micro_services
             runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{micro_host} 'sudo service #{service} #{command}'"
           runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{mono_host} 'sudo service tomcat7 #{command}'"
@@ -38,7 +44,7 @@ module.exports = (robot) ->
           msg.send "Executing #{command} on #{service} on #{micro_host}..."
           runCommand msg, "ssh -o StrictHostKeyChecking=no vagrant@#{micro_host} 'sudo service #{service} #{command}'"
 
-respond = (msg, str, wrap = '```') ->
+respond = (msg, str, prefix, wrap = '```') ->
   len = 3000
   _size = Math.ceil(str.length / len)
   _ret = new Array(_size)
@@ -48,11 +54,11 @@ respond = (msg, str, wrap = '```') ->
     _offset = _i * len
     _ret[_i] = str.substring(_offset, _offset + len)
     _i++
-  msg.send "#{wrap}#{_ret[0]}#{wrap}"
+  msg.send "#{prefix}#{wrap}#{_ret[0]}#{wrap}"
   unless _ret.length == 1
     x = 1
     setInterval (->
-      msg.send "#{wrap}#{x+1} of #{_ret.length}\n#{_ret[x]}#{wrap}"
+      msg.send "#{prefix}#{wrap}#{x+1} of #{_ret.length}\n#{_ret[x]}#{wrap}"
       if _ret.length == x+1
         clearInterval this
       else
@@ -65,6 +71,11 @@ runCommand = (msg, cmd) ->
   @exec cmd, (error, stdout, stderr) ->
     if stdout? && stdout != ''
       stdout = stdout.replace /-classpath.*\n/, ""
-      respond msg, stdout
+      status = ""
+      if stdout.match(/Active: active \(running\)/gi)
+        status = ":white_check_mark:"
+      else
+        status = ":red_circle:"
+      respond msg, stdout, status
     if stderr? && stderr != ''
-      respond msg, stderr
+      respond msg, stderr, ":red_circle:"

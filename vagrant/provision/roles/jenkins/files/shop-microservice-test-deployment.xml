@@ -47,12 +47,27 @@
 sudo su
 apt-get update
 apt-get autoclean
+ROLE_FLAG_FILE=/etc/server_role
+SERVER_ROLE=test
+if [ ! -f \$ROLE_FLAG_FILE ]
+then
+    echo "\$SERVER_ROLE" > \$ROLE_FLAG_FILE
+else
+    ROLE="\$(cat \$ROLE_FLAG_FILE)"
+    if [ "\$ROLE" != "\$SERVER_ROLE" ]
+    then
+        echo "Deployment ERROR! Mismatch between deployment role and the server role. This system is tagged '\$ROLE' and you are trying to deploy as '\$SERVER_ROLE'."
+        exit 1
+    fi
+fi
+echo "Deploying to \$SERVER_ROLE server..."
 dpkg --remove --force-all shop-registration-frontend
 dpkg --remove --force-all shop-catalog-frontend
 dpkg --remove --force-all shop-checkout-frontend
 dpkg --remove --force-all shop-product-service
 dpkg --remove --force-all shop-navigation-service
 dpkg --remove --force-all shop-cart-service
+apt-get -y install dialog apt-utils
 apt-get -y install shop-registration-frontend
 apt-get -y install shop-catalog-frontend
 apt-get -y install shop-checkout-frontend

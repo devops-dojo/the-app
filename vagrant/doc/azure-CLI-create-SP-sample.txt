@@ -1,0 +1,101 @@
+$ azure login
+info:    Executing command login
+- Authenticating...
+info:    To sign in, use a web browser to open the page https://aka.ms/devicelogin and enter the code F3TE5H7K3 to authenticate.
+info:    Added subscription Visual Studio Enterprise
+
+$ azure account show
+info:    Executing command account show
+data:    Name                        : Visual Studio Enterprise
+data:    ID                          : your-subscription-id
+data:    State                       : Enabled
+data:    Tenant ID                   : your-tenant-id
+data:    Is Default                  : true
+data:    Environment                 : AzureCloud
+data:    Has Certificate             : No
+data:    Has Access Token            : Yes
+data:    User name                   : your.account@your.company
+data:    
+info:    account show command OK
+
+$ azure ad sp create -n TransientAppSP -p TransientAppSPPwd.1
+info:    Executing command ad sp create
+- Creating application TransientAppSP
+- Creating service principal for application cfa4f4c2-4d24-4990-8edd-fde92bf3be84
+data:    Object Id:               a1bae6f9-670c-406d-b395-aa18712ab381
+data:    Display Name:            TransientAppSP
+data:    Service Principal Names:
+data:                             cfa4f4c2-4d24-4990-8edd-fde92bf3be84
+data:                             http://TransientAppSP
+info:    ad sp create command OK
+
+$ azure role assignment create --objectID a1bae6f9-670c-406d-b395-aa18712ab381 -o Reader -c /subscriptions/your-subscription-id
+info:    Executing command role assignment create
+- Finding role with specified name
+- Creating role assignment
+data:    RoleAssignmentId     : /subscriptions/your-subscription-id/providers/Microsoft.Authorization/roleAssignments/ec37a292-e9ae-40ef-a821-456ae084e1aa
+data:    RoleDefinitionName   : Reader
+data:    RoleDefinitionId     : acdd72a7-3385-48ef-bd42-f606fba81ae7
+data:    Scope                : /subscriptions/your-subscription-id
+data:    Display Name         : TransientAppSP
+data:    SignInName           : undefined
+data:    ObjectId             : a1bae6f9-670c-406d-b395-aa18712ab381
+data:    ObjectType           : ServicePrincipal
+info:    role assignment create command OK
+
+$ azure ad sp show -c TransientAppSP
+info:    Executing command ad sp show
+- Getting Active Directory service principals
+data:    Object Id:               a1bae6f9-670c-406d-b395-aa18712ab381
+data:    Display Name:            TransientAppSP
+data:    Service Principal Names:
+data:                             http://TransientAppSP
+data:                             cfa4f4c2-4d24-4990-8edd-fde92bf3be84
+data:    
+info:    ad sp show command OK
+
+$ azure ad app show -a cfa4f4c2-4d24-4990-8edd-fde92bf3be84
+info:    Executing command ad app show
+- Getting Active Directory application(s)
+data:    AppId:                   cfa4f4c2-4d24-4990-8edd-fde92bf3be84
+data:    ObjectId:                27ec7f86-42d7-4245-ae43-ffa52231f6ca
+data:    DisplayName:             TransientAppSP
+data:    IdentifierUris:          http://TransientAppSP
+data:    ReplyUrls:              
+data:    AvailableToOtherTenants: False
+data:    HomePage:                http://TransientAppSP
+info:    ad app show command OK
+
+$ azure logout your.account@your.company
+info:    Executing command logout
+info:    You have logged out.
+info:    logout command OK
+
+$ azure login -u cfa4f4c2-4d24-4990-8edd-fde92bf3be84 --service-principal --tenant your-tenant-id -p TransientAppSPPwd.1
+info:    Executing command login
+- Authenticating...
+info:    Added subscription Visual Studio Enterprise
+info:    Setting subscription "Visual Studio Enterprise" as default
+info:    login command OK
+
+$ azure account show
+info:    Executing command account show
+data:    Name                        : Visual Studio Enterprise
+data:    ID                          : your-subscription-id
+data:    State                       : Enabled
+data:    Tenant ID                   : your-tenant-id
+data:    Is Default                  : true
+data:    Environment                 : AzureCloud
+data:    Has Certificate             : No
+data:    Has Access Token            : Yes
+data:    User name                   : cfa4f4c2-4d24-4990-8edd-fde92bf3be84
+data:    
+info:    account show command OK
+
+$ azure vm list
+info:    Executing command vm list
+- Getting virtual machines
+data:    ResourceGroupName  Name  ProvisioningState  PowerState      Location    Size           
+data:    -----------------  ----  -----------------  --------------  ----------  ---------------
+data:    AM                 am95  Succeeded          VM deallocated  westeurope  Standard_DS1_v2
+info:    vm list command OK

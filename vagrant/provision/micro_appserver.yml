@@ -1,7 +1,7 @@
 ---
 - hosts: micro_appservers
   user: vagrant
-  sudo: yes
+  become: true
 
   vars_files:
      - vars/default.yml
@@ -14,6 +14,7 @@
     - rstats
     - logstash
     - microservice-appserver
+    - haproxy
 
   environment:
     "{{ (with_proxy) | ternary( proxy_env, {}) }}"   # use proxy_env only when with_proxy is true

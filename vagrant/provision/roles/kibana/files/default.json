@@ -28,7 +28,7 @@
           "pin": true,
           "type": "lucene",
           "enable": true,
-          "query": "host: \"app-server-node-4\""
+          "query": "host: \"app-server-node-4\" OR host: \"app-server-node-5\""
         },
         "3": {
           "id": 3,
@@ -77,12 +77,57 @@
         },
         "8": {
           "id": 8,
-          "color": "#508642",
+          "color": "#E0752D",
+          "alias": "Test_A",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "field:path=\"*_access.log.1\""
+        },
+        "9": {
+          "id": 9,
+          "color": "#CCA300",
+          "alias": "Test_B",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "field:path=\"*_access.log.2\""
+        },
+        "10": {
+          "id": 10,
+          "color": "#0A437C",
+          "alias": "PRO Micro 1",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "host: \"app-server-node-4\""
+        },
+        "11": {
+          "id": 11,
+          "color": "#1F78C1",
+          "alias": "PRO Micro 2",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "host: \"app-server-node-5\""
+        },
+        "12": {
+          "id": 12,
+          "color": "#890F02",
           "alias": "",
           "pin": false,
           "type": "lucene",
           "enable": true,
           "query": "*"
+        },
+        "13": {
+          "id": 13,
+          "color": "#890F02",
+          "alias": "PRO Mono 1",
+          "pin": true,
+          "type": "lucene",
+          "enable": true,
+          "query": "host: \"app-server-node-2\""
         }
       },
       "ids": [
@@ -94,7 +139,12 @@
         5,
         6,
         7,
-        8
+        8,
+        9,
+        13,
+        10,
+        11,
+        12
       ]
     },
     "filter": {
@@ -112,16 +162,36 @@
         "1": {
           "type": "field",
           "field": "host",
-          "query": "\"app-server-node-2\" OR \"app-server-node-4\"",
-          "mandate": "must",
+          "query": "\"app-server-node-1\" or \"app-server-node-3\"",
+          "mandate": "mustNot",
           "active": true,
           "alias": "",
           "id": 1
+        },
+        "2": {
+          "type": "field",
+          "field": "_type",
+          "query": "\"product-service-log\"",
+          "mandate": "mustNot",
+          "active": true,
+          "alias": "",
+          "id": 2
+        },
+        "3": {
+          "type": "field",
+          "field": "request",
+          "query": "\"/status.txt\"",
+          "mandate": "mustNot",
+          "active": true,
+          "alias": "",
+          "id": 3
         }
       },
       "ids": [
         0,
-        1
+        1,
+        2,
+        3
       ]
     }
   },
@@ -152,7 +222,12 @@
               5,
               6,
               7,
-              8
+              8,
+              9,
+              10,
+              11,
+              12,
+              13
             ]
           },
           "field": "_type",
@@ -354,6 +429,115 @@
       "notice": false
     },
     {
+      "title": "A B Testing",
+      "height": "150px",
+      "editable": true,
+      "collapse": false,
+      "collapsable": true,
+      "panels": [
+        {
+          "span": 8,
+          "editable": true,
+          "type": "histogram",
+          "loadingEditor": false,
+          "mode": "count",
+          "time_field": "@timestamp",
+          "value_field": null,
+          "x-axis": true,
+          "y-axis": true,
+          "scale": 1,
+          "y_format": "none",
+          "grid": {
+            "max": null,
+            "min": 0
+          },
+          "queries": {
+            "mode": "selected",
+            "ids": [
+              8,
+              9
+            ]
+          },
+          "annotate": {
+            "enable": false,
+            "query": "*",
+            "size": 20,
+            "field": "_type",
+            "sort": [
+              "_score",
+              "desc"
+            ]
+          },
+          "auto_int": true,
+          "resolution": 100,
+          "interval": "30m",
+          "intervals": [
+            "auto",
+            "1s",
+            "1m",
+            "5m",
+            "10m",
+            "30m",
+            "1h",
+            "3h",
+            "12h",
+            "1d",
+            "1w",
+            "1y"
+          ],
+          "lines": false,
+          "fill": 0,
+          "linewidth": 3,
+          "points": false,
+          "pointradius": 5,
+          "bars": true,
+          "stack": true,
+          "spyable": true,
+          "zoomlinks": true,
+          "options": true,
+          "legend": true,
+          "show_query": true,
+          "interactive": true,
+          "legend_counts": true,
+          "timezone": "browser",
+          "percentage": false,
+          "zerofill": true,
+          "derivative": false,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": true
+          },
+          "title": "A B Testing"
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "type": "hits",
+          "loadingEditor": false,
+          "style": {
+            "font-size": "10pt"
+          },
+          "arrangement": "horizontal",
+          "chart": "bar",
+          "counter_pos": "above",
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "spyable": true,
+          "queries": {
+            "mode": "selected",
+            "ids": [
+              10,
+              11,
+              13
+            ]
+          },
+          "title": "Server hits PRO"
+        }
+      ],
+      "notice": false
+    },
+    {
       "title": "Events",
       "height": "650px",
       "editable": true,
@@ -389,7 +573,8 @@
             "request",
             "class",
             "message",
-            "stack_trace"
+            "stack_trace",
+            "path"
           ],
           "highlight": [],
           "sortable": true,
@@ -407,7 +592,12 @@
               5,
               6,
               7,
-              8
+              8,
+              9,
+              10,
+              11,
+              12,
+              13
             ]
           },
           "field_list": true,
@@ -450,28 +640,28 @@
   "pulldowns": [
     {
       "type": "query",
-      "collapse": false,
+      "collapse": true,
       "notice": false,
       "query": "*",
       "pinned": true,
       "history": [
+        "*",
+        "field:path=\"*_access.log.2\"",
+        "field:path=\"*_access.log.1\"",
         "field:server_response=\"500\"",
         "field:server_response=\"304\"",
         "field:server_response=\"404\"",
         "field:server_response=\"302\"",
         "field:server_response=\"200\"",
-        "host: \"app-server-node-4\"",
-        "host: \"app-server-node-2\"",
-        "message: \"was submited\" AND type:\"catalina-log\"",
-        "field:server_response=500",
-        "field:server_response=304"
+        "host: \"app-server-node-4\" OR host: \"app-server-node-5\"",
+        "host: \"app-server-node-2\""
       ],
       "remember": 10,
       "enable": true
     },
     {
       "type": "filtering",
-      "collapse": false,
+      "collapse": true,
       "notice": true,
       "enable": true
     }

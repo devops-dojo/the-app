@@ -17,7 +17,7 @@
   <jdks>
     <jdk>
       <name>java 8</name>
-      <home>/usr/local/jdk1.8.0_25/</home>
+      <home>/usr/lib/jvm/java-8-openjdk-amd64/</home>
       <properties/>
     </jdk>
     <jdk>
@@ -173,12 +173,14 @@
       <jobNames>
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView[2]/jobNames/comparator"/>
         <string>shop-microservice-cart-service-build</string>
+        <string>shop-microservice-catalog-ui-build</string>
         <string>shop-microservice-checkout-ui-build</string>
         <string>shop-microservice-dataloader-build</string>
         <string>shop-microservice-navigation-service-build</string>
         <string>shop-microservice-product-service-build</string>
-        <string>shop-microservice-production-deployment</string>
         <string>shop-microservice-registration-ui-build</string>
+        <string>shop-microservice-test-deployment</string>
+        <string>shop-microservice-production-deployment</string>
       </jobNames>
       <jobFilters/>
       <columns>
@@ -264,5 +266,25 @@
   <slaveAgentPort>0</slaveAgentPort>
   <label></label>
   <nodeProperties/>
-  <globalNodeProperties/>
+  <globalNodeProperties>
+  <hudson.slaves.EnvironmentVariablesNodeProperty>
+    <envVars serialization="custom">
+      <unserializable-parents/>
+      <tree-map>
+        <default>
+          <comparator class="hudson.util.CaseInsensitiveComparator"/>
+        </default>
+<!-- BEGIN ANSIBLE MANAGED BLOCK JENKINS VAR -->
+        <int>3</int>
+        <string>GIT_REPOSITORY</string>
+        <string>https://github.com/devops-dojo/the-app.git</string>
+        <string>BRANCH_TO_BUILD</string>
+        <string>refs/tags/v1.0</string>
+        <string>PROD_SERVERS</string>
+        <string>app-server-node-4 app-server-node-5</string>
+<!-- END ANSIBLE MANAGED BLOCK JENKINS VAR -->
+      </tree-map>
+    </envVars>
+  </hudson.slaves.EnvironmentVariablesNodeProperty>
+</globalNodeProperties>
 </hudson>

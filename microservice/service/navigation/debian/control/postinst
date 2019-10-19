@@ -7,5 +7,5 @@ rm -f /etc/init.d/navigation
 
 systemctl daemon-reload
 systemctl enable navigation.service
-
+systemctl daemon-reload
 service navigation restart

@@ -1,3 +1,11 @@
 ---
-- name: restart vncserver
-  service: name=vncserver state=restarted
+- name: restart vnc
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: vncserver-{{ item.user }}@{{ item.display }}
+  with_items:
+    - user: dojo1
+      display: 1
+    - user: dojo2
+      display: 2

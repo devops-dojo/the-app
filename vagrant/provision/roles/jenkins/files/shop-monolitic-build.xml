@@ -18,7 +18,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>master</name>
+        <name>${BRANCH_TO_BUILD}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -38,7 +38,11 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>./gradlew -p monolithic/ui war</command>
+      <command>./gradlew -p monolithic/repository test
+./gradlew -p monolithic/service/authentication test
+./gradlew -p monolithic/service/checkout test
+./gradlew -p monolithic/service/user test
+./gradlew -p monolithic/ui test war</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -49,6 +53,12 @@
       <fingerprint>false</fingerprint>
       <defaultExcludes>true</defaultExcludes>
     </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.19">
+      <testResults>**/monolithic/service/user/build/test-results/*.xml,**/monolithic/service/authentication/build/test-results/*.xml,**/monolithic/service/checkout/build/test-results/*.xml,**/monolithic/service/cart/build/test-results/*.xml,**/monolithic/ui/build/test-results/*.xml,**/monolithic/repository/order/build/test-results/*.xml,**/monolithic/repository/user/build/test-results/*.xml,**/monolithic/repository/product/build/test-results/*.xml,**/monolithic/repository/cart/build/test-results/*.xml,</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <healthScaleFactor>1.0</healthScaleFactor>
+      <allowEmptyResults>false</allowEmptyResults>
+    </hudson.tasks.junit.JUnitResultArchiver>
   </publishers>
   <buildWrappers/>
 </project>

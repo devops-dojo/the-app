@@ -12,6 +12,7 @@
 #Modify these variables for your environment
 MY_ICINGA_HOSTNAME="monitoring.microservice.io"
 HUBOT_HOOK="http://ci-node:8888/publish"
+HUBOT_ADAPTER=slack
 
 #Set the message icon based on Nagios service state
 if [ "$ICINGA_SERVICESTATE" = "CRITICAL" ]
@@ -36,6 +37,9 @@ else
 fi
 
 #Send message to Hubot pubsub
+
+if [ "$HUBOT_ADAPTER" = "slack" ]
+then
 curl -H "Content-Type: application/json" -X POST -d '{"event":"nagios","data":"'\
 '{\"text\":\"'"${ICON} ${ICINGA_SERVICEDISPLAYNAME}"' is in '"${ICINGA_SERVICESTATE}"' condition. More details <http://monitoring.microservice.io/cgi-bin/icinga/status.cgi?host='"${ICINGA_HOSTNAME}"'|here>\",'\
 '\"attachments\":'\
@@ -45,3 +49,7 @@ curl -H "Content-Type: application/json" -X POST -d '{"event":"nagios","data":"'
 ']'\
 '}"}' \
 ${HUBOT_HOOK}
+else
+curl -H "Content-Type: application/json" -X POST -d '{"event":"nagios","data":"'"${ICON} ${ICINGA_SERVICEDISPLAYNAME}"' is in '"${ICINGA_SERVICESTATE}"' condition. More details <http://monitoring.microservice.io/cgi-bin/icinga/status.cgi?host='"${ICINGA_HOSTNAME}"'>" }' \
+${HUBOT_HOOK}
+fi

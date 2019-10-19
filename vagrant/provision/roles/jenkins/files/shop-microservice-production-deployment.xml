@@ -32,12 +32,27 @@
       <command/>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>ssh vagrant@app-server-node-4 -o StrictHostKeyChecking=no -v &lt;&lt;EOF
+      <command>for HOST in $PROD_SERVERS;
+do ssh vagrant@$HOST -o StrictHostKeyChecking=no -v &lt;&lt;EOF
 sudo su
 apt-get update
+ROLE_FLAG_FILE=/etc/server_role
+SERVER_ROLE=production
+if [ ! -f \$ROLE_FLAG_FILE ]
+then
+    echo "\$SERVER_ROLE" > \$ROLE_FLAG_FILE
+else
+    ROLE="\$(cat \$ROLE_FLAG_FILE)"
+    if [ "\$ROLE" != "\$SERVER_ROLE" ]
+    then
+        echo "Deployment ERROR! Mismatch between deployment role and the server role. This system is tagged '\$ROLE' and you are trying to deploy as '\$SERVER_ROLE'."
+        exit 1
+    fi
+fi
+echo "Deploying to \$SERVER_ROLE server..."
 echo ****************************************
 echo *         Remove Application          *
-echo **************************************** 
+echo ****************************************
 apt-get clean
 dpkg --remove --force-all shop-registration-frontend
 dpkg --remove --force-all shop-catalog-frontend
@@ -48,13 +63,16 @@ dpkg --remove --force-all shop-cart-service
 echo ****************************************
 echo *         Install Application          *
 echo ****************************************
+apt-get -y install dialog apt-utils
 apt-get -y install shop-registration-frontend
 apt-get -y install shop-catalog-frontend
 apt-get -y install shop-checkout-frontend
 apt-get -y install shop-product-service
 apt-get -y install shop-navigation-service
 apt-get -y install shop-cart-service
-EOF</command>
+EOF
+done
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

@@ -1,48 +1,105 @@
 ---
-- group:
+- name: create hubot group
+  group:
     name: hubot
     state: present
 
-- user:
+- name: create hubot user
+  user:
     name: hubot
     group: hubot
 
 - name: install hubot files
-  copy: src=ninjabot dest=/home/hubot group=hubot owner=hubot
+  copy:
+    src: ninjabot
+    dest: /home/hubot
+    group: hubot
+    owner: hubot
 
 - name: Tweak proxy if needed
-  sudo: yes
-  sudo_user: hubot
+  become: true
+  become_user: hubot
   blockinfile:
     dest: /home/hubot/ninjabot/.env.template
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     content: |
-      export http_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
-      export https_proxy=http://{{http_proxy_host}}:{{http_proxy_port}}/
+      export http_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}/
+      export https_proxy=http://{{ http_proxy_host }}:{{ http_proxy_port }}/
   when: with_proxy
 
-- name: Configure npm registry for Hubot user if proxy set
-  shell: npm config set registry {{ nodejs_npm_registry }}
+- name: Setup Hubot adapter
+  lineinfile:
+    dest: /home/hubot/ninjabot/.env.template
+    regexp: '^export HUBOT_ADAPTER='
+    line: 'export HUBOT_ADAPTER={{ hubot_adapter }}'
+
+- name: Use rich text in pubsub when slack adapter
+  lineinfile:
+    dest: /home/hubot/ninjabot/.env.template
+    regexp: '^#export HUBOT_PUBSUB_DATA_AS_JSON='
+    line: 'export HUBOT_PUBSUB_DATA_AS_JSON=true'
+  when: hubot_adapter == "slack"
+
+- name: Cnfigure npm registry for Hubot user if proxy set
+  shell: npm config set registry {{ nodejs_npm_registry|quote }}
   become: true
   become_user: hubot
   when: with_proxy
 
 - name: add exec permission for ninjabot/start.sh
-  file: path=/home/hubot/ninjabot/start.sh mode=0755 owner=hubot group=hubot state=file
+  file:
+    path: /home/hubot/ninjabot/start.sh
+    mode: 0755
+    owner: hubot
+    group: hubot
+    state: file
 
 - name: add exec permission for ninjabot/bin/hubot
-  file: path=/home/hubot/ninjabot/bin/hubot mode=0755 owner=hubot group=hubot state=file
+  file:
+    path: /home/hubot/ninjabot/bin/hubot
+    mode: 0755
+    owner: hubot
+    group: hubot
+    state: file
 
 - name: create .ssh directory
-  file: path=/home/hubot/.ssh state=directory owner=hubot
+  file:
+    path: /home/hubot/.ssh
+    state: directory
+    owner: hubot
 
-- copy: src=id_rsa dest=/home/hubot/.ssh/id_rsa mode=600 group=hubot owner=hubot
+- name: insert hubot identification kry
+  copy:
+    src: id_rsa
+    dest: /home/hubot/.ssh/id_rsa
+    mode: 0600
+    group: hubot
+    owner: hubot
+
+- name: configure hubot ssh config
+  copy:
+    src: ssh_config
+    dest: /home/hubot/.ssh/config
+    mode: 0664
+    group: hubot
+    owner: hubot
 
 - name: install hubot service
-  copy: src=hubot.service dest=/etc/systemd/system/hubot.service force=true owner=root
+  copy:
+    src: hubot.service
+    dest: /etc/systemd/system/hubot.service
+    mode: 0644
+    force: yes
+    owner: root
 
-- systemd:
+- name: Systemctl daemon-reload
+  become: yes
+  shell: systemctl daemon-reload
+
+- name: restart hubot daemon
+  become_user: root
+  become: yes
+  service:
     state: restarted
     enabled: yes
-    daemon_reload: yes
     name: hubot

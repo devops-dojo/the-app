@@ -1,0 +1,6 @@
+# This script has been configured by ansible automatically
+#
+[Service]
+{% if with_proxy %}
+Environment="HTTP_PROXY=http://{{ http_proxy_host }}:{{ http_proxy_port }}" "HTTPS_PROXY=http://{{ http_proxy_host }}:{{ http_proxy_port }}" "NO_PROXY={{ no_proxy }}"
+{% endif %}

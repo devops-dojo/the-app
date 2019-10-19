@@ -14,12 +14,18 @@ sourceSets {
         }
     }
     test {
-        resources {
+        java {
             srcDir 'src/test/java'
         }
     }
 }
 
+test {
+    testLogging {
+        showStandardStreams = false
+        events "started", "skipped", "failed", "passed"
+    }
+}
 
 dependencies {
     compile project(':monolithic:service:common')

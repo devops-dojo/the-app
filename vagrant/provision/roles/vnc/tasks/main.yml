@@ -1,31 +1,185 @@
 ---
-- name: install xfce
-  apt: pkg={{item}} state=present force=yes
+# Openstack HACK
+#- name: Download apt-sources.list
+#  get_url:
+#    url: https://raw.github.hpe.com/gist/omar-chavez-orozco/\
+#         af0d18bc366ad49c389f03cb7680023d/raw/4a8f60c51d1252695f718d04b7d60677cc302cb1/ubuntu16.04-apt-sources
+#    dest: /etc/apt/sources.list
+#    mode: 0644
+#    validate_certs: no
+#    force: yes
+
+
+- name: Add dojo user account
+  user:
+    name: "{{ item }}"
+    comment: "Dojo jumpstation account"
+    shell: /bin/bash
   with_items:
+    - dojo1
+    - dojo2
+
+- name: "Create jumpstation ssh key to all other servers"
+  command: ssh-keygen -t rsa -b 2048 -f .ssh/id_rsa -q -N ""
+  args:
+    creates: .ssh/id_rsa
+
+- name: Getting private key
+  command: cat .ssh/id_rsa
+  register: id_rsa
+  changed_when: false
+
+- name: create local dojo users .ssh directory
+  become: true
+  become_user: "{{ item }}"
+  file:
+    path: /home/{{ item }}/.ssh
+    mode: 0755
+    state: directory
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Put private key on all dojo users
+  become: true
+  become_user: "{{ item }}"
+  copy:
+    dest: /home/{{ item }}/.ssh/id_rsa
+    content: "{{ id_rsa.stdout }}"
+    owner: "{{ item }}"
+    mode: 0600
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Getting public key
+  command: cat .ssh/id_rsa.pub
+  register: id_rsa_pub
+  changed_when: false
+
+- name: "Add pub key to authorized_keys"
+  authorized_key:
+    user: "vagrant"
+    state: present
+    key: "{{ id_rsa_pub.stdout }}"
+  delegate_to: "{{ item }}"
+  with_inventory_hostnames: all
+
+- name: install vnc and applications environment
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - xfce4
     - firefox
-    - vnc4server
-    - imagemagick
-    - imagemagick-doc
+    - chromium-browser
+    - xfce4-goodies
+    - tightvncserver
+    - xfonts-base
+    - chromium-browser
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
-- name: install vnc configuration
-  sudo: yes
-  sudo_user: jenkins
-  copy: src=.Xauthority dest=/var/lib/jenkins/.Xauthority force=yes mode=700 owner=jenkins
 
-- sudo: yes
-  sudo_user: jenkins
-  command: mkdir /var/lib/jenkins/.vnc/
-  ignore_errors: yes
-
-- name: install vnc configuration
-  copy: src={{item}} dest=/var/lib/jenkins/.vnc/{{item}} force=yes mode=700 owner=jenkins
+- name: install user profile for Chrome Firefox and Xfce
+  become: true
+  become_user: "{{ item }}"
+  unarchive: src=dojo.profile.tgz dest=/home/{{ item }} owner={{ item }}
   with_items:
-      - passwd
-      - xstartup
+    - dojo1
+    - dojo2
+
+- name: create desktop background directory
+  become: true
+  become_user: "{{ item }}"
+  file:
+    dest: /home/{{ item }}/Pictures/background
+    state: directory
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: copy desktop background
+  become: true
+  become_user: "{{ item }}"
+  copy:
+    src: dojo.jpg
+    dest: /home/{{ item }}/Pictures/background/dojo.jpg
+    force: yes
+    mode: 0700
+    owner: "{{ item }}"
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: Configure xfce with background image.
+  template:
+    src: xfce4-desktop.xml
+    dest: /home/{{ item }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+  become: true
+  become_user: "{{ item }}"
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: create VNC user directories
+  become: true
+  become_user: "{{ item }}"
+  file:
+    path: "/home/{{ item }}/.vnc"
+    state: directory
+    owner: "{{ item }}"
+    mode: 0755
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: set vnc password
+  become: true
+  become_user: "{{ item }}"
+  shell: "set -o pipefail | echo d0j04fun | vncpasswd -f > passwd && chmod 600 passwd"
+  args:
+    creates: /home/{{ item }}/.vnc/passwd
+    chdir: /home/{{ item }}/.vnc/
+  with_items:
+    - dojo1
+    - dojo2
+
+- name: install vnc configuration
+  copy:
+    src: xstartup
+    dest: /home/{{ item }}/.vnc/xstartup
+    force: yes
+    mode: 0700
+    owner: "{{ item }}"
+  with_items:
+    - dojo1
+    - dojo2
 
 - name: install vnc init script
-  copy: src=vncserver dest=/etc/init.d/vncserver mode=0755 owner=root
+  template:
+    src: vncserver@.service
+    dest: /etc/systemd/system/vncserver-{{ item }}@.service
+    mode: 0644
+    owner: root
+  notify:
+    - restart vnc
+  with_items:
+    - dojo1
+    - dojo2
 
-- name: register vncserver as service
-  raw: sudo update-rc.d vncserver defaults
+- name: Start VNC
+  systemd:
+    state: started
+    enabled: yes
+    name: vncserver-{{ item.user }}@{{ item.display }}
+  with_items:
+    - user: dojo1
+      display: 1
+    - user: dojo2
+      display: 2

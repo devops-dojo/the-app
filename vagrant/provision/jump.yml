@@ -1,0 +1,11 @@
+---
+- hosts: jumpstations
+  user: vagrant
+  become: true
+  gather_facts: no
+
+  vars_files:
+     - vars/default.yml
+
+  roles:
+    - vnc

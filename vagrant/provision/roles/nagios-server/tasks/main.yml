@@ -1,12 +1,26 @@
 ---
-- apt: pkg={{item}} state=present force=yes
+- name: APT install of nagios3
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
   with_items:
     - nagios3
     - nagios-nrpe-plugin
     - dc
+  register: task_result
+  until: task_result is success
+  retries: 10
+  delay: 2
 
-- sudo: yes
-  copy: src={{item}} dest=/etc/nagios3/conf.d/{{item}} force=yes mode=0644
+- name: install nagios target configurations
+  become: true
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/nagios3/conf.d/{{ item }}"
+    force: yes
+    mode: 0644
   with_items:
       - app-server-node-1.cfg
       - app-server-node-2.cfg
@@ -22,19 +36,40 @@
       - extinfo_nagios2.cfg
       - hostgroups_nagios2.cfg
 
-- get_url: url='http://exchange.nagios.org/components/com_mtree/attachment.php?link_id=3329&cf_id=24' dest=/usr/lib/nagios/plugins/check_mem owner=root mode=0744
+- name: get nagios mem check plugin
+  get_url:
+    url: 'http://exchange.nagios.org/components/com_mtree/attachment.php?link_id=3329&cf_id=24'
+    dest: /usr/lib/nagios/plugins/check_mem
+    owner: root
+    mode: 0744
 
-- sudo: yes
-  copy: src=nagios.cfg dest=/etc/nagios3/nagios.cfg force=yes mode=0644
+- name: set nagios config
+  become: true
+  copy:
+    src: nagios.cfg
+    dest: /etc/nagios3/nagios.cfg
+    force: yes
+    mode: 0644
 
-- sudo: yes
-  copy: src=disk.cfg dest=/etc/nagios-plugins/config/disk.cfg force=yes mode=0644
+- name: set nagios disk check config
+  become: true
+  copy:
+    src: disk.cfg
+    dest: /etc/nagios-plugins/config/disk.cfg
+    force: yes
+    mode: 0644
 
-- sudo: yes
-  raw: mkdir -p /var/log/nagios/
+- name: create nagios plugin directory
+  become: true
+  file:
+    path: /var/log/nagios
+    state: directory
 
-- sudo: yes
-  copy: src=htpasswd.users dest=/etc/nagios3/htpasswd.users force=yes mode=0644
+- name: set nagios security
+  become: true
+  copy:
+    src: htpasswd.users
+    dest: /etc/nagios3/htpasswd.users
+    force: yes
+    mode: 0644
   notify: restart nagios3
-
-

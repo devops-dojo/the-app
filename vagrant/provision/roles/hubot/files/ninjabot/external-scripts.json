@@ -2,6 +2,7 @@
   "hubot-help",
   "hubot-redis-brain",
   "hubot-rules",
-  "hubot-shipit",
-  "hubot-pubsub"
+  "hubot-business-cat",
+  "hubot-pubsub",
+  "hubot-auth"
 ]

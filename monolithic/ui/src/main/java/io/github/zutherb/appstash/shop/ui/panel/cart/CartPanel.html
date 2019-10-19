@@ -2,8 +2,12 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
+    <wicket:container wicket:id="discountHeader">
+      <div class="alert alert-success">
+        <strong><span id="discountHeader">Save!</span></strong> <span wicket:id="discountPercent" id="discountPercent">1.00</span>% off your cart today!
+      </div>
+    </wicket:container>
     <h2>Shopping Cart</h2>
-
     <div class="well">
         <table class="table table-striped">
             <thead>
@@ -29,13 +33,14 @@
             </tr>
             </tbody>
             <tfoot>
-            <tr>
+            <tr wicket:id="discountTr">
+	              <!-- Fragment markup goes here -->
                 <td><div id="discountLabel">You save</div></td>
                 <td style="text-align: right;">
                     <wicket:container wicket:id="discount">1.00</wicket:container>
                 </td>
                 <td></td>
-            </tr>                
+            </tr>
             <tr>
                 <td>Subtotal</td>
                 <td style="text-align: right;">

@@ -1,10 +1,18 @@
 ---
 - hosts: buildservers
   user: vagrant
-  sudo: yes
+  become: true
 
   vars_files:
      - vars/default.yml
+
+ # HACK: don't rsync & deal with this nasty '/provision' hardcoded directory
+ # pre_tasks:
+ #   - name: Copy provision directory
+ #     copy:
+ #       src: "{{ PROVISION_DIRECTORY }}"
+ #       dest: /
+
 
   roles:
     - hosts
