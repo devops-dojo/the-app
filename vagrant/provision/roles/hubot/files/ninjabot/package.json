@@ -5,7 +5,7 @@
   "author": "DevOps Dojo",
   "description": "The DevOps Dojo bot",
   "dependencies": {
-    "hubot": "^2.19.0",
+    "hubot": "^3.1.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-help": "^0.2.0",
     "hubot-pubsub": "^1.0.5",
