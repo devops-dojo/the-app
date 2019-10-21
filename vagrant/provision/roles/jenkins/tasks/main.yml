@@ -208,14 +208,13 @@
 
 - name: create init groovy directory
   become: true
-  become_user: jenkins
   file:
     path: "/var/lib/jenkins/init.groovy.d/"
     state: directory
+    owner: jenkins
 
 - name: provision Jenkins admin and anonymous users
   become: true
-  become_user: jenkins
   copy:
     src: basic-security.groovy
     dest: /var/lib/jenkins/init.groovy.d/basic-security
@@ -224,7 +223,6 @@
 
 - name: install config.xml
   become: true
-  become_user: jenkins
   copy:
     src: '{{ item }}'
     dest: /var/lib/jenkins/{{ item }}
@@ -239,7 +237,6 @@
 
 - name: Tune GIT repository and branch per global variable
   become: true
-  become_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/config.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK JENKINS VAR -->"
@@ -262,7 +259,6 @@
 
 - name: download jenkins update-center.js
   become: true
-  become_user: jenkins
   get_url:
     url: http://updates.jenkins-ci.org/update-center.json
     dest: /tmp/update-center.json
@@ -270,12 +266,10 @@
 
 - name: remove first and last line javascript wrapper
   become: true
-  become_user: jenkins
   raw:  sed -i '1d;$d' /tmp/update-center.json
 
 - name: push it to the update URL
   become: true
-  become_user: jenkins
   raw:
      'curl -X POST -H "Accept: application/json"
      -d @/tmp/update-center.json http://localhost:8080/updateCenter/byId/default/postBack'
@@ -289,7 +283,6 @@
 
 - name: download jenkins cli
   become: true
-  become_user: jenkins
   get_url:
     url: http://localhost:8080/jnlpJars/jenkins-cli.jar
     dest: /tmp/jenkins-cli.jar
@@ -297,7 +290,6 @@
 
 - name: download jenkins plugins
   become: true
-  become_user: jenkins
   get_url:
     dest: /var/lib/jenkins/plugins/
     url: http://mirrors.jenkins-ci.org/plugins/{{ item }}
@@ -428,7 +420,6 @@
 
 - name: get GIT repository
   become: true
-  become_user: jenkins
   git:
     repo: "{{ github_url }}"
     dest: /var/lib/jenkins/repo-cache/appstash
@@ -441,8 +432,8 @@
 
 - name: Setup cron job to update GIT repository automatically
   become: true
-  become_user: jenkins
   cron:
+    user: jenkins
     name: "Update AppStash Git Repository"
     minute: "*/60"
     job: "cd /var/lib/jenkins/repo-cache/appstash; git fetch origin +refs/heads/*:refs/heads/* --prune"

@@ -92,9 +92,10 @@
     force: yes
     owner: root
 
-- name: Systemctl daemon-reload
+- name: hubot config daemon-reload
   become: yes
-  shell: systemctl daemon-reload
+  systemd:
+    daemon_reload: yes
 
 - name: restart hubot daemon
   become_user: root
