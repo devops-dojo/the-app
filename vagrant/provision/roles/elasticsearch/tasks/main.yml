@@ -42,12 +42,13 @@
   raw: sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch
 
 - name: ensure directory is owned by elasticsearch
-  file:  
-    path: /usr/share/elasticsearch/data
+  file:
+    src: /usr/share/elasticsearch/data
+    dest: /var/lib/elasticsearch
     owner: elasticsearch
     group: elasticsearch
-    state: directory
-    recurse: yes
+    state: link
+    force: yes
 
 - name: insert/update elasticsearch configuration block
   blockinfile:

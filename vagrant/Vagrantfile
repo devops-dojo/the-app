@@ -46,12 +46,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.hostname = node['hostname']
       config.vm.network :private_network, ip: node['ip']
 
-      config.vm.synced_folder "provision", "/provision"
+
       # config.vm.box = 'bento/ubuntu-16.04'
 
       if provider==:virtualbox
         puts "provider= #{provider}"
         config.vm.box = 'bento/ubuntu-16.04'
+        config.vm.synced_folder "provision", "/provision"
         config.vm.provider :virtualbox do |vb, override|
           vb.customize ["modifyvm", :id, "--memory", node['memory']]
           vb.customize ["modifyvm", :id, "--name", node['node']]
@@ -64,6 +65,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       if provider==:libvirt
         puts "provider= #{provider}"
         config.vm.box = 'peru/ubuntu-16.04-server-amd64'
+        config.vm.synced_folder "provision", "/provision" , type: "rsync"
         config.vm.provider :libvirt do |vb, override|
           vb.memory = node['memory']
           vb.cpus = node['cpus'] || 2
@@ -74,6 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       if provider=="azure"
+        config.vm.synced_folder "provision", "/provision"
         config.vm.provider :azure do |azure, override|
           config.vm.box = 'azure'
           azure.vm_image_urn = 'canonical:ubuntuserver:16.04-DAILY-LTS:latest'
