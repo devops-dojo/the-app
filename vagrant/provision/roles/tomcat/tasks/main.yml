@@ -1,7 +1,12 @@
 ---
 - name: install tomcat
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - tomcat7
     - unzip
   register: task_result
@@ -11,13 +16,25 @@
 
 
 - name: install default tomcat7 settings
-  copy: src=default dest=/etc/default/tomcat7 force=yes mode=0644
+  copy:
+    src: default
+    dest: /etc/default/tomcat7
+    force: yes
+    mode: 0644
 
 - name: set default tomcat configuration
-  copy: src=server.xml dest=/var/lib/tomcat7/conf/server.xml force=yes mode=0644
+  copy:
+    src: server.xml
+    dest: /var/lib/tomcat7/conf/server.xml
+    force: yes
+    mode: 0644
 
 - name: copy default tomcat user config
-  copy: src=tomcat-users.xml dest=/var/lib/tomcat7/conf/tomcat-users.xml force=yes mode=0644
+  copy:
+    src: tomcat-users.xml
+    dest: /var/lib/tomcat7/conf/tomcat-users.xml
+    force: yes
+    mode: 0644
 
 - name: download psi probe
   become: true
@@ -28,5 +45,11 @@
     mode: 0644
 
 - name: install psi probe
-  raw: sudo unzip -o -C /tmp/probe-2.3.3.zip -d /var/lib/tomcat7/webapps/
+  become: true
+  # become_user: tomcat7
+  # raw: sudo unzip -o -C /tmp/probe-2.3.3.zip -d /var/lib/tomcat7/webapps/
+  unarchive:
+    src: /tmp/probe-2.3.3.zip
+    dest: /var/lib/tomcat7/webapps/
+    remote_src: yes
   notify: restart tomcat7

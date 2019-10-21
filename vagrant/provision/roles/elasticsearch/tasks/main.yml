@@ -1,6 +1,8 @@
 ---
 - name: install elasticsearch key file
-  apt_key: url=http://packages.elasticsearch.org/GPG-KEY-elasticsearch state=present
+  apt_key:
+    url: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state: present
   register: task_result
   until: task_result is success
   retries: 10
@@ -8,27 +10,45 @@
 
 - name: add elasticsearch repository into sources list.
   apt_repository:
-    repo: 'deb http://packages.elasticsearch.org/elasticsearch/{{ elasticsearch_version }}/debian stable main'
+    repo: "deb http://packages.elasticsearch.org/elasticsearch/{{ elasticsearch_version }}/debian stable main"
     state: present
 
 
 - name: update cache
-  apt: update_cache=yes force=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
 - name: install elasticsearch
-  apt: pkg=elasticsearch state=present force=yes cache_valid_time=3600
+  apt:
+    pkg: elasticsearch
+    state: present
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
-- raw: sudo update-rc.d elasticsearch defaults
-- raw: sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch
-- raw: sudo chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
+- name: set elaticsearch.service defaults
+  raw: sudo update-rc.d elasticsearch defaults
+
+- name: set elaticserarch paramater to start
+  raw: sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch
+
+- name: ensure directory is owned by elasticsearch
+  file:
+    src: /usr/share/elasticsearch/data
+    dest: /var/lib/elasticsearch
+    owner: elasticsearch
+    group: elasticsearch
+    state: link
+    force: yes
 
 - name: insert/update elasticsearch configuration block
   blockinfile:
@@ -38,4 +58,9 @@
       http.cors.allow-origin: http://monitoring.microservice.io
       cluster.name: {{ 100000 | random | to_uuid }}
 
-- raw: sudo service elasticsearch restart
+- name: restart elaticsearch service
+  become: yes
+  service:
+    state: restarted
+    enabled: yes
+    name: elasticsearch

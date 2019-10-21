@@ -1,21 +1,33 @@
 ---
 # - apt_repository: repo='ppa:formorer/icinga'
-- apt: update_cache=yes cache_valid_time=3600
+- name: update apt cache for icinga install
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
-
-- apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+- name: Install Icinga package
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - icinga
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
-- file: src=/etc/nagios3/conf.d/{{ item }} dest=/etc/icinga/objects/{{ item }} state=link
+- name: Set nagios config files
+  file:
+    src: "/etc/nagios3/conf.d/{{ item }}"
+    dest: "/etc/icinga/objects/{{ item }}"
+    state: link
   with_items:
       - app-server-node-1.cfg
       - app-server-node-2.cfg
@@ -29,7 +41,9 @@
 
 - name: remove unused icinga configuration
   become: true
-  file: path=/etc/icinga/objects/{{ item }} state=absent
+  file:
+    path: "/etc/icinga/objects/{{ item }}"
+    state: absent
   with_items:
     - localhost_icinga.cfg
     - ido2db_check_proc.cfg
@@ -37,9 +51,13 @@
     - services_icinga.cfg
     - extinfo_icinga.cfg
 
-- name: install new icinga configurationache_valid
+- name: install new icinga configuration
   become: true
-  copy: src={{ item }} dest=/etc/icinga/{{ item }} force=yes mode=0644
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/icinga/{{ item }}"
+    force: yes
+    mode: 0644
   with_items:
     - htpasswd.users
     - icinga.cfg
@@ -47,12 +65,22 @@
     - commands.cfg
   notify: restart icinga
 
-- become: true
-  copy: src=contacts_icinga.cfg dest=/etc/icinga/objects/contacts_icinga.cfg force=yes mode=0644
+- name: set up notifications
+  become: true
+  copy:
+    src: contacts_icinga.cfg
+    dest: /etc/icinga/objects/contacts_icinga.cfg
+    force: yes
+    mode: 0644
   notify: restart icinga
 
-- become: true
-  copy: src=hubot_nagios.sh dest=/usr/local/bin/hubot_nagios.sh force=yes mode=0755
+- name: add hubot notification
+  become: true
+  copy:
+    src: hubot_nagios.sh
+    dest: /usr/local/bin/hubot_nagios.sh
+    force: yes
+    mode: 0755
 
 - name: Setup Hubot adapter
   lineinfile:
@@ -60,5 +88,10 @@
     regexp: '^HUBOT_ADAPTER='
     line: 'HUBOT_ADAPTER={{ hubot_adapter }}'
 
-- become: true
-  template: src=blink1_nagios.sh.j2 dest=/usr/local/bin/blink1_nagios.sh force=yes mode=0755
+- name: install Blink1 Nagios driver
+  become: true
+  template:
+    src: blink1_nagios.sh.j2
+    dest: /usr/local/bin/blink1_nagios.sh
+    force: yes
+    mode: 0755

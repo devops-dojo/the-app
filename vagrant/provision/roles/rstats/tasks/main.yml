@@ -1,20 +1,32 @@
 ---
 - name: install rstats key file
-  apt_key: data="{{ lookup('file', 'rstats.key.txt') }}" state=present
+  apt_key:
+    data: "{{ lookup('file', 'rstats.key.txt') }}"
+    state: present
 
 - name: add rstats repository into sources list.
-  apt_repository: repo='deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' state=present
+  apt_repository:
+    repo: 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial/'
+    state: present
 
 - name: update cache
-  apt: update_cache=yes force=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
 - name: install rstats
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - r-base
     - r-recommended
   register: task_result

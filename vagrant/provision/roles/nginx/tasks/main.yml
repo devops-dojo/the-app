@@ -1,29 +1,44 @@
 ---
 - name: install python-software-properties
-  apt: pkg=python-software-properties state=present force=yes cache_valid_time=3600
+  apt:
+    pkg: python-software-properties
+    state: present
+    force: yes
+    cache_valid_time: 3600
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
 
-- name: add node repository into sources list.
-  apt_repository: repo='ppa:nginx/stable' state=present
+- name: add nginx repository into sources list.
+  apt_repository:
+    repo: 'ppa:nginx/stable'
+    state: present
+    update_cache: yes
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
-- name: update cache
+- name: update apt cache
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
-  apt: update_cache=yes force=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    force: yes
+    cache_valid_time: 3600
 
 - name: install nginx
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - nginx
   register: task_result
   until: task_result is success

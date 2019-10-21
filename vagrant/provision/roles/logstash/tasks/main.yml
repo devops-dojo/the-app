@@ -1,8 +1,13 @@
 - name: Install python-pycurl and python-apt
-  apt: pkg={{ item }} update_cache=yes state=present cache_valid_time=3600
-  with_items:
-   - python-pycurl
-   - python-apt
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - python-pycurl
+    - python-apt
   register: task_result
   until: task_result is success
   retries: 10
@@ -21,15 +26,28 @@
   delay: 2
 
 - name: Install Logstash from repository
-  apt: pkg={{ item }} update_cache=yes state=present allow_unauthenticated=yes cache_valid_time=3600
-  with_items:
-   - logstash
-   - logstash-contrib
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - logstash
+    - logstash-contrib
   register: task_result
   until: task_result is success
   retries: 10
   delay: 2
 
-- raw: sudo update-rc.d logstash defaults
+- name: set logstash service defaults
+  raw:  sudo update-rc.d logstash defaults
+  # service:
+  #   name: logstash
+  #   runlevel: default
 
-- raw: sudo update-rc.d logstash enable
+
+- name: enable logstash service
+  service:
+    name: logstash
+    enabled: yes

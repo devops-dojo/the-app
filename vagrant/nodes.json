@@ -17,7 +17,7 @@
             "node": "reposerver",
             "vm_size": "Standard_A0",
             "hostname": "ci-repo",
-            "memory": "256",
+            "memory": "512",
 	    "cpus": "1",
             "ip": "10.211.55.201",
             "ports":[ ],

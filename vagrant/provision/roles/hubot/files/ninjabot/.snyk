@@ -36,11 +36,11 @@ patch:
         patched: '2019-10-10T20:08:07.727Z'
   SNYK-JS-HTTPSPROXYAGENT-469131:
     - hubot-slack > @slack/client > https-proxy-agent:
-        patched: '2019-10-10T20:08:07.727Z'
+        patched: '2019-10-10T20:15:35.589Z'
     - snyk > proxy-agent > https-proxy-agent:
-        patched: '2019-10-10T20:09:31.340Z'
+        patched: '2019-10-10T20:15:35.589Z'
     - snyk > proxy-agent > pac-proxy-agent > https-proxy-agent:
-        patched: '2019-10-10T20:09:31.340Z'
+        patched: '2019-10-10T20:15:35.589Z'
   'npm:mime:20170907':
     - hubot > express > connect > serve-static > send > mime:
         patched: '2019-10-10T20:08:07.727Z'

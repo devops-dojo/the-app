@@ -66,8 +66,13 @@
   with_inventory_hostnames: all
 
 - name: install vnc and applications environment
-  apt: pkg={{ item }} state=present force=yes cache_valid_time=3600
-  with_items:
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    force: yes
+    cache_valid_time: 3600
+  vars:
+    packages:
     - xfce4
     - firefox
     - chromium-browser
@@ -102,7 +107,12 @@
 - name: copy desktop background
   become: true
   become_user: "{{ item }}"
-  copy: src=dojo.jpg dest=/home/{{ item }}/Pictures/background/dojo.jpg force=yes mode=0700 owner={{ item }}
+  copy:
+    src: dojo.jpg
+    dest: /home/{{ item }}/Pictures/background/dojo.jpg
+    force: yes
+    mode: 0700
+    owner: "{{ item }}"
   with_items:
     - dojo1
     - dojo2
@@ -141,7 +151,12 @@
     - dojo2
 
 - name: install vnc configuration
-  copy: src=xstartup dest=/home/{{ item }}/.vnc/xstartup force=yes mode=0700 owner={{ item }}
+  copy:
+    src: xstartup
+    dest: /home/{{ item }}/.vnc/xstartup
+    force: yes
+    mode: 0700
+    owner: "{{ item }}"
   with_items:
     - dojo1
     - dojo2
