@@ -36,8 +36,6 @@ patch:
         patched: '2019-10-10T20:08:07.727Z'
   SNYK-JS-HTTPSPROXYAGENT-469131:
     - hubot-slack > @slack/client > https-proxy-agent:
-        patched: '2019-10-10T20:08:07.727Z'
-    - hubot-slack > @slack/client > https-proxy-agent:
         patched: '2019-10-10T20:15:35.589Z'
     - snyk > proxy-agent > https-proxy-agent:
         patched: '2019-10-10T20:15:35.589Z'
