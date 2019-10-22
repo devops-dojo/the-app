@@ -1,11 +1,12 @@
 ---
 - name: APT install of nagios3
   apt:
-    pkg: "{{ item }}"
+    pkg: "{{ packages }}"
     state: present
     force: yes
     cache_valid_time: 3600
-  with_items:
+  vars:
+    packages:
     - nagios3
     - nagios-nrpe-plugin
     - dc

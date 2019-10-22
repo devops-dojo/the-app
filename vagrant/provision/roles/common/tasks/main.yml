@@ -59,6 +59,7 @@
   when: with_proxy
 
 - name: install the basic common packages
+  become: yes
   apt:
     pkg: "{{ packages }}"
     state: present

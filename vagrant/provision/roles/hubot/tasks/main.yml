@@ -18,7 +18,6 @@
 
 - name: Tweak proxy if needed
   become: true
-  become_user: hubot
   blockinfile:
     dest: /home/hubot/ninjabot/.env.template
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
@@ -40,10 +39,9 @@
     line: 'export HUBOT_PUBSUB_DATA_AS_JSON=true'
   when: hubot_adapter == "slack"
 
-- name: Cnfigure npm registry for Hubot user if proxy set
+- name: Configure npm registry for Hubot user if proxy set
   shell: npm config set registry {{ nodejs_npm_registry|quote }}
   become: true
-  become_user: hubot
   when: with_proxy
 
 - name: add exec permission for ninjabot/start.sh
@@ -98,7 +96,6 @@
     daemon_reload: yes
 
 - name: restart hubot daemon
-  become_user: root
   become: yes
   service:
     state: restarted
