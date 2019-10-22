@@ -35,7 +35,7 @@ fi
 # This directory is synced by vagrant or copied with above code
 cd /provision
 ls -alrt
-
+echo ${http_proxy}
 # Are we behind web proxy?
 if grep -Fxq "with_proxy: true" vars/default.yml; then
    proxy_host=`awk '/http_proxy_host/ {printf "%s",$2;exit}' vars/default.yml`
@@ -45,9 +45,10 @@ if grep -Fxq "with_proxy: true" vars/default.yml; then
 fi
 
 # Install or update ansible if not there
+export DEBIAN_FRONTEND=noninteractive
 if ! command -v ansible >/dev/null 2>&1; then
   sudo -E apt-get update
-  sudo -E apt-get install -y software-properties-common python-apt
+  sudo -E apt-get install -y software-properties-common python-apt aptitude
   sudo -E apt-key add ansible.key.txt
   sudo -E apt-add-repository --yes --update ppa:ansible/ansible
   sudo -E apt-get install -y ansible

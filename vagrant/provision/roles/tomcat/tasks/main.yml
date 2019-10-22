@@ -38,7 +38,6 @@
 
 - name: download psi probe
   become: true
-  become_user: tomcat7
   get_url:
     url: https://github.com/psi-probe/psi-probe/releases/download/2.3.3/probe-2.3.3.zip
     dest: /tmp/probe-2.3.3.zip

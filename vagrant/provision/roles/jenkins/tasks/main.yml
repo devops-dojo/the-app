@@ -116,7 +116,6 @@
 - name: Configure npm registry for Jenkins user if proxy set
   shell: npm config set registry {{ nodejs_npm_registry }}
   become: true
-  become_user: jenkins
   when: with_proxy
 
 - name: install npm packages
@@ -137,11 +136,13 @@
 
 #gem plugin does'nt work correct
 - name: gem plugin workaround
-  raw: sudo gem install compass
+  become: yes
+  gem:
+    name: compass
+    state: present
 
 - name: install Jenkins proxy config if necessary
   become: true
-  become_user: jenkins
   copy:
     src: proxy.xml
     dest: /var/lib/jenkins/proxy.xml
@@ -151,7 +152,6 @@
 
 - name: Tune Jenkins proxy per global variable
   become: true
-  become_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/proxy.xml
     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
@@ -169,7 +169,6 @@
 
 - name: install gradle.properties with proxy if necessary
   become: true
-  become_user: jenkins
   copy:
     src: gradle.properties
     dest: /var/lib/jenkins/.gradle/gradle.properties
@@ -178,7 +177,6 @@
 
 - name: Tune gradle proxy per global variable
   become: true
-  become_user: jenkins
   blockinfile:
     dest: /var/lib/jenkins/.gradle/gradle.properties
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
@@ -417,6 +415,8 @@
     owner: jenkins
     group: jenkins
     state: directory
+    recurse: yes
+    follow: yes
 
 - name: get GIT repository
   become: true
@@ -429,6 +429,16 @@
   until: task_result is success
   retries: 10
   delay: 2
+
+- name: ensure jenkins dir is owned by jenkins recursively
+  become: yes
+  file:
+    path: /var/lib/jenkins/
+    recurse: yes
+    follow: yes
+    state: directory
+    owner: jenkins
+    group: jenkins
 
 - name: Setup cron job to update GIT repository automatically
   become: true
@@ -456,7 +466,7 @@
 - name: add jenkins ssh known_hosts
   file:
     path: /var/lib/jenkins/.ssh/known_hosts
-    mode: 0755
+    mode: 0644
     owner: jenkins
     group: jenkins
     state: touch
