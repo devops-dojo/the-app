@@ -3,7 +3,7 @@
 #
 # Commands:
 #   hubot update me - Update hubot with latest from Github
-#   hubot update host <monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4>
+#   hubot update host [monitoring|cinode|cirepo|db|appserver1|appserver2|appserver3|appserver4] - reprovision with latest from Github
 #
 
 module.exports = (robot) ->
@@ -58,7 +58,8 @@ module.exports = (robot) ->
         server='app-server-node-5'
         command="sh ./provision.sh --local --limit=#{server} micro_appserver.yml"
 
-    msg.send "Reprovisioning host with the latest on Github..."
+    msg.send "Reprovisioning host #{server} with the latest on Github..."
+
 
     @exec = require('child_process').exec
     @exec "ssh -o StrictHostKeyChecking=no vagrant@#{server} 'cd the-app && git fetch --all && git reset --hard origin/master && cd vagrant/scripts && #{command} | tee -a /tmp/reprovision.log'", (error, stdout, stderr) ->
@@ -66,3 +67,4 @@ module.exports = (robot) ->
         msg.send ":tada: Update done! For details have a look in /tmp/reprovision.log for server #{server}"
       else
         msg.send ":thunder_cloud_and_rain: Damned, it failed!!! \nLook \n#{stderr}\nFor details have a look on #{server} in /tmp/reprovision.log"
+
