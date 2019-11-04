@@ -140,6 +140,7 @@
   gem:
     name: compass
     state: present
+    user_install: no
 
 - name: install Jenkins proxy config if necessary
   become: true
