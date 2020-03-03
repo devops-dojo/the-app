@@ -3,24 +3,21 @@ jdk:
   - oraclejdk9
 
 env:
-  - COVERAGE=0.3
+    - COVERAGE=0.057 BUILD_TARGET=./monolithic/ui
+    - COVERAGE=0.148 BUILD_TARGET=./monolithic/service/cart
+    - COVERAGE=0.0 BUILD_TARGET=./monolithic/service/user
+    - COVERAGE=0.397 BUILD_TARGET=./monolithic/repository/order
+    - COVERAGE=0.0 BUILD_TARGET=./monolithic/repository/cart
+    - COVERAGE=0.124 BUILD_TARGET=./monolithic/repository/product
+    - COVERAGE=0.318 BUILD_TARGET=./monolithic/repository/user
+
 
 install:
   - ./gradlew clean jar
 
 script:
   # - echo 'testing coming soon'
-   - ./gradlew test
+    - ./gradlew -p $BUILD_TARGET check
 
 after_success:
-  - ./gradlew jacocoTestReport
   - find . -name jacocoTestReport.csv|xargs cat|awk -F',' '{print $3" "$4" "$5}'
-
-before_deploy:
-  - ./gradlew test jacocoTestCoverageVerification
-
-deploy:
-  provider: script
-  script: echo 'WIP'
-  on:
-    all_branches: true
