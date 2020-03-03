@@ -1,7 +1,9 @@
 language: java
 jdk:
-  - oraclejdk8
   - oraclejdk9
+
+services:
+  - docker
 
 env:
     - COVERAGE=0.057 BUILD_TARGET=./monolithic/ui
@@ -22,3 +24,9 @@ script:
 
 after_success:
   - find . -name jacocoTestReport.csv|xargs cat|awk -F',' '{print $3" "$4" "$5}'
+
+deploy:
+  provider: script
+  script: bash -c "echo \"${Docker_password}\" | docker login --username \"${Docker_login}\" --password-stdin ;"
+  on:
+    all_branches: true
