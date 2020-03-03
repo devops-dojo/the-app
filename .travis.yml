@@ -2,7 +2,6 @@ language: java
 jdk:
   -oraclejdk8
 
-# TS
   script:
-    -.gradlew clean jar
-    echo  'test comming soon'
+    - ./gradlew clean jar
+    - echo  'test comming soon'
