@@ -8,4 +8,4 @@ install:
 
 script:
   # - echo 'testing coming soon'
-  - gradlew test
+   - ./gradlew test
