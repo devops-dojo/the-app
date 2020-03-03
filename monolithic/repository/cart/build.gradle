@@ -1,3 +1,6 @@
+apply plugin: 'jacoco'
+apply plugin: 'java'
+
 jar.baseName = "redis-cart-microservice-repository"
 
 idea {
@@ -32,3 +35,46 @@ dependencies {
 
     testCompile testDeps
 }
+
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled true
+    }
+}
+
+jacocoTestCoverageVerification {
+    Map<String, String> env = System.getenv()
+    def coverage = (env.get('COVERAGE') != null ? Float.parseFloat(env.get('COVERAGE')) : 0.5 )
+    // This module testing dev is still WIP, lets validate when
+    // coverage check is less than 0.15, otherwise we always have 0 validation
+    coverage = (coverage < 0.25) ? coverage : 0.0
+
+    violationRules {
+        rule {
+            limit {
+                minimum = coverage
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['org.gradle.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.3
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification

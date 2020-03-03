@@ -1,10 +1,32 @@
-language: python
-install: "pip install -r requirements.txt"
+language: java
+jdk:
+  - oraclejdk9
+
+services:
+  - docker
+
+env:
+    - COVERAGE=0.057 BUILD_TARGET=./monolithic/ui
+    - COVERAGE=0.148 BUILD_TARGET=./monolithic/service/cart
+    - COVERAGE=0.0 BUILD_TARGET=./monolithic/service/user
+    - COVERAGE=0.31 BUILD_TARGET=./monolithic/repository/order
+    - COVERAGE=0.0 BUILD_TARGET=./monolithic/repository/cart
+    - COVERAGE=0.124 BUILD_TARGET=./monolithic/repository/product
+    - COVERAGE=0.318 BUILD_TARGET=./monolithic/repository/user
+
+
+install:
+  - ./gradlew clean jar
 
 script:
-  # Run ANSIBLE checks
-  # - ANSIBLE0008: Disabled for use of sudo warnings - to address
-  # - ANSIBLE0011: Disabled for all tasks which should be named
-  # - ANSIBLE0012: Disabled (should not change if nothings needs doing) - to address
-  # - ANSIBLE0013: Disabled - few uses of shell commands - to address
-  - find vagrant/provision -name "*.yml" -exec ansible-lint -x ANSIBLE008,ANSIBLE0011,ANSIBLE0012,ANSIBLE0013  {} +
+  # - echo 'testing coming soon'
+    - ./gradlew -p $BUILD_TARGET check
+
+after_success:
+  - find . -name jacocoTestReport.csv|xargs cat|awk -F',' '{print $3" "$4" "$5}'
+
+deploy:
+  provider: script
+  script: bash -c "echo \"${Docker_password}\" | docker login --username \"${Docker_login}\" --password-stdin ;"
+  on:
+    all_branches: true
