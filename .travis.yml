@@ -9,3 +9,7 @@ install:
 script:
   # - echo 'testing coming soon'
    - ./gradlew test
+
+after_success:
+  - ./gradlew jacocoTestReport
+  - find . -name jacocoTestReport.csv|xargs cat|awk -F',' '{print $3" "$4" "$5}'
