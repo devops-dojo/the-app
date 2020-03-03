@@ -13,3 +13,12 @@ script:
 after_success:
   - ./gradlew jacocoTestReport
   - find . -name jacocoTestReport.csv|xargs cat|awk -F',' '{print $3" "$4" "$5}'
+
+before_deploy:
+  - ./gradlew test jacocoTestCoverageVerification
+
+deploy:
+  provider: script
+  script: echo 'WIP'
+  on:
+    all_branches: true
