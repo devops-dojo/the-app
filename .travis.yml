@@ -1,7 +1,14 @@
 language: java
 jdk:
-  -oraclejdk8
+  - oraclejdk8
 
-  script:
-    - ./gradlew clean jar
-    - echo  'test comming soon'
+# Just to have a look where we are
+before_install:
+  - pwd
+  - ls -la
+
+install:
+  - ./gradlew clean jar
+
+script:
+  - echo 'testing coming soon'
