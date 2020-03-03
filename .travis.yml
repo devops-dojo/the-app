@@ -1,11 +1,7 @@
 language: java
 jdk:
-  - oraclejdk8
+  - oraclejdk9
 
-# Just to have a look where we are
-before_install:
-  - pwd
-  - ls -la
 
 install:
   - ./gradlew clean jar
