@@ -149,8 +149,8 @@ war {
 }
 
 docker {
-    maintainer = 'Bernd Zuther <bernd.zuther@codecentric.de>'
-    baseImage = 'wegenenverkeer/tomcat7-java8'
+    maintainer = 'Microsoft Lab'
+    baseImage = 'maluuba/tomcat7-java8'
 }
 
 task packageToContainer(type: Docker) {
