@@ -1,0 +1,3 @@
+./gradlew jacocoTestReport
+
+find . -name jacocoTestReport.csv|xargs cat |awf -F'.' {print $3" "$4" "$5}'
